@@ -1,0 +1,134 @@
+{
+  "aggregate": {
+    "after_grasp_pass_count": 0,
+    "common_snapshot_pass_count": 0,
+    "completed_seeds": 0,
+    "contact_free_staging_seeds": 0,
+    "fixture_overlap_free_count": 0,
+    "fixture_placement_failures": 0,
+    "fixture_settle_contact_free_count": 0,
+    "gates": {
+      "A": false,
+      "B": false,
+      "C": false,
+      "D": false,
+      "E": false,
+      "F": false
+    },
+    "jam_contact_branches": 0,
+    "local_geometry_pass_count": 0,
+    "meaningful_transition_seeds": 0,
+    "median_alignment_cosine": 0.15744985934346248,
+    "median_jam_contact_duration_ms": NaN,
+    "median_max_local_speed_mps": 0.00023997690988796308,
+    "median_minimum_entry_clearance_m": -0.04639657707850464,
+    "median_nominal_final_progress_m": NaN,
+    "median_repeat_rmse_100ms": NaN,
+    "median_repeat_rmse_250ms": NaN,
+    "median_repeat_rmse_500ms": NaN,
+    "median_slide_contact_duration_ms": NaN,
+    "nominal_executable_branches": 0,
+    "nominal_jam_count": 0,
+    "nominal_progress_successful_branches": 0,
+    "nominal_successful_branches": 0,
+    "preparation_attempted_seeds": 5,
+    "preparation_failures": 5,
+    "preparation_successful_seeds": 0,
+    "repeat_seeds_le_2mm": 0,
+    "representative_jam_sequence": "n/a",
+    "representative_slide_sequence": "n/a",
+    "slide_contact_branches": 0,
+    "sustained_jam_branches": 0,
+    "sustained_slip_branches": 0,
+    "sustained_stick_seeds": 0
+  },
+  "preparations": [
+    {
+      "after_grasp_pass": false,
+      "common_snapshot_pass": false,
+      "contact_bead_indices": [],
+      "contact_free": false,
+      "failure_reason": "local geometry gate failed after initial settle",
+      "fixture_overlap_free": false,
+      "fixture_settle_contact_free": false,
+      "initial_local_diagnostics": {
+        "max_local_speed_mps": 0.00023997690988796308,
+        "median_alignment_cosine": -0.06249313204620477,
+        "minimum_entry_clearance_m": -0.09187617256654668
+      },
+      "local_geometry_pass": false,
+      "seed": 82001,
+      "status": "PREP_FAILED_LOCAL_GEOMETRY"
+    },
+    {
+      "after_grasp_pass": false,
+      "common_snapshot_pass": false,
+      "contact_bead_indices": [],
+      "contact_free": false,
+      "failure_reason": "local geometry gate failed after initial settle",
+      "fixture_overlap_free": false,
+      "fixture_settle_contact_free": false,
+      "initial_local_diagnostics": {
+        "max_local_speed_mps": 0.026571702554122386,
+        "median_alignment_cosine": 0.09343245389997913,
+        "minimum_entry_clearance_m": -0.04639657707850464
+      },
+      "local_geometry_pass": false,
+      "seed": 82002,
+      "status": "PREP_FAILED_LOCAL_GEOMETRY"
+    },
+    {
+      "after_grasp_pass": false,
+      "common_snapshot_pass": false,
+      "contact_bead_indices": [],
+      "contact_free": false,
+      "failure_reason": "local geometry gate failed after initial settle",
+      "fixture_overlap_free": false,
+      "fixture_settle_contact_free": false,
+      "initial_local_diagnostics": {
+        "max_local_speed_mps": 7.150940155095459e-05,
+        "median_alignment_cosine": 0.86559023344314,
+        "minimum_entry_clearance_m": -0.12342380936318009
+      },
+      "local_geometry_pass": false,
+      "seed": 82003,
+      "status": "PREP_FAILED_LOCAL_GEOMETRY"
+    },
+    {
+      "after_grasp_pass": false,
+      "common_snapshot_pass": false,
+      "contact_bead_indices": [],
+      "contact_free": false,
+      "failure_reason": "local geometry gate failed after initial settle",
+      "fixture_overlap_free": false,
+      "fixture_settle_contact_free": false,
+      "initial_local_diagnostics": {
+        "max_local_speed_mps": 0.028098063814393906,
+        "median_alignment_cosine": 0.8639144564402723,
+        "minimum_entry_clearance_m": 0.12076867294345106
+      },
+      "local_geometry_pass": false,
+      "seed": 82004,
+      "status": "PREP_FAILED_LOCAL_GEOMETRY"
+    },
+    {
+      "after_grasp_pass": false,
+      "common_snapshot_pass": false,
+      "contact_bead_indices": [],
+      "contact_free": false,
+      "failure_reason": "local geometry gate failed after initial settle",
+      "fixture_overlap_free": false,
+      "fixture_settle_contact_free": false,
+      "initial_local_diagnostics": {
+        "max_local_speed_mps": 0.0001357293970358896,
+        "median_alignment_cosine": 0.15744985934346248,
+        "minimum_entry_clearance_m": -0.02428542199955097
+      },
+      "local_geometry_pass": false,
+      "seed": 82005,
+      "status": "PREP_FAILED_LOCAL_GEOMETRY"
+    }
+  ],
+  "seeds": [],
+  "verdict": "PHASE0B_R1_1_PREPARATION_FAIL"
+}

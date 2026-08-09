@@ -32,3 +32,17 @@ frame and reruns all five seeds.
 
 Do not modify jam geometry in R1.
 Do not enter Phase 0C until task qualification is complete.
+
+## Current phase: Phase 0B-R1.1
+
+R1 fixed workspace placement but endpoint-only staging did not control the
+adjacent cable geometry. Four of five seeds contacted fixture walls before
+the common snapshot.
+
+R1.1 uses benchmark initialization only: fixture creation is deferred, the
+endpoint-adjacent five-bead segment is canonicalized outside the entry plane,
+the endpoint is grasped, then the fixture is created and a contact-free common
+snapshot is saved.
+
+No cable reset or teleportation is permitted after that snapshot.
+Do not tune jam geometry in R1.1.

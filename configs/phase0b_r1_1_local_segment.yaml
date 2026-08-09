@@ -1,0 +1,73 @@
+experiment:
+  name: phase0b_r1_1_local_segment_canonicalization
+  seeds: [82001, 82002, 82003, 82004, 82005]
+  staging_contact_correction:
+    applied: true
+    previous_staging_before_entry_m: 0.012
+    reason: the first staging snapshot had fixture contact
+
+simulator:
+  task_name: slncde-fixture-channel-cable
+  hz: 240
+  deterministic: true
+  trace_stride: 4
+
+fixture:
+  channel_gap_m: 0.014
+  channel_length_m: 0.050
+  wall_thickness_m: 0.006
+  wall_height_m: 0.025
+  entry_distance_from_endpoint_m: 0.018
+  wall_lateral_friction: 0.60
+
+canonical_frame:
+  mode: canonical
+  entry_center_xy_m: [0.50, 0.00]
+  insertion_axis_xy: [1.0, 0.0]
+
+preparation:
+  defer_fixture_creation: true
+  local_bead_count: 5
+  entry_clearance_margin_m: 0.002
+  alignment_cosine_min: 0.90
+  max_local_speed_mps: 0.01
+  settle_steps_before_grasp: 120
+  settle_steps_after_grasp: 24
+  settle_steps_after_fixture_creation: 24
+
+motion:
+  acquisition_speed_mps: 0.01
+  staging_speed_mps: 0.01
+  insertion_speed_mps: 0.01
+  approach_height_m: 0.050
+  grasp_height_offset_m: 0.0
+  staging_before_entry_m: 0.017
+  insertion_distance_m: 0.060
+  nominal_lateral_offset_m: 0.000
+  slide_lateral_offset_m: 0.0035
+  jam_lateral_offset_m: 0.0080
+  pre_snapshot_settle_steps: 120
+  branch_hold_steps: 120
+
+labels:
+  contact_normal_force_min_n: 0.05
+  stick_tangent_speed_max_mps: 0.002
+  slip_tangent_speed_min_mps: 0.005
+  command_active_speed_min_mps: 0.005
+  jam_normal_force_min_n: 0.50
+  jam_window_ms: 100
+  jam_progress_max_m: 0.0005
+  minimum_mode_duration_ms: 80
+
+analysis:
+  horizons_ms: [100, 250, 500]
+  repeat_rmse_500ms_max_m: 0.0015
+  nominal_progress_min_m: 0.040
+  minimum_contact_seeds: 4
+  minimum_slip_seeds: 3
+  minimum_jam_seeds: 3
+  minimum_transition_seeds: 3
+
+paths:
+  data_root: data/phase0b_r1_1
+  report_root: reports/phase0b_r1_1

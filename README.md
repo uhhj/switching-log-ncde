@@ -22,6 +22,11 @@ The simulator is supplied by the `external/deformable-ravens` submodule. Its tes
 ## Scientific phase status
 
 - Phase 0A: NO-GO for artificial hidden-friction mechanism.
-- Phase 0B: partial qualification; repeat stability and real fixture contact
-  established, random fixture placement not seed-robust, and jam not established.
-- Current: Phase 0B-R1 canonical fixture frame.
+- Phase 0B: real fixture contact and low repeat noise on completed seeds.
+- Phase 0B-R1: canonical fixture placement solved workspace placement, but
+  endpoint-only staging failed to control adjacent cable geometry.
+- Current: Phase 0B-R1.1 local-segment canonical initialization.
+
+Local-segment canonicalization is benchmark initial-state generation. It is
+applied before the common snapshot and identically for all future branches.
+No cable teleportation or state reset is allowed after the common snapshot.

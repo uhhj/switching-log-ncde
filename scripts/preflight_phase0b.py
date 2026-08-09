@@ -43,6 +43,22 @@ def main() -> None:
         task = tasks.names[task_name]()
         env.reset(task)
         spec = task.fixture_spec()
+        defer_creation = bool(
+            config.get("preparation", {}).get(
+                "defer_fixture_creation", False
+            )
+        )
+        if defer_creation:
+            if spec["fixture_created"] or spec["fixture_ids"]:
+                raise RuntimeError("fixture was created during deferred reset")
+            print(f"fixture defer: {defer_creation}")
+            print(f"fixture_created after reset: {spec['fixture_created']}")
+            print(f"fixture_ids after reset: {spec['fixture_ids']}")
+            task.create_fixture()
+            spec = task.fixture_spec()
+            if not spec["fixture_created"] or len(spec["fixture_ids"]) != 2:
+                raise RuntimeError("deferred fixture creation failed")
+            print(f"fixture_created after call: {spec['fixture_created']}")
         if len(spec["fixture_ids"]) != 2:
             raise RuntimeError("fixture does not contain two wall bodies")
         if spec["active_endpoint_id"] is None:
@@ -52,7 +68,7 @@ def main() -> None:
             if not (task.X_MIN <= x <= task.X_MAX and task.Y_MIN <= y <= task.Y_MAX):
                 raise RuntimeError(f"{name} lies outside workspace")
         contact = task.fixture_contact_observation()
-        if int(contact["contact_point_count"]) != 0:
+        if not defer_creation and int(contact["contact_point_count"]) != 0:
             raise RuntimeError("initial fixture contact is not zero")
         wall_aabbs = [p.getAABB(int(body)) for body in spec["fixture_ids"]]
         for minimum, maximum in wall_aabbs:

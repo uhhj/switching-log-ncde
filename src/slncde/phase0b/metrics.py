@@ -33,10 +33,30 @@ def repeat_gate(values: Sequence[float], config: Mapping[str, Any]) -> bool:
 def experiment_verdict(
     aggregate: Mapping[str, Any], config: Mapping[str, Any]
 ) -> str:
+    local_segment = bool(
+        config.get("preparation", {}).get(
+            "defer_fixture_creation", False
+        )
+    )
+    expected = len(config["experiment"]["seeds"])
+    if local_segment:
+        if int(aggregate["common_snapshot_pass_count"]) < expected:
+            return "PHASE0B_R1_1_PREPARATION_FAIL"
+        if int(aggregate["completed_seeds"]) < expected:
+            return "PHASE0B_R1_1_ENGINEERING_BLOCKED"
+        gates = aggregate["gates"]
+        if not gates["A"]:
+            return "PHASE0B_R1_1_NO_GO"
+        if not gates["B"]:
+            return "PHASE0B_R1_1_NOMINAL_FAIL"
+        if not (gates["C"] and gates["D"]):
+            return "PHASE0B_R1_1_NO_GO"
+        if gates["E"]:
+            return "PHASE0B_R1_1_GO"
+        return "PHASE0B_R1_1_WEAK_JAM"
     canonical = (
         config.get("canonical_frame", {}).get("mode") == "canonical"
     )
-    expected = len(config["experiment"]["seeds"])
     if canonical:
         if (
             int(aggregate["preparation_successful_seeds"]) < expected
@@ -296,6 +316,11 @@ def analyze_experiment(
     repo_root: Path, config: Mapping[str, Any]
 ) -> Dict[str, Any]:
     data_root = repo_root / str(config["paths"]["data_root"])
+    local_segment = bool(
+        config.get("preparation", {}).get(
+            "defer_fixture_creation", False
+        )
+    )
     pairs = []
     preparations = []
     for seed in config["experiment"]["seeds"]:
@@ -309,25 +334,51 @@ def analyze_experiment(
         contact = metadata.get(
             "staging_fixture_contact", metadata.get("staging_contact", {})
         )
-        contact_free = bool(
-            int(contact.get("contact_active_beads", 0)) == 0
-            and int(contact.get("contact_point_count", 0)) == 0
+        contact_free = (
+            bool(metadata.get("fixture_settle_contact_free", False))
+            if local_segment
+            else bool(
+                int(contact.get("contact_active_beads", 0)) == 0
+                and int(contact.get("contact_point_count", 0)) == 0
+            )
         )
-        preparations.append(
-            {
-                "seed": int(seed),
-                "status": status,
-                "contact_free": contact_free,
-                "failure_reason": metadata.get("preparation_failure_reason"),
-                "contact_bead_indices": contact.get(
-                    "contact_bead_indices", []
-                ),
-            }
-        )
+        preparation_record = {
+            "seed": int(seed),
+            "status": status,
+            "contact_free": contact_free,
+            "failure_reason": metadata.get("preparation_failure_reason"),
+            "contact_bead_indices": contact.get(
+                "contact_bead_indices", []
+            ),
+            "local_geometry_pass": bool(
+                metadata.get("local_geometry_pass", status == "COMPLETED")
+            ),
+            "after_grasp_pass": bool(
+                metadata.get("after_grasp_pass", status == "COMPLETED")
+            ),
+            "fixture_overlap_free": bool(
+                metadata.get("fixture_overlap_free", contact_free)
+            ),
+            "fixture_settle_contact_free": bool(
+                metadata.get("fixture_settle_contact_free", contact_free)
+            ),
+            "common_snapshot_pass": bool(
+                metadata.get(
+                    "common_snapshot_pass",
+                    status in ("COMPLETED", "PASS"),
+                )
+            ),
+            "initial_local_diagnostics": metadata.get(
+                "preparation_diagnostics", {}
+            ).get("after_initial_settle"),
+        }
+        preparations.append(preparation_record)
         required = [
             seed_root / branch / "trajectory.npz" for branch in BRANCHES
         ]
-        if status == "COMPLETED" and all(path.is_file() for path in required):
+        if status in ("COMPLETED", "PASS") and all(
+            path.is_file() for path in required
+        ):
             pairs.append(analyze_seed(seed_root, config, int(seed)))
 
     minimum_duration = float(config["labels"]["minimum_mode_duration_ms"])
@@ -335,6 +386,11 @@ def analyze_experiment(
     slide_contact = sum(bool(pair["slide_contact_sustained"]) for pair in pairs)
     jam_contact = sum(bool(pair["jam_contact_sustained"]) for pair in pairs)
     nominal_success = sum(bool(pair["nominal_success"]) for pair in pairs)
+    nominal_progress_success = sum(
+        float(pair["nominal_final_progress_m"])
+        >= float(config["analysis"]["nominal_progress_min_m"])
+        for pair in pairs
+    )
     nominal_executable = sum(
         bool(pair["nominal_motion_completed"]) for pair in pairs
     )
@@ -345,7 +401,7 @@ def analyze_experiment(
     stick_count = sum(bool(pair["sustained_stick"]) for pair in pairs)
     transition_count = sum(bool(pair["meaningful_transition"]) for pair in pairs)
     preparation_success = sum(
-        item["status"] == "COMPLETED" for item in preparations
+        bool(item["common_snapshot_pass"]) for item in preparations
     )
     contact_free_staging = sum(
         bool(item["contact_free"]) for item in preparations
@@ -361,12 +417,53 @@ def analyze_experiment(
         )
         for item in preparations
     )
+    local_geometry_pass_count = sum(
+        bool(item["local_geometry_pass"]) for item in preparations
+    )
+    after_grasp_pass_count = sum(
+        bool(item["after_grasp_pass"]) for item in preparations
+    )
+    fixture_overlap_free_count = sum(
+        bool(item["fixture_overlap_free"]) for item in preparations
+    )
+    fixture_settle_contact_free_count = sum(
+        bool(item["fixture_settle_contact_free"]) for item in preparations
+    )
+    initial_diagnostics = [
+        item["initial_local_diagnostics"]
+        for item in preparations
+        if item["initial_local_diagnostics"] is not None
+    ]
+
+    def diagnostic_median(key: str) -> float:
+        if not initial_diagnostics:
+            return float("nan")
+        return float(
+            np.median([float(item[key]) for item in initial_diagnostics])
+        )
+
     aggregate: Dict[str, Any] = {
         "preparation_attempted_seeds": len(preparations),
         "preparation_successful_seeds": preparation_success,
         "contact_free_staging_seeds": contact_free_staging,
         "preparation_failures": preparation_failures,
         "fixture_placement_failures": fixture_placement_failures,
+        "local_geometry_pass_count": local_geometry_pass_count,
+        "after_grasp_pass_count": after_grasp_pass_count,
+        "fixture_overlap_free_count": fixture_overlap_free_count,
+        "fixture_settle_contact_free_count": (
+            fixture_settle_contact_free_count
+        ),
+        "common_snapshot_pass_count": preparation_success,
+        "median_minimum_entry_clearance_m": diagnostic_median(
+            "minimum_entry_clearance_m"
+        ),
+        "median_alignment_cosine": diagnostic_median(
+            "median_alignment_cosine"
+        ),
+        "median_max_local_speed_mps": diagnostic_median(
+            "max_local_speed_mps"
+        ),
         "completed_seeds": len(pairs),
         "median_repeat_rmse_100ms": _median(pairs, "repeat_rmse_100ms")
         if pairs
@@ -381,6 +478,7 @@ def analyze_experiment(
             np.count_nonzero(np.asarray(repeat_500) <= 0.0020)
         ),
         "nominal_successful_branches": nominal_success,
+        "nominal_progress_successful_branches": nominal_progress_success,
         "nominal_executable_branches": nominal_executable,
         "median_nominal_final_progress_m": _median(
             pairs, "nominal_final_progress_m"

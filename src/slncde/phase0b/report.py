@@ -133,6 +133,74 @@ def _r1_interpretation(result: Mapping[str, Any]):
     return fact, inference, scientific, next_action
 
 
+def _r1_1_interpretation(result: Mapping[str, Any]):
+    aggregate = result["aggregate"]
+    verdict = result["verdict"]
+    fact = (
+        f"All {aggregate['preparation_attempted_seeds']} fixed seeds were "
+        f"attempted; local geometry passed in "
+        f"{aggregate['local_geometry_pass_count']}, after-grasp geometry passed "
+        f"in {aggregate['after_grasp_pass_count']}, and "
+        f"{aggregate['common_snapshot_pass_count']} reached a contact-free common "
+        f"snapshot. {aggregate['completed_seeds']} paired rollouts completed."
+    )
+    if verdict == "PHASE0B_R1_1_GO":
+        inference = (
+            "Local-segment canonicalization produces comparable common states "
+            "and the unchanged fixture task passes all qualification gates."
+        )
+        scientific = (
+            "Phase 0B task qualification is complete; predictive mode necessity "
+            "has not yet been tested."
+        )
+        next_action = "Run the Phase 0C matched-state/action Oracle-mode necessity smoke."
+    elif verdict == "PHASE0B_R1_1_WEAK_JAM":
+        inference = (
+            "Preparation, repeatability, nominal insertion, fixture contact, and "
+            "slip pass, but the unchanged jam probe remains weak."
+        )
+        scientific = (
+            "The benchmark is qualified for free/contact/slip; jam geometry needs "
+            "a separately controlled R2 qualification."
+        )
+        next_action = (
+            "Increase jam_lateral_offset_m by 0.002 m in Phase 0B-R2 and rerun "
+            "the same five seeds."
+        )
+    elif verdict == "PHASE0B_R1_1_PREPARATION_FAIL":
+        inference = (
+            "The fixed one-pass initialization did not yield five valid common "
+            "snapshots, so downstream rollout counts are not a task verdict."
+        )
+        scientific = "Initial-state generation remains unqualified."
+        next_action = (
+            "Inspect compatibility between the cable constraint frames and the five-bead reset geometry."
+        )
+    elif verdict == "PHASE0B_R1_1_NOMINAL_FAIL":
+        inference = (
+            "Initial-state preparation and repeatability pass, but centered "
+            "insertion does not reliably achieve the unchanged progress gate."
+        )
+        scientific = (
+            "The next limitation is nominal task geometry or control, not state preparation."
+        )
+        next_action = (
+            "Diagnose centered nominal insertion geometry and control without lowering the progress threshold."
+        )
+    elif verdict == "PHASE0B_R1_1_NO_GO":
+        inference = (
+            "Preparation, repeatability, and nominal execution are adequate, but "
+            "fixture contact or slip is not reliably realized."
+        )
+        scientific = "The current contact-regime task is not qualified for Phase 0C."
+        next_action = "Reassess fixture-contact and slip task realization."
+    else:
+        inference = "A simulator, data, or snapshot error prevented valid analysis."
+        scientific = "No scientific qualification conclusion is available."
+        next_action = "Fix the reported engineering failure and rerun the five fixed seeds."
+    return fact, inference, scientific, next_action
+
+
 def write_reports(
     result: Mapping[str, Any], config: Mapping[str, Any], repo_root: Path
 ) -> Path:
@@ -143,6 +211,72 @@ def write_reports(
         handle.write("\n")
 
     aggregate = result["aggregate"]
+    if config.get("preparation", {}).get("defer_fixture_creation", False):
+        fact, inference, scientific, next_action = _r1_1_interpretation(
+            result
+        )
+        text = f"""# Phase 0B-R1.1 Local-Segment Canonicalization
+
+## Verdict
+{result['verdict']}
+
+## Preparation
+- attempted: {aggregate['preparation_attempted_seeds']} / 5
+- local geometry pass: {aggregate['local_geometry_pass_count']} / 5
+- after-grasp pass: {aggregate['after_grasp_pass_count']} / 5
+- fixture overlap-free: {aggregate['fixture_overlap_free_count']} / 5
+- fixture-settle contact-free: {aggregate['fixture_settle_contact_free_count']} / 5
+- common snapshot PASS: {aggregate['common_snapshot_pass_count']} / 5
+
+## Local geometry
+- median minimum entry clearance: {_format(aggregate['median_minimum_entry_clearance_m'])} m
+- median alignment cosine: {_format(aggregate['median_alignment_cosine'])}
+- median max local speed: {_format(aggregate['median_max_local_speed_mps'])} m/s
+
+## Repeat stability
+- median RMSE @100 ms: {_format(aggregate['median_repeat_rmse_100ms'])} m
+- median RMSE @250 ms: {_format(aggregate['median_repeat_rmse_250ms'])} m
+- median RMSE @500 ms: {_format(aggregate['median_repeat_rmse_500ms'])} m
+- seeds <= 2 mm: {aggregate['repeat_seeds_le_2mm']} / 5
+
+## Nominal
+- executable: {aggregate['nominal_executable_branches']} / 5
+- progress >= 0.040 m: {aggregate['nominal_progress_successful_branches']} / 5
+- median final progress: {_format(aggregate['median_nominal_final_progress_m'])} m
+- sustained jam: {aggregate['nominal_jam_count']} / 5
+
+## Fixture contact
+- slide contact: {aggregate['slide_contact_branches']} / 5
+- jam contact: {aggregate['jam_contact_branches']} / 5
+
+## Modes
+- sustained slip: {aggregate['sustained_slip_branches']} / 5
+- sustained stick: {aggregate['sustained_stick_seeds']} / 5
+- sustained jam: {aggregate['sustained_jam_branches']} / 5
+
+## Representative transitions
+- slide: {aggregate['representative_slide_sequence']}
+- jam: {aggregate['representative_jam_sequence']}
+
+## Benchmark boundary
+Local-segment canonicalization is benchmark initial-state generation. It is applied before the common snapshot and identically for all future branches. No cable teleportation or state reset is allowed after the common snapshot.
+
+## Fact
+{fact}
+
+## Inference
+{inference}
+
+## Scientific interpretation
+{scientific}
+
+## Next action
+{next_action}
+"""
+        result_path = report_root / "RESULT.md"
+        result_path.write_text(text, encoding="utf-8")
+        return result_path
+
     if config.get("canonical_frame", {}).get("mode") == "canonical":
         fact, inference, scientific, next_action = _r1_interpretation(result)
         text = f"""# Phase 0B-R1 Canonical Fixture Qualification
