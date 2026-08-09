@@ -33,12 +33,30 @@ def repeat_gate(values: Sequence[float], config: Mapping[str, Any]) -> bool:
 def experiment_verdict(
     aggregate: Mapping[str, Any], config: Mapping[str, Any]
 ) -> str:
+    canonical_spawn = bool(
+        config.get("preparation", {}).get("method") == "canonical_spawn"
+    )
     local_segment = bool(
         config.get("preparation", {}).get(
             "defer_fixture_creation", False
         )
     )
     expected = len(config["experiment"]["seeds"])
+    if canonical_spawn:
+        if int(aggregate["common_snapshot_pass_count"]) < expected:
+            return "PHASE0B_R1_2_PREPARATION_FAIL"
+        if int(aggregate["completed_seeds"]) < expected:
+            return "PHASE0B_R1_2_ENGINEERING_BLOCKED"
+        gates = aggregate["gates"]
+        if not gates["A"]:
+            return "PHASE0B_R1_2_NO_GO"
+        if not gates["B"]:
+            return "PHASE0B_R1_2_NOMINAL_FAIL"
+        if not (gates["C"] and gates["D"]):
+            return "PHASE0B_R1_2_NO_GO"
+        if gates["E"]:
+            return "PHASE0B_R1_2_GO"
+        return "PHASE0B_R1_2_WEAK_JAM"
     if local_segment:
         if int(aggregate["common_snapshot_pass_count"]) < expected:
             return "PHASE0B_R1_1_PREPARATION_FAIL"
@@ -321,6 +339,9 @@ def analyze_experiment(
             "defer_fixture_creation", False
         )
     )
+    canonical_spawn = bool(
+        config.get("preparation", {}).get("method") == "canonical_spawn"
+    )
     pairs = []
     preparations = []
     for seed in config["experiment"]["seeds"]:
@@ -353,6 +374,12 @@ def analyze_experiment(
             "local_geometry_pass": bool(
                 metadata.get("local_geometry_pass", status == "COMPLETED")
             ),
+            "canonical_spawn_geometry_pass": bool(
+                metadata.get(
+                    "canonical_spawn_geometry_pass",
+                    metadata.get("local_geometry_pass", False),
+                )
+            ),
             "after_grasp_pass": bool(
                 metadata.get("after_grasp_pass", status == "COMPLETED")
             ),
@@ -370,7 +397,14 @@ def analyze_experiment(
             ),
             "initial_local_diagnostics": metadata.get(
                 "preparation_diagnostics", {}
-            ).get("after_initial_settle"),
+            ).get(
+                "after_spawn_settle"
+                if canonical_spawn
+                else "after_initial_settle"
+            ),
+            "endpoint_spawn_error_m": metadata.get(
+                "endpoint_spawn_error_m"
+            ),
         }
         preparations.append(preparation_record)
         required = [
@@ -407,7 +441,8 @@ def analyze_experiment(
         bool(item["contact_free"]) for item in preparations
     )
     preparation_failures = sum(
-        item["status"] != "COMPLETED" for item in preparations
+        item["status"] not in ("COMPLETED", "PASS")
+        for item in preparations
     )
     fixture_placement_failures = sum(
         item["failure_reason"] is not None
@@ -419,6 +454,10 @@ def analyze_experiment(
     )
     local_geometry_pass_count = sum(
         bool(item["local_geometry_pass"]) for item in preparations
+    )
+    canonical_spawn_geometry_pass_count = sum(
+        bool(item["canonical_spawn_geometry_pass"])
+        for item in preparations
     )
     after_grasp_pass_count = sum(
         bool(item["after_grasp_pass"]) for item in preparations
@@ -434,13 +473,21 @@ def analyze_experiment(
         for item in preparations
         if item["initial_local_diagnostics"] is not None
     ]
+    endpoint_spawn_errors = [
+        float(item["endpoint_spawn_error_m"])
+        for item in preparations
+        if item["endpoint_spawn_error_m"] is not None
+    ]
 
     def diagnostic_median(key: str) -> float:
-        if not initial_diagnostics:
+        values = [
+            float(item[key])
+            for item in initial_diagnostics
+            if key in item
+        ]
+        if not values:
             return float("nan")
-        return float(
-            np.median([float(item[key]) for item in initial_diagnostics])
-        )
+        return float(np.median(values))
 
     aggregate: Dict[str, Any] = {
         "preparation_attempted_seeds": len(preparations),
@@ -449,6 +496,9 @@ def analyze_experiment(
         "preparation_failures": preparation_failures,
         "fixture_placement_failures": fixture_placement_failures,
         "local_geometry_pass_count": local_geometry_pass_count,
+        "canonical_spawn_geometry_pass_count": (
+            canonical_spawn_geometry_pass_count
+        ),
         "after_grasp_pass_count": after_grasp_pass_count,
         "fixture_overlap_free_count": fixture_overlap_free_count,
         "fixture_settle_contact_free_count": (
@@ -463,6 +513,14 @@ def analyze_experiment(
         ),
         "median_max_local_speed_mps": diagnostic_median(
             "max_local_speed_mps"
+        ),
+        "median_max_local_spacing_error_m": diagnostic_median(
+            "max_local_spacing_error_m"
+        ),
+        "median_endpoint_spawn_error_m": (
+            float(np.median(endpoint_spawn_errors))
+            if endpoint_spawn_errors
+            else float("nan")
         ),
         "completed_seeds": len(pairs),
         "median_repeat_rmse_100ms": _median(pairs, "repeat_rmse_100ms")

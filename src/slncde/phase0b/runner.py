@@ -17,7 +17,9 @@ from slncde.phase0a.snapshot import (
     restore_runtime_state,
 )
 from slncde.phase0b.preparation import (
+    canonical_active_endpoint_index,
     canonicalize_local_segment,
+    endpoint_local_indices,
     local_geometry_passes,
     local_segment_diagnostics,
 )
@@ -81,6 +83,15 @@ def set_fixture_environment(config: Mapping[str, Any], seed: int) -> None:
             "wall_lateral_friction"
         ],
         "SLNCDE_FIXTURE_TRACE_STRIDE": simulator["trace_stride"],
+        "SLNCDE_FIXTURE_STAGING_BEFORE_ENTRY": config["motion"][
+            "staging_before_entry_m"
+        ],
+        "SLNCDE_CABLE_SPAWN_MODE": (
+            "canonical"
+            if config.get("preparation", {}).get("method")
+            == "canonical_spawn"
+            else "random"
+        ),
     }
     frame = config.get("canonical_frame", {"mode": "auto_endpoint"})
     values["SLNCDE_FIXTURE_FRAME_MODE"] = frame.get(
@@ -411,6 +422,43 @@ def _empty_preparation_payload(indices, targets) -> Dict[str, np.ndarray]:
     return payload
 
 
+def _empty_canonical_spawn_payload(
+    indices, endpoint_target, spawn_origin
+) -> Dict[str, np.ndarray]:
+    payload = {
+        "local_bead_indices": np.asarray(indices, dtype=np.int64),
+        "canonical_endpoint_target": np.asarray(
+            endpoint_target, dtype=np.float64
+        ),
+        "canonical_spawn_origin": np.asarray(
+            spawn_origin, dtype=np.float64
+        ),
+    }
+    for stage in (
+        "initial_spawn",
+        "after_spawn_settle",
+        "after_grasp",
+        "after_fixture_settle",
+    ):
+        payload[f"positions_{stage}"] = np.empty((0, 3), dtype=np.float64)
+        payload[f"entry_signed_distances_{stage}"] = np.empty(
+            (0,), dtype=np.float64
+        )
+        payload[f"alignment_cosines_{stage}"] = np.empty(
+            (0,), dtype=np.float64
+        )
+        payload[f"local_speeds_{stage}"] = np.empty(
+            (0,), dtype=np.float64
+        )
+        payload[f"segment_lengths_{stage}"] = np.empty(
+            (0,), dtype=np.float64
+        )
+        payload[f"spacing_errors_{stage}"] = np.empty(
+            (0,), dtype=np.float64
+        )
+    return payload
+
+
 def _store_preparation_diagnostics(
     payload: Dict[str, np.ndarray], stage: str, diagnostics
 ) -> None:
@@ -424,6 +472,12 @@ def _store_preparation_diagnostics(
     payload[f"local_speeds_{stage}"] = np.asarray(
         diagnostics["local_speeds_mps"]
     )
+    payload[f"segment_lengths_{stage}"] = np.asarray(
+        diagnostics["segment_lengths_m"]
+    )
+    payload[f"spacing_errors_{stage}"] = np.asarray(
+        diagnostics["spacing_errors_m"]
+    )
 
 
 def _contact_free(observation: Mapping[str, Any]) -> bool:
@@ -431,6 +485,36 @@ def _contact_free(observation: Mapping[str, Any]) -> bool:
         int(observation["contact_active_beads"]) == 0
         and int(observation["contact_point_count"]) == 0
     )
+
+
+def _fixture_contact_after_collision_refresh(task) -> Dict[str, Any]:
+    """Refresh contacts, with a PyBullet 3.0.4 overlap-query fallback."""
+    import pybullet as p
+
+    refresh = getattr(p, "performCollisionDetection", None)
+    if callable(refresh):
+        refresh()
+    observation = task.fixture_contact_observation()
+    if callable(refresh) or not _contact_free(observation):
+        return observation
+
+    spec = task.fixture_spec()
+    active_indices = set()
+    point_count = 0
+    for bead_index, bead_id in enumerate(task.cable_bead_IDs):
+        for fixture_id in spec["fixture_ids"]:
+            points = p.getClosestPoints(
+                int(bead_id), int(fixture_id), distance=0.0
+            )
+            if points:
+                active_indices.add(int(bead_index))
+                point_count += len(points)
+    if point_count:
+        observation = dict(observation)
+        observation["contact_active_beads"] = len(active_indices)
+        observation["contact_point_count"] = int(point_count)
+        observation["contact_bead_indices"] = sorted(active_indices)
+    return observation
 
 
 def _write_preparation_artifacts(
@@ -471,6 +555,10 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
                 "defer_fixture_creation", False
             )
         )
+        canonical_spawn = bool(
+            config.get("preparation", {}).get("method")
+            == "canonical_spawn"
+        )
         seed_root = (
             repo_root
             / str(config["paths"]["data_root"])
@@ -478,7 +566,238 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
         )
         seed_root.mkdir(parents=True, exist_ok=True)
 
-        if local_preparation:
+        if canonical_spawn:
+            spec = task.fixture_spec()
+            if bool(spec["fixture_created"]) or spec["fixture_ids"]:
+                raise RuntimeError("fixture was not deferred during R1.2 reset")
+            if spec.get("cable_spawn_mode") != "canonical":
+                raise RuntimeError("canonical cable spawn mode was not active")
+            insertion_axis = np.asarray(
+                spec["insertion_axis"], dtype=np.float64
+            )
+            lateral_axis = np.asarray(
+                spec["lateral_axis"], dtype=np.float64
+            )
+            if not np.allclose(insertion_axis[:2], [1.0, 0.0], atol=1e-8):
+                raise RuntimeError("R1.2 requires the canonical +X insertion axis")
+            entry_center = np.asarray(
+                spec["entry_center"], dtype=np.float64
+            )
+            staging_endpoint = np.asarray(
+                spec["canonical_endpoint_target"], dtype=np.float64
+            )
+            expected_staging = (
+                entry_center
+                - float(config["motion"]["staging_before_entry_m"])
+                * insertion_axis
+            )
+            if not np.allclose(staging_endpoint, expected_staging, atol=1e-8):
+                raise RuntimeError("task and runner canonical staging targets differ")
+            endpoint_index = canonical_active_endpoint_index(
+                len(task.cable_bead_IDs)
+            )
+            if int(spec["active_endpoint_index"]) != endpoint_index:
+                raise RuntimeError("canonical active endpoint is not the last bead")
+            endpoint_id = int(spec["active_endpoint_id"])
+            endpoint_initial = _active_endpoint_position(task)
+            endpoint_spawn_error_m = float(
+                np.linalg.norm(endpoint_initial - staging_endpoint)
+            )
+            local_indices = endpoint_local_indices(
+                len(task.cable_bead_IDs),
+                endpoint_index,
+                int(config["preparation"]["local_bead_count"]),
+            )
+            nominal_spacing = float(spec["nominal_spacing_m"])
+            preparation_payload = _empty_canonical_spawn_payload(
+                local_indices,
+                staging_endpoint,
+                spec["canonical_spawn_origin"],
+            )
+            metadata = {
+                "seed": int(seed),
+                "task": task_name,
+                "config": config,
+                "fixture_spec": spec,
+                "fixture_frame_mode": frame_mode,
+                "preparation_method": "canonical_spawn",
+                "cable_spawn_mode": "canonical",
+                "active_endpoint_index": int(endpoint_index),
+                "active_endpoint_id": int(endpoint_id),
+                "canonical_entry_center": spec["entry_center"],
+                "canonical_insertion_axis": spec["insertion_axis"],
+                "canonical_endpoint_target": staging_endpoint,
+                "canonical_spawn_origin": spec["canonical_spawn_origin"],
+                "nominal_spacing_m": nominal_spacing,
+                "endpoint_spawn_error_m": endpoint_spawn_error_m,
+                "staging_endpoint_target": staging_endpoint,
+                "local_bead_indices": local_indices,
+                "fixture_created_at_reset": False,
+                "scientific_rollout_start": "common_snapshot",
+                "preparation_status": None,
+                "preparation_failure_reason": None,
+                "canonical_spawn_geometry_pass": False,
+                "local_geometry_pass": False,
+                "after_grasp_pass": False,
+                "fixture_overlap_free": False,
+                "fixture_settle_contact_free": False,
+                "common_snapshot_pass": False,
+                "preparation_diagnostics": {},
+                "simulator_git_commit": _simulator_commit(simulator_root),
+                "branches": {},
+            }
+
+            def summarize_spawn(stage: str, diagnostics) -> None:
+                _store_preparation_diagnostics(
+                    preparation_payload, stage, diagnostics
+                )
+                metadata["preparation_diagnostics"][stage] = {
+                    "minimum_entry_clearance_m": -float(
+                        diagnostics["max_signed_entry_distance_m"]
+                    ),
+                    "median_alignment_cosine": float(
+                        diagnostics["median_alignment_cosine"]
+                    ),
+                    "max_local_speed_mps": float(
+                        diagnostics["max_local_speed_mps"]
+                    ),
+                    "max_local_spacing_error_m": float(
+                        diagnostics["max_local_spacing_error_m"]
+                    ),
+                    "median_local_spacing_error_m": float(
+                        diagnostics["median_local_spacing_error_m"]
+                    ),
+                }
+
+            def fail_spawn(status: str, reason: str) -> Path:
+                metadata["preparation_status"] = status
+                metadata["preparation_failure_reason"] = reason
+                metadata["fixture_spec"] = task.fixture_spec()
+                _write_preparation_artifacts(
+                    seed_root, metadata, preparation_payload
+                )
+                return seed_root
+
+            initial_spawn = local_segment_diagnostics(
+                task,
+                local_indices,
+                entry_center,
+                insertion_axis,
+                lateral_axis,
+                nominal_spacing,
+            )
+            summarize_spawn("initial_spawn", initial_spawn)
+            task.set_script_context("staging", [0.0, 0.0, 0.0])
+            env.step_physics(
+                int(config["preparation"]["settle_steps_after_spawn"])
+            )
+            after_spawn_settle = local_segment_diagnostics(
+                task,
+                local_indices,
+                entry_center,
+                insertion_axis,
+                lateral_axis,
+                nominal_spacing,
+            )
+            summarize_spawn("after_spawn_settle", after_spawn_settle)
+            metadata["canonical_spawn_geometry_pass"] = local_geometry_passes(
+                after_spawn_settle, config["preparation"]
+            )
+            metadata["local_geometry_pass"] = metadata[
+                "canonical_spawn_geometry_pass"
+            ]
+            if not metadata["canonical_spawn_geometry_pass"]:
+                return fail_spawn(
+                    "PREP_FAILED_SPAWN_GEOMETRY",
+                    "canonical geometry gate failed after spawn settle",
+                )
+
+            try:
+                endpoint_id = _acquire_endpoint(env, task, config["motion"])
+            except RuntimeError as exc:
+                return fail_spawn("PREP_FAILED_GRASP", str(exc))
+            env.step_physics(
+                int(config["preparation"]["settle_steps_after_grasp"])
+            )
+            after_grasp = local_segment_diagnostics(
+                task,
+                local_indices,
+                entry_center,
+                insertion_axis,
+                lateral_axis,
+                nominal_spacing,
+            )
+            summarize_spawn("after_grasp", after_grasp)
+            grasp_active = bool(getattr(env.ee, "activated", False))
+            metadata["grasp_active"] = grasp_active
+            metadata["after_grasp_pass"] = bool(
+                grasp_active
+                and local_geometry_passes(
+                    after_grasp, config["preparation"]
+                )
+            )
+            if not metadata["after_grasp_pass"]:
+                return fail_spawn(
+                    "PREP_FAILED_AFTER_GRASP",
+                    "local geometry or suction gate failed after grasp",
+                )
+
+            if task.fixture_created():
+                raise RuntimeError("fixture existed before explicit creation")
+            task.create_fixture()
+            overlap_contact = _fixture_contact_after_collision_refresh(task)
+            metadata["fixture_overlap_contact"] = overlap_contact
+            metadata["fixture_overlap_free"] = _contact_free(
+                overlap_contact
+            )
+            if not metadata["fixture_overlap_free"]:
+                return fail_spawn(
+                    "PREP_FAILED_FIXTURE_OVERLAP",
+                    "fixture creation produced immediate cable overlap",
+                )
+
+            env.step_physics(
+                int(
+                    config["preparation"][
+                        "settle_steps_after_fixture_creation"
+                    ]
+                )
+            )
+            fixture_settle_contact = _fixture_contact_after_collision_refresh(
+                task
+            )
+            after_fixture_settle = local_segment_diagnostics(
+                task,
+                local_indices,
+                entry_center,
+                insertion_axis,
+                lateral_axis,
+                nominal_spacing,
+            )
+            summarize_spawn("after_fixture_settle", after_fixture_settle)
+            metadata["fixture_settle_contact"] = fixture_settle_contact
+            metadata["fixture_settle_contact_free"] = _contact_free(
+                fixture_settle_contact
+            )
+            if not metadata["fixture_settle_contact_free"]:
+                return fail_spawn(
+                    "PREP_FAILED_FIXTURE_SETTLE_CONTACT",
+                    "fixture contact appeared during fixture settle",
+                )
+
+            metadata["preparation_status"] = "PASS"
+            metadata["common_snapshot_pass"] = True
+            metadata["fixture_spec"] = task.fixture_spec()
+            metadata["staging_fixture_contact"] = fixture_settle_contact
+            metadata["staging_contact"] = fixture_settle_contact
+            metadata["staging_endpoint_actual"] = _active_endpoint_position(
+                task
+            )
+            metadata["active_endpoint_id"] = int(endpoint_id)
+            _write_preparation_artifacts(
+                seed_root, metadata, preparation_payload
+            )
+        elif local_preparation:
             spec = task.fixture_spec()
             if bool(spec["fixture_created"]) or spec["fixture_ids"]:
                 raise RuntimeError("fixture was not deferred during R1.1 reset")
@@ -617,8 +936,7 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
             if task.fixture_created():
                 raise RuntimeError("fixture existed before explicit creation")
             task.create_fixture()
-            p.performCollisionDetection()
-            overlap_contact = task.fixture_contact_observation()
+            overlap_contact = _fixture_contact_after_collision_refresh(task)
             metadata["fixture_overlap_contact"] = overlap_contact
             metadata["fixture_overlap_free"] = _contact_free(
                 overlap_contact
@@ -636,8 +954,9 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
                     ]
                 )
             )
-            p.performCollisionDetection()
-            fixture_settle_contact = task.fixture_contact_observation()
+            fixture_settle_contact = _fixture_contact_after_collision_refresh(
+                task
+            )
             after_fixture_settle = local_segment_diagnostics(
                 task,
                 local_indices,

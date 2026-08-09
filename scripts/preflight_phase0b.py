@@ -15,6 +15,10 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from slncde.phase0a.runner import load_simulator
 from slncde.phase0b.config import load_config
 from slncde.phase0b.runner import set_fixture_environment
+from slncde.phase0b.preparation import (
+    endpoint_local_indices,
+    local_segment_diagnostics,
+)
 
 
 def main() -> None:
@@ -48,12 +52,77 @@ def main() -> None:
                 "defer_fixture_creation", False
             )
         )
+        canonical_spawn = bool(
+            config.get("preparation", {}).get("method")
+            == "canonical_spawn"
+        )
         if defer_creation:
             if spec["fixture_created"] or spec["fixture_ids"]:
                 raise RuntimeError("fixture was created during deferred reset")
             print(f"fixture defer: {defer_creation}")
             print(f"fixture_created after reset: {spec['fixture_created']}")
             print(f"fixture_ids after reset: {spec['fixture_ids']}")
+            if canonical_spawn:
+                axis = np.asarray(spec["insertion_axis"], dtype=np.float64)
+                if spec.get("cable_spawn_mode") != "canonical":
+                    raise RuntimeError("spawn mode is not canonical")
+                if not np.allclose(axis[:2], [1.0, 0.0], atol=1e-8):
+                    raise RuntimeError("canonical insertion axis is not +X")
+                endpoint_index = len(task.cable_bead_IDs) - 1
+                if int(spec["active_endpoint_index"]) != endpoint_index:
+                    raise RuntimeError("canonical active endpoint is not last bead")
+                endpoint = np.asarray(
+                    p.getBasePositionAndOrientation(
+                        int(spec["active_endpoint_id"])
+                    )[0],
+                    dtype=np.float64,
+                )
+                expected = np.asarray(
+                    spec["canonical_endpoint_target"], dtype=np.float64
+                )
+                endpoint_error = float(np.linalg.norm(endpoint - expected))
+                if endpoint_error > 1e-6:
+                    raise RuntimeError("canonical endpoint missed staging target")
+                indices = endpoint_local_indices(
+                    len(task.cable_bead_IDs),
+                    endpoint_index,
+                    int(config["preparation"]["local_bead_count"]),
+                )
+                entry = np.asarray(spec["entry_center"], dtype=np.float64)
+                lateral = np.asarray(spec["lateral_axis"], dtype=np.float64)
+                spacing = float(spec["nominal_spacing_m"])
+                before = local_segment_diagnostics(
+                    task, indices, entry, axis, lateral, spacing
+                )
+                task.set_script_context("staging", [0.0, 0.0, 0.0])
+                env.step_physics(
+                    int(config["preparation"]["settle_steps_after_spawn"])
+                )
+                after = local_segment_diagnostics(
+                    task, indices, entry, axis, lateral, spacing
+                )
+                if float(before["median_alignment_cosine"]) < 0.99:
+                    raise RuntimeError("initial canonical alignment is not near +1")
+                if float(after["median_alignment_cosine"]) < float(
+                    config["preparation"]["alignment_cosine_min"]
+                ):
+                    raise RuntimeError("canonical alignment failed after settle")
+                if float(after["max_local_spacing_error_m"]) > float(
+                    config["preparation"]["max_local_spacing_error_m"]
+                ):
+                    raise RuntimeError("canonical spacing failed after settle")
+                print("cable spawn mode: canonical")
+                print(f"active endpoint index: {endpoint_index}")
+                print(f"endpoint spawn error m: {endpoint_error}")
+                print(
+                    "alignment before/after settle: "
+                    f"{float(before['median_alignment_cosine'])} / "
+                    f"{float(after['median_alignment_cosine'])}"
+                )
+                print(
+                    "max spacing error after settle m: "
+                    f"{float(after['max_local_spacing_error_m'])}"
+                )
             task.create_fixture()
             spec = task.fixture_spec()
             if not spec["fixture_created"] or len(spec["fixture_ids"]) != 2:

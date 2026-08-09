@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from slncde.phase0b.preparation import (
+    canonical_active_endpoint_index,
     canonical_local_targets,
     endpoint_local_indices,
     local_geometry_passes,
@@ -13,6 +14,7 @@ from slncde.phase0b.preparation import (
 def test_endpoint_local_indices_follow_inward_order():
     assert endpoint_local_indices(20, 0, 5) == [0, 1, 2, 3, 4]
     assert endpoint_local_indices(20, 19, 5) == [19, 18, 17, 16, 15]
+    assert canonical_active_endpoint_index(20) == 19
 
 
 def test_canonical_targets_step_away_from_entry():
@@ -41,6 +43,7 @@ def test_straight_local_segment_passes_and_entry_crossing_fails():
         [0.0, 1.0, 0.0],
     )
     assert np.isclose(diagnostics["median_alignment_cosine"], 1.0)
+    assert np.isclose(diagnostics["max_local_spacing_error_m"], 0.0)
     assert local_geometry_passes(diagnostics, thresholds)
 
     crossing = positions.copy()
@@ -53,3 +56,40 @@ def test_straight_local_segment_passes_and_entry_crossing_fails():
         [0.0, 1.0, 0.0],
     )
     assert not local_geometry_passes(crossed, thresholds)
+
+
+def test_spacing_diagnostic_rejects_perturbed_bead():
+    positions = canonical_local_targets(
+        [0.483, 0.0, 0.005], [1.0, 0.0, 0.0], 0.014, 5
+    )
+    velocities = np.zeros_like(positions)
+    thresholds = {
+        "entry_clearance_margin_m": 0.002,
+        "alignment_cosine_min": 0.90,
+        "max_local_speed_mps": 0.01,
+        "max_local_spacing_error_m": 0.002,
+    }
+    straight = local_segment_diagnostics_from_state(
+        positions,
+        velocities,
+        [0.5, 0.0, 0.005],
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        0.014,
+    )
+    assert np.isclose(straight["median_alignment_cosine"], 1.0)
+    assert np.isclose(straight["max_local_spacing_error_m"], 0.0)
+    assert local_geometry_passes(straight, thresholds)
+
+    perturbed = positions.copy()
+    perturbed[2, 1] += 0.010
+    diagnostics = local_segment_diagnostics_from_state(
+        perturbed,
+        velocities,
+        [0.5, 0.0, 0.005],
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        0.014,
+    )
+    assert diagnostics["max_local_spacing_error_m"] > 0.002
+    assert not local_geometry_passes(diagnostics, thresholds)

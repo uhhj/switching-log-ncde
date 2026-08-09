@@ -46,3 +46,15 @@ snapshot is saved.
 
 No cable reset or teleportation is permitted after that snapshot.
 Do not tune jam geometry in R1.1.
+
+## Current phase: Phase 0B-R1.2
+
+R1.1 showed that teleporting only five beads is incompatible with the
+pre-existing point-to-point cable constraint frames.
+
+R1.2 changes benchmark initial-state generation itself: the cable is spawned
+directly in a canonical pre-insertion line and its constraints are created
+consistently with that geometry.
+
+No bead teleportation is allowed in R1.2. Fixture creation remains deferred
+until the cable is settled and grasped. No jam-specific tuning is allowed.

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 
 from slncde.phase0b.runner import (
@@ -64,3 +66,20 @@ def test_branch_target_invariants():
         insert = targets[branch]["insert_endpoint"]
         np.testing.assert_allclose(align - staging, offset * lateral)
         np.testing.assert_allclose(insert - align, 0.060 * insertion)
+
+
+def test_canonical_spawn_origin_matches_advance_before_create_semantics():
+    from slncde.phase0a.runner import load_simulator
+
+    repo_root = Path(__file__).resolve().parents[2]
+    load_simulator(repo_root)
+    from ravens.tasks.slncde_fixture_channel_cable import (
+        canonical_cable_start_position,
+    )
+
+    count = 24
+    spacing = 0.01 * np.sqrt(2.0)
+    target = np.asarray([0.483, 0.0, 0.005])
+    origin = canonical_cable_start_position(target, count, spacing)
+    predicted_last = origin + count * spacing * np.asarray([1.0, 0.0, 0.0])
+    np.testing.assert_allclose(predicted_last, target)

@@ -25,8 +25,11 @@ The simulator is supplied by the `external/deformable-ravens` submodule. Its tes
 - Phase 0B: real fixture contact and low repeat noise on completed seeds.
 - Phase 0B-R1: canonical fixture placement solved workspace placement, but
   endpoint-only staging failed to control adjacent cable geometry.
-- Current: Phase 0B-R1.1 local-segment canonical initialization.
+- Phase 0B-R1.1: local bead teleport was incompatible with the cable constraints.
+- Current: Phase 0B-R1.2 constraint-consistent canonical cable spawn.
 
 Local-segment canonicalization is benchmark initial-state generation. It is
 applied before the common snapshot and identically for all future branches.
 No cable teleportation or state reset is allowed after the common snapshot.
+R1.2 creates the whole bead chain and its point-to-point constraints directly
+in the canonical pre-insertion geometry; it does not rearrange an existing cable.
