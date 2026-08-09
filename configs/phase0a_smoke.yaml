@@ -1,0 +1,47 @@
+experiment:
+  name: phase0a_oracle_mode_necessity_smoke
+  seeds: [81001, 81002, 81003, 81004, 81005]
+  single_allowed_correction:
+    applied: true
+    previous_hidden_lateral_friction: 1.2
+    reason: all five initial pilot pairs had matched initial states but no observed regime contrast
+
+simulator:
+  task_name: ccda-hidden-friction-cable
+  hz: 240
+  deterministic: true
+  trace_stride: 4
+  friction_mechanism: native_segment
+
+friction:
+  base_lateral_friction: 0.15
+  hidden_lateral_friction: 2.0
+  selected_count: 5
+  center_ratio: 0.45
+
+motion:
+  grasp_height_offset_m: 0.0
+  acquisition_speed: 0.01
+  pull_speed: 0.01
+  pull_distance_m: 0.04
+  pre_snapshot_settle_steps: 120
+  no_action_steps: 24
+  post_pull_steps: 120
+
+analysis:
+  horizons_ms: [100, 250, 500]
+  initial_state_rmse_max_m: 0.00001
+  repeat_noise_floor_m: 0.00001
+  future_divergence_min_m: 0.001
+  future_vs_repeat_multiplier: 3.0
+  stick_speed_max_mps: 0.003
+  slip_speed_min_mps: 0.008
+  minimum_regime_duration_ms: 80
+
+gate:
+  minimum_valid_pairs: 3
+  minimum_total_pairs: 5
+
+paths:
+  data_root: data/phase0a
+  report_root: reports/phase0a
