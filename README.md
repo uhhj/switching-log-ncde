@@ -18,3 +18,8 @@ python3 scripts/analyze_phase0a.py --config configs/phase0a_smoke.yaml
 ```
 
 The simulator is supplied by the `external/deformable-ravens` submodule. Its tested PyBullet requirement applies; the main package intentionally does not pin PyBullet.
+
+## Scientific phase status
+
+- Phase 0A: NO-GO for the hidden native-friction intervention.
+- Phase 0B: fixture contact-regime task qualification.
