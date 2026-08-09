@@ -80,6 +80,59 @@ def _interpretation(result: Mapping[str, Any], config: Mapping[str, Any]):
     return fact, inference, scientific, next_action
 
 
+def _r1_interpretation(result: Mapping[str, Any]):
+    aggregate = result["aggregate"]
+    verdict = result["verdict"]
+    fact = (
+        f"Canonical preparation completed for "
+        f"{aggregate['preparation_successful_seeds']} / 5 seeds; "
+        f"{aggregate['contact_free_staging_seeds']} / 5 staging states were "
+        f"fixture-contact-free. Repeat, nominal, contact, and mode counts are "
+        f"reported from {aggregate['completed_seeds']} complete paired rollouts."
+    )
+    if verdict == "PHASE0B_R1_GO":
+        inference = (
+            "The canonical frame is seed-robust and preserves low repeat noise "
+            "while realizing the required fixture-contact modes."
+        )
+        scientific = (
+            "Phase 0B task qualification is complete; predictive mode necessity "
+            "has not yet been tested."
+        )
+        next_action = "Run the Phase 0C matched-state/action Oracle-mode necessity smoke."
+    elif verdict == "PHASE0B_R1_WEAK_JAM":
+        inference = (
+            "The canonical task is engineering-qualified for free/contact/slip, "
+            "but the unchanged jam geometry is not strong enough."
+        )
+        scientific = (
+            "The coordinate-frame failure is resolved; jam remains a separate "
+            "geometry qualification question."
+        )
+        next_action = (
+            "Increase jam_lateral_offset_m by 0.002 m in a separate Phase 0B-R2 run."
+        )
+    elif verdict == "PHASE0B_R1_NO_GO":
+        inference = (
+            "All canonical preparations ran, but repeatability, nominal motion, "
+            "fixture contact, or slip failed a core qualification gate."
+        )
+        scientific = "The current task realization is not qualified for Phase 0C."
+        next_action = "Reassess task realization before changing this fixture geometry."
+    else:
+        inference = (
+            "The fixed frame was placeable, but adjacent cable beads contacted "
+            "the walls during staging in four seeds, so the frame alone did not "
+            "produce five comparable common states."
+        )
+        scientific = "No R1 task-qualification conclusion is available."
+        next_action = (
+            "Redesign canonical staging preparation so the trailing cable remains "
+            "outside the channel, then rerun all five fixed seeds."
+        )
+    return fact, inference, scientific, next_action
+
+
 def write_reports(
     result: Mapping[str, Any], config: Mapping[str, Any], repo_root: Path
 ) -> Path:
@@ -90,6 +143,66 @@ def write_reports(
         handle.write("\n")
 
     aggregate = result["aggregate"]
+    if config.get("canonical_frame", {}).get("mode") == "canonical":
+        fact, inference, scientific, next_action = _r1_interpretation(result)
+        text = f"""# Phase 0B-R1 Canonical Fixture Qualification
+
+## Verdict
+{result['verdict']}
+
+## Preparation
+- completed seeds: {aggregate['preparation_successful_seeds']} / 5
+- canonical staging contact-free: {aggregate['contact_free_staging_seeds']} / 5
+- fixture placement failures: {aggregate['fixture_placement_failures']} / 5
+- prep failures: {aggregate['preparation_failures']} / 5
+
+## Repeat stability
+- median RMSE @100 ms: {_format(aggregate['median_repeat_rmse_100ms'])} m
+- median RMSE @250 ms: {_format(aggregate['median_repeat_rmse_250ms'])} m
+- median RMSE @500 ms: {_format(aggregate['median_repeat_rmse_500ms'])} m
+- seeds <= 2 mm: {aggregate['repeat_seeds_le_2mm']} / 5
+
+## Nominal
+- executable: {aggregate['nominal_executable_branches']} / 5
+- median final progress: {_format(aggregate['median_nominal_final_progress_m'])} m
+- sustained jam: {aggregate['nominal_jam_count']} / 5
+
+## Fixture contact
+- slide contact: {aggregate['slide_contact_branches']} / 5
+- jam contact: {aggregate['jam_contact_branches']} / 5
+
+## Modes
+- sustained slip in slide_probe: {aggregate['sustained_slip_branches']} / 5
+- sustained stick: {aggregate['sustained_stick_seeds']} / 5
+- sustained jam in jam_probe: {aggregate['sustained_jam_branches']} / 5
+
+## Representative transitions
+- slide: {aggregate['representative_slide_sequence']}
+- jam: {aggregate['representative_jam_sequence']}
+
+## Comparison with Phase 0B
+- previous completed: 3 / 5
+- previous repeat @500ms: 0.000741054 m
+- previous slip: 2 / 3 completed
+- previous jam: 0 / 3 completed
+- previous preparation failures: 82003, 82004
+
+## Fact
+{fact}
+
+## Inference
+{inference}
+
+## Scientific interpretation
+{scientific}
+
+## Next action
+{next_action}
+"""
+        result_path = report_root / "RESULT.md"
+        result_path.write_text(text, encoding="utf-8")
+        return result_path
+
     fact, inference, scientific, next_action = _interpretation(result, config)
     fixture = config["fixture"]
     text = f"""# Phase 0B Fixture Task Qualification

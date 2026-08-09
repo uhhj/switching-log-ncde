@@ -18,3 +18,17 @@ naturally realizes free/contact/slip/jam with low same-condition repeat noise.
 
 Do not implement NCDE, Log-NCDE, mode inference, MPC or RL until Phase 0B
 passes and Phase 0C establishes Oracle-mode necessity.
+
+## Current phase: Phase 0B-R1
+
+Phase 0A hidden-friction mechanism: NO-GO.
+
+Phase 0B established low repeat drift and real fixture contact on completed
+seeds, but random fixture placement failed for two seeds and the current jam
+probe produced no sustained jam.
+
+Phase 0B-R1 changes only the fixture frame to a fixed canonical workspace
+frame and reruns all five seeds.
+
+Do not modify jam geometry in R1.
+Do not enter Phase 0C until task qualification is complete.

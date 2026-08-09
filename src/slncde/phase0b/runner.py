@@ -26,6 +26,33 @@ BRANCH_OFFSETS = {
 }
 
 
+def canonical_frame_arrays(
+    config: Mapping[str, Any], endpoint_positions: np.ndarray = None
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Return the fixed R1 frame; endpoint positions cannot affect it."""
+    del endpoint_positions
+    frame = config["canonical_frame"]
+    entry_xy = np.asarray(frame["entry_center_xy_m"], dtype=np.float64)
+    axis_xy = np.asarray(frame["insertion_axis_xy"], dtype=np.float64)
+    norm = float(np.linalg.norm(axis_xy))
+    if (
+        entry_xy.shape != (2,)
+        or axis_xy.shape != (2,)
+        or not np.all(np.isfinite(entry_xy))
+        or not np.all(np.isfinite(axis_xy))
+        or norm <= 1e-9
+    ):
+        raise ValueError("canonical frame requires finite XY entry and axis")
+    axis_xy = axis_xy / norm
+    insertion_axis = np.asarray(
+        [axis_xy[0], axis_xy[1], 0.0], dtype=np.float64
+    )
+    lateral_axis = np.asarray(
+        [-axis_xy[1], axis_xy[0], 0.0], dtype=np.float64
+    )
+    return entry_xy, insertion_axis, lateral_axis
+
+
 def set_fixture_environment(config: Mapping[str, Any], seed: int) -> None:
     fixture = config["fixture"]
     simulator = config["simulator"]
@@ -43,6 +70,22 @@ def set_fixture_environment(config: Mapping[str, Any], seed: int) -> None:
         ],
         "SLNCDE_FIXTURE_TRACE_STRIDE": simulator["trace_stride"],
     }
+    frame = config.get("canonical_frame", {"mode": "auto_endpoint"})
+    values["SLNCDE_FIXTURE_FRAME_MODE"] = frame.get(
+        "mode", "auto_endpoint"
+    )
+    if values["SLNCDE_FIXTURE_FRAME_MODE"] == "canonical":
+        entry_xy, insertion_axis, _ = canonical_frame_arrays(config)
+        entry_x, entry_y = entry_xy
+        axis_x, axis_y = insertion_axis[:2]
+        values.update(
+            {
+                "SLNCDE_FIXTURE_ENTRY_X": entry_x,
+                "SLNCDE_FIXTURE_ENTRY_Y": entry_y,
+                "SLNCDE_FIXTURE_AXIS_X": axis_x,
+                "SLNCDE_FIXTURE_AXIS_Y": axis_y,
+            }
+        )
     for name, value in values.items():
         os.environ[name] = str(value)
     random.seed(int(seed))
@@ -66,6 +109,34 @@ def _active_endpoint_position(task) -> np.ndarray:
     return np.asarray(
         p.getBasePositionAndOrientation(endpoint_id)[0], dtype=np.float64
     )
+
+
+def choose_active_endpoint_from_positions(
+    positions: np.ndarray, staging_xy: np.ndarray
+) -> int:
+    values = np.asarray(positions, dtype=np.float64)
+    target = np.asarray(staging_xy, dtype=np.float64)
+    if values.ndim != 2 or values.shape[0] < 2 or values.shape[1] < 2:
+        raise ValueError("positions must contain at least two XY points")
+    if target.shape != (2,):
+        raise ValueError("staging_xy must contain two values")
+    candidates = np.asarray([0, len(values) - 1], dtype=np.int64)
+    distances = np.linalg.norm(values[candidates, :2] - target, axis=1)
+    return int(candidates[int(np.argmin(distances))])
+
+
+def choose_active_endpoint_for_staging(task, staging_xy: np.ndarray):
+    import pybullet as p
+
+    positions = np.asarray(
+        [
+            p.getBasePositionAndOrientation(int(bead))[0]
+            for bead in task.cable_bead_IDs
+        ],
+        dtype=np.float64,
+    )
+    index = choose_active_endpoint_from_positions(positions, staging_xy)
+    return index, int(task.cable_bead_IDs[index]), positions[index].copy()
 
 
 def _ee_pose(env) -> Tuple[np.ndarray, np.ndarray]:
@@ -324,10 +395,12 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
     try:
         task = tasks.names[task_name]()
         env.reset(task)
+        frame_mode = str(
+            config.get("canonical_frame", {}).get("mode", "auto_endpoint")
+        )
+        chosen_endpoint_initial = None
         task.set_fixture_collision_enabled(False)
-        endpoint_id = _acquire_endpoint(env, task, config["motion"])
-        for _ in range(2):
-            task.reposition_fixture_from_active_endpoint()
+        if frame_mode == "canonical":
             spec = task.fixture_spec()
             insertion_axis = np.asarray(
                 spec["insertion_axis"], dtype=np.float64
@@ -335,20 +408,94 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
             staging_endpoint = np.asarray(
                 spec["entry_center"], dtype=np.float64
             ) - float(config["motion"]["staging_before_entry_m"]) * insertion_axis
-            if not _move_endpoint_to(
-                env,
-                task,
-                staging_endpoint,
-                float(config["motion"]["staging_speed_mps"]),
-            ):
-                raise RuntimeError("common staging stretch failed")
+            chosen_index, _, chosen_endpoint_initial = (
+                choose_active_endpoint_for_staging(
+                    task, staging_endpoint[:2]
+                )
+            )
+            task.set_active_endpoint_index(chosen_index)
+            spec = task.fixture_spec()
+            endpoint_id = _acquire_endpoint(env, task, config["motion"])
+            for _ in range(2):
+                if not _move_endpoint_to(
+                    env,
+                    task,
+                    staging_endpoint,
+                    float(config["motion"]["staging_speed_mps"]),
+                ):
+                    raise RuntimeError("common staging stretch failed")
+        else:
+            endpoint_id = _acquire_endpoint(env, task, config["motion"])
+            for _ in range(2):
+                task.reposition_fixture_from_active_endpoint()
+                spec = task.fixture_spec()
+                insertion_axis = np.asarray(
+                    spec["insertion_axis"], dtype=np.float64
+                )
+                staging_endpoint = np.asarray(
+                    spec["entry_center"], dtype=np.float64
+                ) - float(
+                    config["motion"]["staging_before_entry_m"]
+                ) * insertion_axis
+                if not _move_endpoint_to(
+                    env,
+                    task,
+                    staging_endpoint,
+                    float(config["motion"]["staging_speed_mps"]),
+                ):
+                    raise RuntimeError("common staging stretch failed")
         lateral_axis = np.asarray(spec["lateral_axis"], dtype=np.float64)
         task.set_script_context("staging", [0.0, 0.0, 0.0])
         task.set_fixture_collision_enabled(True)
         env.step_physics(int(config["motion"]["pre_snapshot_settle_steps"]))
         staging_contact = task.fixture_contact_observation()
-        if int(staging_contact["contact_point_count"]) != 0:
-            raise RuntimeError("common staging pose has fixture contact")
+        staging_endpoint_actual = _active_endpoint_position(task)
+
+        seed_root = (
+            repo_root
+            / str(config["paths"]["data_root"])
+            / f"seed_{int(seed)}"
+        )
+        seed_root.mkdir(parents=True, exist_ok=True)
+        metadata = {
+            "seed": int(seed),
+            "task": task_name,
+            "config": config,
+            "fixture_spec": spec,
+            "active_endpoint_id": endpoint_id,
+            "fixture_frame_mode": frame_mode,
+            "canonical_entry_center": (
+                spec["entry_center"] if frame_mode == "canonical" else None
+            ),
+            "canonical_insertion_axis": (
+                spec["insertion_axis"] if frame_mode == "canonical" else None
+            ),
+            "chosen_endpoint_index": spec["active_endpoint_index"],
+            "chosen_endpoint_initial_position": chosen_endpoint_initial,
+            "canonical_staging_target": (
+                staging_endpoint if frame_mode == "canonical" else None
+            ),
+            "staging_endpoint_target": staging_endpoint,
+            "staging_endpoint_actual": staging_endpoint_actual,
+            "staging_fixture_contact": staging_contact,
+            "staging_contact": staging_contact,
+            "simulator_git_commit": _simulator_commit(simulator_root),
+            "branches": {},
+        }
+        if (
+            int(staging_contact["contact_active_beads"]) != 0
+            or int(staging_contact["contact_point_count"]) != 0
+        ):
+            metadata["preparation_status"] = "PREP_FAILED"
+            metadata["preparation_failure_reason"] = (
+                "fixture_contact_at_staging"
+            )
+            with (seed_root / "metadata.json").open(
+                "w", encoding="utf-8"
+            ) as handle:
+                json.dump(_json_ready(metadata), handle, indent=2, sort_keys=True)
+                handle.write("\n")
+            return seed_root
 
         runtime_state = capture_runtime_state(env)
         common_state = capture_world_state(env, task)
@@ -363,25 +510,9 @@ def run_seed(config: Mapping[str, Any], seed: int, repo_root: Path) -> Path:
             endpoint_at_snapshot,
         )
 
-        seed_root = (
-            repo_root
-            / str(config["paths"]["data_root"])
-            / f"seed_{int(seed)}"
-        )
-        seed_root.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(seed_root / "common_state.npz", **common_state)
-        metadata = {
-            "seed": int(seed),
-            "task": task_name,
-            "config": config,
-            "fixture_spec": spec,
-            "active_endpoint_id": endpoint_id,
-            "staging_endpoint_target": staging_endpoint,
-            "staging_endpoint_actual": endpoint_at_snapshot,
-            "staging_contact": staging_contact,
-            "simulator_git_commit": _simulator_commit(simulator_root),
-            "branches": {},
-        }
+        metadata["preparation_status"] = "COMPLETED"
+        metadata["nominal_repeat_targets_identical"] = True
         for branch_name, offset_key in BRANCH_OFFSETS.items():
             offset = float(config["motion"][offset_key])
             payload, details = _run_branch(
@@ -420,7 +551,18 @@ def run_seeds(
     for seed in seeds:
         try:
             seed_root = run_seed(config, int(seed), repo_root)
-            print(f"completed seed {int(seed)}: {seed_root}", flush=True)
+            with (seed_root / "metadata.json").open(
+                "r", encoding="utf-8"
+            ) as handle:
+                preparation_status = json.load(handle).get(
+                    "preparation_status", "COMPLETED"
+                )
+            if preparation_status == "COMPLETED":
+                print(f"completed seed {int(seed)}: {seed_root}", flush=True)
+            else:
+                print(
+                    f"prep failed seed {int(seed)}: {seed_root}", flush=True
+                )
         except Exception as exc:
             failures.append((int(seed), str(exc)))
             print(f"failed seed {int(seed)}: {exc}", flush=True)

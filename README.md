@@ -21,5 +21,7 @@ The simulator is supplied by the `external/deformable-ravens` submodule. Its tes
 
 ## Scientific phase status
 
-- Phase 0A: NO-GO for the hidden native-friction intervention.
-- Phase 0B: fixture contact-regime task qualification.
+- Phase 0A: NO-GO for artificial hidden-friction mechanism.
+- Phase 0B: partial qualification; repeat stability and real fixture contact
+  established, random fixture placement not seed-robust, and jam not established.
+- Current: Phase 0B-R1 canonical fixture frame.

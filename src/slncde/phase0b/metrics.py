@@ -33,7 +33,30 @@ def repeat_gate(values: Sequence[float], config: Mapping[str, Any]) -> bool:
 def experiment_verdict(
     aggregate: Mapping[str, Any], config: Mapping[str, Any]
 ) -> str:
-    if int(aggregate["completed_seeds"]) < len(config["experiment"]["seeds"]):
+    canonical = (
+        config.get("canonical_frame", {}).get("mode") == "canonical"
+    )
+    expected = len(config["experiment"]["seeds"])
+    if canonical:
+        if (
+            int(aggregate["preparation_successful_seeds"]) < expected
+            or int(aggregate["completed_seeds"]) < expected
+        ):
+            return "PHASE0B_R1_ENGINEERING_BLOCKED"
+        gates = aggregate["gates"]
+        if all(bool(gates[name]) for name in ("A", "B", "C", "D", "E", "F")):
+            return "PHASE0B_R1_GO"
+        if (
+            gates["A"]
+            and gates["B"]
+            and gates["C"]
+            and gates["D"]
+            and int(aggregate["sustained_jam_branches"])
+            < int(config["analysis"]["minimum_jam_seeds"])
+        ):
+            return "PHASE0B_R1_WEAK_JAM"
+        return "PHASE0B_R1_NO_GO"
+    if int(aggregate["completed_seeds"]) < expected:
         return "PHASE0B_ENGINEERING_BLOCKED"
     gates = aggregate["gates"]
     if all(bool(gates[name]) for name in ("A", "B", "C", "D", "E", "F")):
@@ -274,12 +297,37 @@ def analyze_experiment(
 ) -> Dict[str, Any]:
     data_root = repo_root / str(config["paths"]["data_root"])
     pairs = []
+    preparations = []
     for seed in config["experiment"]["seeds"]:
         seed_root = data_root / f"seed_{int(seed)}"
-        required = [seed_root / "metadata.json"] + [
+        metadata_path = seed_root / "metadata.json"
+        if not metadata_path.is_file():
+            continue
+        with metadata_path.open("r", encoding="utf-8") as handle:
+            metadata = json.load(handle)
+        status = str(metadata.get("preparation_status", "COMPLETED"))
+        contact = metadata.get(
+            "staging_fixture_contact", metadata.get("staging_contact", {})
+        )
+        contact_free = bool(
+            int(contact.get("contact_active_beads", 0)) == 0
+            and int(contact.get("contact_point_count", 0)) == 0
+        )
+        preparations.append(
+            {
+                "seed": int(seed),
+                "status": status,
+                "contact_free": contact_free,
+                "failure_reason": metadata.get("preparation_failure_reason"),
+                "contact_bead_indices": contact.get(
+                    "contact_bead_indices", []
+                ),
+            }
+        )
+        required = [
             seed_root / branch / "trajectory.npz" for branch in BRANCHES
         ]
-        if all(path.is_file() for path in required):
+        if status == "COMPLETED" and all(path.is_file() for path in required):
             pairs.append(analyze_seed(seed_root, config, int(seed)))
 
     minimum_duration = float(config["labels"]["minimum_mode_duration_ms"])
@@ -287,13 +335,38 @@ def analyze_experiment(
     slide_contact = sum(bool(pair["slide_contact_sustained"]) for pair in pairs)
     jam_contact = sum(bool(pair["jam_contact_sustained"]) for pair in pairs)
     nominal_success = sum(bool(pair["nominal_success"]) for pair in pairs)
+    nominal_executable = sum(
+        bool(pair["nominal_motion_completed"]) for pair in pairs
+    )
     slip_count = sum(
         pair["slide_slip_duration_ms"] >= minimum_duration for pair in pairs
     )
     jam_count = sum(pair["jam_duration_ms"] >= minimum_duration for pair in pairs)
     stick_count = sum(bool(pair["sustained_stick"]) for pair in pairs)
     transition_count = sum(bool(pair["meaningful_transition"]) for pair in pairs)
+    preparation_success = sum(
+        item["status"] == "COMPLETED" for item in preparations
+    )
+    contact_free_staging = sum(
+        bool(item["contact_free"]) for item in preparations
+    )
+    preparation_failures = sum(
+        item["status"] != "COMPLETED" for item in preparations
+    )
+    fixture_placement_failures = sum(
+        item["failure_reason"] is not None
+        and (
+            "workspace" in str(item["failure_reason"]).lower()
+            or "placement" in str(item["failure_reason"]).lower()
+        )
+        for item in preparations
+    )
     aggregate: Dict[str, Any] = {
+        "preparation_attempted_seeds": len(preparations),
+        "preparation_successful_seeds": preparation_success,
+        "contact_free_staging_seeds": contact_free_staging,
+        "preparation_failures": preparation_failures,
+        "fixture_placement_failures": fixture_placement_failures,
         "completed_seeds": len(pairs),
         "median_repeat_rmse_100ms": _median(pairs, "repeat_rmse_100ms")
         if pairs
@@ -308,6 +381,7 @@ def analyze_experiment(
             np.count_nonzero(np.asarray(repeat_500) <= 0.0020)
         ),
         "nominal_successful_branches": nominal_success,
+        "nominal_executable_branches": nominal_executable,
         "median_nominal_final_progress_m": _median(
             pairs, "nominal_final_progress_m"
         )
@@ -364,4 +438,9 @@ def analyze_experiment(
         "F": transition_count >= int(analysis["minimum_transition_seeds"]),
     }
     verdict = experiment_verdict(aggregate, config)
-    return {"verdict": verdict, "aggregate": aggregate, "seeds": pairs}
+    return {
+        "verdict": verdict,
+        "aggregate": aggregate,
+        "preparations": preparations,
+        "seeds": pairs,
+    }
