@@ -275,6 +275,88 @@ def write_reports(
         handle.write("\n")
 
     aggregate = result["aggregate"]
+    if config["simulator"]["task_name"] == "slncde-constriction-passage":
+        verdict = result["verdict"]
+        if verdict == "PHASE0B_T2_GO":
+            inference = "The constriction passage reliably realizes hierarchical contact, friction, and jam states."
+            scientific = "Phase 0 task qualification is complete; mode necessity remains untested."
+            next_action = "Run the Phase 0C matched-state/matched-action mode-necessity audit."
+        elif verdict == "PHASE0B_T2_WEAK":
+            inference = "Core passage mechanics pass, but one hierarchical regime has marginal coverage."
+            scientific = "One task-specific single-parameter correction is permitted before qualification."
+            next_action = "Apply the single allowed correction indicated by the failed friction or jam gate."
+        elif verdict == "PHASE0B_T2_NO_GO":
+            inference = "The fixed constriction geometry does not jointly support nominal passage and reproducible contact regimes."
+            scientific = "The current T2 realization is not qualified for Phase 0C."
+            next_action = "Reevaluate the simulator representation or mode hypothesis."
+        else:
+            inference = "A runtime or data regression prevented a scientific qualification result."
+            scientific = "No task-mechanics conclusion is available."
+            next_action = "Fix the reported engineering failure and rerun the five fixed seeds."
+        fact = (
+            f"{aggregate['completed_seeds']} / 5 paired rollouts completed; "
+            f"nominal passage succeeded in {aggregate['nominal_successful_branches']}, "
+            f"slide contact in {aggregate['slide_contact_branches']}, and jam in "
+            f"{aggregate['sustained_jam_branches']}."
+        )
+        text = f"""# Phase 0B-T2 Constriction Passage Qualification
+
+## Verdict
+{verdict}
+
+## Preparation
+- common snapshot PASS: {aggregate['common_snapshot_pass_count']} / 5
+
+## Repeat
+- RMSE @100ms: {_format(aggregate['median_repeat_rmse_100ms'])} m
+- RMSE @250ms: {_format(aggregate['median_repeat_rmse_250ms'])} m
+- RMSE @500ms: {_format(aggregate['median_repeat_rmse_500ms'])} m
+- seeds <=2mm: {aggregate['repeat_seeds_le_2mm']} / 5
+
+## Passage
+- nominal success: {aggregate['nominal_successful_branches']} / 5
+- median final progress: {_format(aggregate['median_nominal_final_progress_m'])} m
+
+## Contact layer
+- nominal contact: {aggregate['nominal_contact_branches']} / 5
+- slide contact: {aggregate['slide_contact_branches']} / 5
+- jam contact: {aggregate['jam_contact_branches']} / 5
+- median contact dwell: {_format(aggregate['median_contact_dwell_ms'])} ms
+
+## Friction layer
+- sustained stick seeds: {aggregate['sustained_stick_seeds']} / 5
+- sustained slip seeds: {aggregate['sustained_slip_branches']} / 5
+- median stick dwell: {_format(aggregate['median_stick_dwell_ms'])} ms
+- median slip dwell: {_format(aggregate['median_slip_dwell_ms'])} ms
+
+## Failure layer
+- sustained jam seeds: {aggregate['sustained_jam_branches']} / 5
+- median jam dwell: {_format(aggregate['median_jam_dwell_ms'])} ms
+- jam onset count: {aggregate['jam_onset_count']}
+
+## Events
+- touch: {aggregate['touch_count']}
+- release: {aggregate['release_count']}
+- stick->slip: {aggregate['stick_to_slip_count']}
+- slip->stick: {aggregate['slip_to_stick_count']}
+- jam onset: {aggregate['jam_onset_count']}
+- jam release: {aggregate['jam_release_count']}
+
+## Fact
+{fact}
+
+## Inference
+{inference}
+
+## Scientific interpretation
+{scientific}
+
+## Next action
+{next_action}
+"""
+        result_path = report_root / "RESULT.md"
+        result_path.write_text(text, encoding="utf-8")
+        return result_path
     if config.get("preparation", {}).get("method") == "canonical_spawn":
         fact, inference, scientific, next_action = _r1_2_interpretation(
             result

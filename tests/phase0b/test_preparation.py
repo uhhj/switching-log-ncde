@@ -4,7 +4,6 @@ import numpy as np
 
 from slncde.phase0b.preparation import (
     canonical_active_endpoint_index,
-    canonical_local_targets,
     endpoint_local_indices,
     local_geometry_passes,
     local_segment_diagnostics_from_state,
@@ -17,18 +16,14 @@ def test_endpoint_local_indices_follow_inward_order():
     assert canonical_active_endpoint_index(20) == 19
 
 
-def test_canonical_targets_step_away_from_entry():
-    targets = canonical_local_targets(
-        [0.483, 0.0, 0.0], [1.0, 0.0, 0.0], 0.014, 5
+def straight_positions():
+    return np.asarray(
+        [[0.483 - rank * 0.014, 0.0, 0.005] for rank in range(5)]
     )
-    np.testing.assert_allclose(np.diff(targets[:, 0]), -0.014)
-    np.testing.assert_allclose(targets[:, 1:], 0.0)
 
 
 def test_straight_local_segment_passes_and_entry_crossing_fails():
-    positions = canonical_local_targets(
-        [0.483, 0.0, 0.0], [1.0, 0.0, 0.0], 0.014, 5
-    )
+    positions = straight_positions()
     velocities = np.zeros_like(positions)
     thresholds = {
         "entry_clearance_margin_m": 0.002,
@@ -59,9 +54,7 @@ def test_straight_local_segment_passes_and_entry_crossing_fails():
 
 
 def test_spacing_diagnostic_rejects_perturbed_bead():
-    positions = canonical_local_targets(
-        [0.483, 0.0, 0.005], [1.0, 0.0, 0.0], 0.014, 5
-    )
+    positions = straight_positions()
     velocities = np.zeros_like(positions)
     thresholds = {
         "entry_clearance_margin_m": 0.002,

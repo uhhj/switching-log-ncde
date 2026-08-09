@@ -26,60 +26,6 @@ def endpoint_local_indices(num_beads: int, endpoint_index: int, count: int):
     raise ValueError("endpoint_index must be a cable endpoint")
 
 
-def canonical_local_targets(
-    staging_xyz: Sequence[float],
-    insertion_axis: Sequence[float],
-    spacing_m: float,
-    count: int,
-) -> np.ndarray:
-    staging = np.asarray(staging_xyz, dtype=np.float64)
-    axis = np.asarray(insertion_axis, dtype=np.float64)
-    spacing = float(spacing_m)
-    if staging.shape != (3,) or axis.shape != (3,):
-        raise ValueError("staging_xyz and insertion_axis must be XYZ")
-    if spacing <= 0.0:
-        raise ValueError("spacing_m must be positive")
-    return np.asarray(
-        [staging - rank * spacing * axis for rank in range(int(count))],
-        dtype=np.float64,
-    )
-
-
-def canonicalize_local_segment(
-    task,
-    endpoint_index: int,
-    staging_xyz: Sequence[float],
-    insertion_axis: Sequence[float],
-    local_bead_count: int,
-) -> Dict[str, Any]:
-    bead_ids = list(task.cable_bead_IDs)
-    indices = endpoint_local_indices(
-        len(bead_ids), endpoint_index, int(local_bead_count)
-    )
-    spacing = float(task.length) / float(task.num_parts)
-    if spacing <= 0.0:
-        raise ValueError("nominal bead spacing must be positive")
-    targets = canonical_local_targets(
-        staging_xyz, insertion_axis, spacing, len(indices)
-    )
-    for index, target in zip(indices, targets):
-        bead_id = int(bead_ids[index])
-        _, orientation = p.getBasePositionAndOrientation(bead_id)
-        p.resetBasePositionAndOrientation(
-            bead_id, target.tolist(), orientation
-        )
-        p.resetBaseVelocity(
-            bead_id,
-            linearVelocity=[0.0, 0.0, 0.0],
-            angularVelocity=[0.0, 0.0, 0.0],
-        )
-    return {
-        "indices": indices,
-        "spacing_m": spacing,
-        "targets": targets,
-    }
-
-
 def local_segment_diagnostics_from_state(
     positions: np.ndarray,
     velocities: np.ndarray,

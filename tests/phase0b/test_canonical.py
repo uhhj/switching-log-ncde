@@ -69,11 +69,11 @@ def test_branch_target_invariants():
 
 
 def test_canonical_spawn_origin_matches_advance_before_create_semantics():
-    from slncde.phase0a.runner import load_simulator
+    from slncde.sim.runtime import load_simulator
 
     repo_root = Path(__file__).resolve().parents[2]
     load_simulator(repo_root)
-    from ravens.tasks.slncde_fixture_channel_cable import (
+    from ravens.tasks.slncde_constriction_passage import (
         canonical_cable_start_position,
     )
 

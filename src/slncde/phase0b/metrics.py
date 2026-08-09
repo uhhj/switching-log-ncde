@@ -6,8 +6,8 @@ from typing import Any, Dict, Mapping, Sequence
 
 import numpy as np
 
-from slncde.phase0a.metrics import select_horizon_step
-from slncde.phase0a.snapshot import cable_rmse
+from slncde.sim.metrics import select_horizon_step
+from slncde.sim.snapshot import cable_rmse
 from slncde.phase0b.labels import (
     compress_transitions,
     derive_labels,
@@ -17,6 +17,19 @@ from slncde.phase0b.labels import (
 
 
 BRANCHES = ("nominal", "nominal_repeat", "slide_probe", "jam_probe")
+
+
+def required_passage_progress(config: Mapping[str, Any]) -> float:
+    return float(
+        float(config["motion"]["staging_before_entry_m"])
+        + float(config["fixture"]["funnel_length_m"])
+        + float(config["fixture"]["throat_length_m"])
+        + float(config["analysis"]["exit_margin_m"])
+    )
+
+
+def contact_reachability_proxy(offset_m, bead_half_width_m, throat_gap_m):
+    return float(abs(offset_m) + bead_half_width_m - 0.5 * throat_gap_m)
 
 
 def repeat_gate(values: Sequence[float], config: Mapping[str, Any]) -> bool:
@@ -33,6 +46,7 @@ def repeat_gate(values: Sequence[float], config: Mapping[str, Any]) -> bool:
 def experiment_verdict(
     aggregate: Mapping[str, Any], config: Mapping[str, Any]
 ) -> str:
+    t2 = config["simulator"]["task_name"] == "slncde-constriction-passage"
     canonical_spawn = bool(
         config.get("preparation", {}).get("method") == "canonical_spawn"
     )
@@ -42,6 +56,19 @@ def experiment_verdict(
         )
     )
     expected = len(config["experiment"]["seeds"])
+    if t2:
+        if int(aggregate["common_snapshot_pass_count"]) < expected:
+            return "PHASE0B_T2_ENGINEERING_BLOCKED"
+        if int(aggregate["completed_seeds"]) < expected:
+            return "PHASE0B_T2_ENGINEERING_BLOCKED"
+        gates = aggregate["gates"]
+        if all(bool(gates[name]) for name in "ABCDEFG"):
+            return "PHASE0B_T2_GO"
+        if all(bool(gates[name]) for name in "ABCD") and sum(
+            bool(gates[name]) for name in "EFG"
+        ) >= 2:
+            return "PHASE0B_T2_WEAK"
+        return "PHASE0B_T2_NO_GO"
     if canonical_spawn:
         if int(aggregate["common_snapshot_pass_count"]) < expected:
             return "PHASE0B_R1_2_PREPARATION_FAIL"
@@ -251,6 +278,16 @@ def _branch_summary(
         "transition_sequence": compress_transitions(modes),
         "free_contact_slip_transition": slide_transition,
         "free_contact_jam_transition": jam_transition,
+        "contact_occupancy": float(np.mean(contact_sustained)),
+        "stick_occupancy": float(np.mean(stick_sustained)),
+        "slip_occupancy": float(np.mean(slip_sustained)),
+        "jam_occupancy": float(np.mean(derived["jam"])),
+        "touch_count": int(np.count_nonzero(derived["is_touch_event"])),
+        "release_count": int(np.count_nonzero(derived["is_release_event"])),
+        "stick_to_slip_count": int(np.count_nonzero(derived["is_stick_to_slip_event"])),
+        "slip_to_stick_count": int(np.count_nonzero(derived["is_slip_to_stick_event"])),
+        "jam_onset_count": int(np.count_nonzero(derived["is_jam_onset_event"])),
+        "jam_release_count": int(np.count_nonzero(derived["is_jam_release_event"])),
     }
 
 
@@ -268,9 +305,14 @@ def analyze_seed(
     slide = summaries["slide_probe"]
     jam = summaries["jam_probe"]
     minimum_duration = float(config["labels"]["minimum_mode_duration_ms"])
+    t2 = config["simulator"]["task_name"] == "slncde-constriction-passage"
+    nominal_threshold = (
+        required_passage_progress(config)
+        if t2
+        else float(config["analysis"]["nominal_progress_min_m"])
+    )
     nominal_success = bool(
-        nominal["final_progress_m"]
-        >= float(config["analysis"]["nominal_progress_min_m"])
+        nominal["final_progress_m"] >= nominal_threshold
         and nominal["sustained_jam_duration_ms"] < minimum_duration
     )
     return {
@@ -280,6 +322,7 @@ def analyze_seed(
         "nominal_final_progress_m": nominal["final_progress_m"],
         "nominal_jam_duration_ms": nominal["sustained_jam_duration_ms"],
         "nominal_success": nominal_success,
+        "nominal_contact_sustained": nominal["contact_duration_ms"] >= minimum_duration,
         "slide_contact_duration_ms": slide["contact_duration_ms"],
         "slide_contact_sustained": slide["contact_duration_ms"]
         >= minimum_duration,
@@ -315,6 +358,11 @@ def analyze_seed(
             slide["free_contact_slip_transition"]
             and jam["free_contact_jam_transition"]
         ),
+        "layer_metrics": {name: {
+            key: value for key, value in summary.items()
+            if key.endswith("_occupancy") or key.endswith("_count")
+            or key.endswith("_duration_ms")
+        } for name, summary in summaries.items()},
         "branch_motion_completed": {
             name: summary["motion_completed"]
             for name, summary in summaries.items()
@@ -422,11 +470,18 @@ def analyze_experiment(
     nominal_success = sum(bool(pair["nominal_success"]) for pair in pairs)
     nominal_progress_success = sum(
         float(pair["nominal_final_progress_m"])
-        >= float(config["analysis"]["nominal_progress_min_m"])
+        >= (
+            required_passage_progress(config)
+            if config["simulator"]["task_name"] == "slncde-constriction-passage"
+            else float(config["analysis"]["nominal_progress_min_m"])
+        )
         for pair in pairs
     )
     nominal_executable = sum(
         bool(pair["nominal_motion_completed"]) for pair in pairs
+    )
+    nominal_contact = sum(
+        bool(pair.get("nominal_contact_sustained", False)) for pair in pairs
     )
     slip_count = sum(
         pair["slide_slip_duration_ms"] >= minimum_duration for pair in pairs
@@ -538,6 +593,7 @@ def analyze_experiment(
         "nominal_successful_branches": nominal_success,
         "nominal_progress_successful_branches": nominal_progress_success,
         "nominal_executable_branches": nominal_executable,
+        "nominal_contact_branches": nominal_contact,
         "median_nominal_final_progress_m": _median(
             pairs, "nominal_final_progress_m"
         )
@@ -593,6 +649,42 @@ def analyze_experiment(
         "E": jam_count >= int(analysis["minimum_jam_seeds"]),
         "F": transition_count >= int(analysis["minimum_transition_seeds"]),
     }
+    if config["simulator"]["task_name"] == "slncde-constriction-passage":
+        all_layers = [pair["layer_metrics"] for pair in pairs]
+        def values(branch, key):
+            return [float(item[branch][key]) for item in all_layers]
+        aggregate.update({
+            "median_contact_dwell_ms": float(np.median(
+                values("slide_probe", "contact_duration_ms")
+                + values("jam_probe", "contact_duration_ms")
+            )) if pairs else float("nan"),
+            "median_stick_dwell_ms": float(np.median(
+                values("slide_probe", "sustained_stick_duration_ms")
+                + values("jam_probe", "sustained_stick_duration_ms")
+            )) if pairs else float("nan"),
+            "median_slip_dwell_ms": float(np.median(values("slide_probe", "sustained_slip_duration_ms"))) if pairs else float("nan"),
+            "median_jam_dwell_ms": float(np.median(values("jam_probe", "sustained_jam_duration_ms"))) if pairs else float("nan"),
+        })
+        for key in ("touch_count", "release_count", "stick_to_slip_count", "slip_to_stick_count", "jam_onset_count", "jam_release_count"):
+            aggregate[key] = int(sum(
+                float(item[branch][key]) for item in all_layers
+                for branch in BRANCHES
+            ))
+        transition_logic = sum(
+            bool(pair["layer_metrics"]["slide_probe"]["touch_count"] > 0)
+            and bool(pair["layer_metrics"]["jam_probe"]["touch_count"] > 0)
+            and bool(pair["jam_duration_ms"] >= minimum_duration)
+            for pair in pairs
+        )
+        aggregate["gates"] = {
+            "A": int(aggregate["common_snapshot_pass_count"]) == len(config["experiment"]["seeds"]),
+            "B": repeat_gate(repeat_500, config),
+            "C": nominal_success >= 4 and nominal_contact >= 4,
+            "D": slide_contact >= 4 and slip_count >= 3,
+            "E": stick_count >= 2,
+            "F": jam_contact >= 4 and jam_count >= 3,
+            "G": transition_logic >= 3,
+        }
     verdict = experiment_verdict(aggregate, config)
     return {
         "verdict": verdict,

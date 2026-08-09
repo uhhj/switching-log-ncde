@@ -12,7 +12,7 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from slncde.phase0a.runner import load_simulator
+from slncde.sim.runtime import load_simulator
 from slncde.phase0b.config import load_config
 from slncde.phase0b.runner import set_fixture_environment
 from slncde.phase0b.preparation import (
@@ -96,7 +96,7 @@ def main() -> None:
                 )
                 task.set_script_context("staging", [0.0, 0.0, 0.0])
                 env.step_physics(
-                    int(config["preparation"]["settle_steps_after_spawn"])
+                    int(config["motion"]["settle_steps_after_spawn"])
                 )
                 after = local_segment_diagnostics(
                     task, indices, entry, axis, lateral, spacing
@@ -125,11 +125,11 @@ def main() -> None:
                 )
             task.create_fixture()
             spec = task.fixture_spec()
-            if not spec["fixture_created"] or len(spec["fixture_ids"]) != 2:
+            if not spec["fixture_created"] or len(spec["fixture_ids"]) != 4:
                 raise RuntimeError("deferred fixture creation failed")
             print(f"fixture_created after call: {spec['fixture_created']}")
-        if len(spec["fixture_ids"]) != 2:
-            raise RuntimeError("fixture does not contain two wall bodies")
+        if len(spec["fixture_ids"]) != 4:
+            raise RuntimeError("fixture does not contain four constriction bodies")
         if spec["active_endpoint_id"] is None:
             raise RuntimeError("fixture task has no active endpoint")
         for name in ("entry_center", "channel_exit"):
@@ -159,9 +159,36 @@ def main() -> None:
         print(f"lateral_axis={spec['lateral_axis']}")
         print(f"left_wall_AABB={wall_aabbs[0]}")
         print(f"right_wall_AABB={wall_aabbs[1]}")
-        print(f"channel_gap_m={spec['channel_gap_m']}")
+        bead_half_width = float(task.radius)
+        outer_half = 0.5 * float(spec["outer_gap_m"])
+        throat_half = 0.5 * float(spec["throat_gap_m"])
+        offsets = {
+            name: float(config["motion"][f"{name}_lateral_offset_m"])
+            for name in ("nominal", "slide", "jam")
+        }
+        proxies = {
+            name: abs(value) + bead_half_width - throat_half
+            for name, value in offsets.items()
+        }
+        if not all(value > 0.0 for value in proxies.values()):
+            raise RuntimeError("a branch path cannot reach throat contact")
+        if not all(abs(offsets[name]) + bead_half_width < outer_half for name in ("nominal", "slide")):
+            raise RuntimeError("nominal or slide path is blocked at funnel mouth")
+        geometry = task._fixture_geometry()
+        jaw = geometry["upper_funnel"]
+        jaw_yaw = p.getEulerFromQuaternion(jaw["orientation"])[2]
+        print(f"task name: {task_name}")
+        print(f"canonical endpoint: {spec['canonical_endpoint_target']}")
+        print(f"bead radius/half width: {bead_half_width}")
+        print(f"funnel outer gap: {spec['outer_gap_m']}")
+        print(f"throat gap: {spec['throat_gap_m']}")
+        print(f"funnel jaw angle: {jaw_yaw}")
+        print(f"nominal contact proxy: {proxies['nominal']}")
+        print(f"slide contact proxy: {proxies['slide']}")
+        print(f"jam contact proxy: {proxies['jam']}")
         print(f"staging_target_xy={staging[:2].tolist()}")
         print(f"fixture_ids={spec['fixture_ids']}")
+        print(f"fixture semantic parts: {spec['fixture_parts']}")
         print("preflight=PASS")
     finally:
         env.stop()

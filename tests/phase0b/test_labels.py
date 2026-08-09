@@ -46,14 +46,12 @@ def synthetic_trace():
     }
 
 
-def test_offline_modes_touch_release_and_compression():
+def test_hierarchical_labels_and_events():
     labels = derive_labels(synthetic_trace(), CONFIG)
-    assert np.all(labels["mode"][:5] == "free")
-    assert labels["touch"][5]
-    assert np.count_nonzero(labels["mode"] == "slip") >= 5
-    assert np.count_nonzero(labels["mode"] == "stick") >= 5
-    assert labels["release"][15]
-    assert np.count_nonzero(labels["mode"] == "jam") >= 5
-    sequence = compress_transitions(labels["mode"])
-    assert "free -> slip -> stick -> free" in sequence
-    assert sequence.endswith("jam")
+    assert np.all(labels["contact_state"][:5] == "free")
+    assert labels["is_touch_event"][5]
+    assert np.count_nonzero(labels["friction_regime"] == "slip") >= 5
+    assert np.count_nonzero(labels["friction_regime"] == "stick") >= 5
+    assert labels["is_release_event"][15]
+    assert np.count_nonzero(labels["jam_state"] == "jam") >= 5
+    assert np.count_nonzero(labels["is_jam_onset_event"]) == 1

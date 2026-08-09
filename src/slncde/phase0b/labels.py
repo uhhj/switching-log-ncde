@@ -124,11 +124,20 @@ def derive_labels(
     )
     jam = sustained_mask(jam_candidate, minimum_samples)
 
-    modes = np.full(progress.shape, "contact_transition", dtype="U24")
-    modes[stick] = "stick"
-    modes[slip] = "slip"
-    modes[~contact] = "free"
-    modes[jam] = "jam"
+    contact_state = np.where(contact, "contact", "free")
+    friction_regime = np.full(progress.shape, "transition", dtype="U16")
+    friction_regime[~contact] = "none"
+    friction_regime[stick] = "stick"
+    friction_regime[slip] = "slip"
+    jam_state = np.where(jam, "jam", "normal")
+    wall_mu = float(labels.get("wall_lateral_friction", 0.60))
+    tangent_force = np.asarray(
+        trace.get("tangential_force_sum", np.zeros(progress.shape)),
+        dtype=np.float64,
+    )
+    friction_utilization = tangent_force / np.maximum(
+        wall_mu * normal_force, 1e-8
+    )
 
     touch = np.zeros(contact.shape, dtype=bool)
     release = np.zeros(contact.shape, dtype=bool)
@@ -136,6 +145,19 @@ def derive_labels(
         touch[0] = bool(contact[0])
         touch[1:] = contact[1:] & ~contact[:-1]
         release[1:] = ~contact[1:] & contact[:-1]
+    stick_to_slip = np.zeros(contact.shape, dtype=bool)
+    slip_to_stick = np.zeros(contact.shape, dtype=bool)
+    jam_onset = np.zeros(contact.shape, dtype=bool)
+    jam_release = np.zeros(contact.shape, dtype=bool)
+    if contact.size > 1:
+        stick_to_slip[1:] = slip[1:] & stick[:-1]
+        slip_to_stick[1:] = stick[1:] & slip[:-1]
+        jam_onset[1:] = jam[1:] & ~jam[:-1]
+        jam_release[1:] = ~jam[1:] & jam[:-1]
+
+    display_mode = friction_regime.copy()
+    display_mode[jam] = "jam"
+    display_mode[~contact] = "free"
 
     return {
         "contact": contact,
@@ -146,7 +168,17 @@ def derive_labels(
         "jam": jam,
         "touch": touch,
         "release": release,
-        "mode": modes,
+        "contact_state": contact_state,
+        "friction_regime": friction_regime,
+        "jam_state": jam_state,
+        "is_touch_event": touch,
+        "is_release_event": release,
+        "is_stick_to_slip_event": stick_to_slip,
+        "is_slip_to_stick_event": slip_to_stick,
+        "is_jam_onset_event": jam_onset,
+        "is_jam_release_event": jam_release,
+        "friction_utilization": friction_utilization,
+        "mode": display_mode,
         "command_speed": command_speed,
         "progress_delta": progress_delta,
         "minimum_mode_samples": np.asarray(minimum_samples),

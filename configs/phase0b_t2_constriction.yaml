@@ -1,0 +1,67 @@
+experiment:
+  name: phase0b_t2_constriction_passage_qualification
+  seeds: [83001, 83002, 83003, 83004, 83005]
+simulator:
+  task_name: slncde-constriction-passage
+  hz: 240
+  deterministic: true
+  trace_stride: 4
+canonical_frame:
+  entry_center_xy_m: [0.50, 0.00]
+  insertion_axis_xy: [1.0, 0.0]
+fixture:
+  funnel_length_m: 0.025
+  throat_length_m: 0.020
+  outer_gap_m: 0.034
+  throat_gap_m: 0.012
+  wall_thickness_m: 0.006
+  wall_height_m: 0.025
+  wall_lateral_friction: 0.60
+preparation:
+  method: canonical_spawn
+  defer_fixture_creation: true
+  local_bead_count: 5
+  entry_clearance_margin_m: 0.002
+  alignment_cosine_min: 0.90
+  max_local_speed_mps: 0.01
+  max_local_spacing_error_m: 0.002
+motion:
+  staging_before_entry_m: 0.017
+  nominal_lateral_offset_m: 0.0015
+  slide_lateral_offset_m: 0.0035
+  jam_lateral_offset_m: 0.0060
+  insertion_distance_m: 0.075
+  acquisition_speed_mps: 0.01
+  insertion_speed_mps: 0.01
+  approach_height_m: 0.050
+  grasp_height_offset_m: 0.0
+  settle_steps_after_spawn: 120
+  settle_steps_after_grasp: 24
+  settle_steps_after_fixture_creation: 24
+  branch_hold_steps: 120
+labels:
+  contact_normal_force_min_n: 0.05
+  stick_tangent_speed_max_mps: 0.002
+  slip_tangent_speed_min_mps: 0.005
+  command_active_speed_min_mps: 0.005
+  jam_normal_force_min_n: 0.50
+  jam_window_ms: 100
+  jam_progress_max_m: 0.0005
+  minimum_mode_duration_ms: 80
+  wall_lateral_friction: 0.60
+analysis:
+  horizons_ms: [100, 250, 500]
+  repeat_rmse_500ms_max_m: 0.0015
+  minimum_contact_duration_ms: 80
+  minimum_slip_duration_ms: 80
+  minimum_stick_duration_ms: 80
+  minimum_jam_duration_ms: 80
+  minimum_contact_seeds: 4
+  minimum_slip_seeds: 3
+  minimum_stick_seeds: 2
+  minimum_jam_seeds: 3
+  minimum_transition_seeds: 3
+  exit_margin_m: 0.005
+paths:
+  data_root: data/phase0b_t2
+  report_root: reports/phase0b_t2
