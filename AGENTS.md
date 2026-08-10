@@ -28,3 +28,17 @@ probes.
 
 The key decision is raw-physics capability versus Oracle-label capability.
 Do not tune the T2 fixture or train models during Phase 0C0.
+
+## Current simulator path
+
+Phase 0C0 established that PyBullet contact extraction and Oracle labels
+can recognize stick/slip/jam, while the DeformableRavens bead-chain task
+could not realize them reliably.
+
+Phase 0S-MJ then demonstrated free/stick/slip/jam capability with MuJoCo
+1D flex.
+
+Current phase: Phase 0M, a single MuJoCo flex constrained-passage task.
+Do not expand DeformableRavens as a parallel primary simulator.
+Do not train dynamics models until Phase 0M and the subsequent
+matched-state/matched-action audit pass.

@@ -1,0 +1,25 @@
+<mujoco model="phase0s_mujoco_flex">
+  <compiler angle="radian"/>
+  <option timestep="0.002" gravity="0 0 -9.81" solver="Newton"
+          iterations="100" noslip_iterations="10"/>
+  <size memory="32M"/>
+
+  <default>
+    <geom friction="0.60 0.005 0.0001" solref="0.01 1"
+          solimp="0.95 0.99 0.0001"/>
+  </default>
+
+  <worldbody>
+    <geom name="floor" type="plane" pos="0 0 0" size="1 1 0.1"
+          rgba="0.82 0.84 0.86 1"/>
+    <include file="wall.xml"/>
+    <flexcomp name="cable" type="grid" dim="1" count="16 1 1"
+              spacing="0.01 0.01 0.01" pos="-0.075 0 0.03"
+              radius="0.005" mass="0.16" rgba="0.10 0.35 0.80 1">
+      <contact condim="3" friction="0.60 0.005 0.0001"
+               solref="0.01 1" solimp="0.95 0.99 0.0001"
+               selfcollide="none"/>
+      <edge equality="true" damping="1"/>
+    </flexcomp>
+  </worldbody>
+</mujoco>

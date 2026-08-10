@@ -1,0 +1,22 @@
+experiment:
+  name: phase0s_mj_mujoco_flex_capability
+  repeats: 3
+
+simulation:
+  model: models/cable.xml
+  hz: 500
+  duration_s: 1.0
+  free_duration_s: 0.5
+  settle_s: 0.25
+  gravity_mps2: -9.81
+
+probe:
+  stick_force_n: 0.20
+  slip_force_n: 1.50
+  jam_force_n: 2.00
+
+labels:
+  source_config: ../../configs/phase0b_t2_constriction.yaml
+
+outputs:
+  report_root: reports/phase0s

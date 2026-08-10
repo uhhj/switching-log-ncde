@@ -1,0 +1,243 @@
+{
+  "capability_matrix": {
+    "free": {
+      "label": true,
+      "raw": true
+    },
+    "jam": {
+      "label": true,
+      "raw": true
+    },
+    "slip": {
+      "label": true,
+      "raw": true
+    },
+    "stick": {
+      "label": true,
+      "raw": true
+    }
+  },
+  "cpu_only": true,
+  "episodes": [
+    {
+      "contact_dwell_ms": 0.0,
+      "driven_displacement_m": 6.536143394249727e-14,
+      "file": "free_repeat_1.npz",
+      "final_300ms_displacement_m": 6.913046595227312e-14,
+      "label_pass": true,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangent_force_n": 0.0,
+      "median_tangent_velocity_mps": 0.0,
+      "probe": "free",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 0.0,
+      "driven_displacement_m": 6.536143394249727e-14,
+      "file": "free_repeat_2.npz",
+      "final_300ms_displacement_m": 6.913046595227312e-14,
+      "label_pass": true,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangent_force_n": 0.0,
+      "median_tangent_velocity_mps": 0.0,
+      "probe": "free",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 0.0,
+      "driven_displacement_m": 6.536143394249727e-14,
+      "file": "free_repeat_3.npz",
+      "final_300ms_displacement_m": 6.913046595227312e-14,
+      "label_pass": true,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangent_force_n": 0.0,
+      "median_tangent_velocity_mps": 0.0,
+      "probe": "free",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "driven_displacement_m": 0.002234183088322764,
+      "file": "stick_repeat_1.npz",
+      "final_300ms_displacement_m": 0.00014799870127303908,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.00013180882871263136,
+      "median_normal_force_n": 1.5695947277534974,
+      "median_tangent_force_n": 0.2020051871867573,
+      "median_tangent_velocity_mps": 0.0013615041561779173,
+      "probe": "stick",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "driven_displacement_m": 0.002234183088322764,
+      "file": "stick_repeat_2.npz",
+      "final_300ms_displacement_m": 0.00014799870127303908,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.00013180882871263136,
+      "median_normal_force_n": 1.5695947277534974,
+      "median_tangent_force_n": 0.2020051871867573,
+      "median_tangent_velocity_mps": 0.0013615041561779173,
+      "probe": "stick",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "driven_displacement_m": 0.002234183088322764,
+      "file": "stick_repeat_3.npz",
+      "final_300ms_displacement_m": 0.00014799870127303908,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.00013180882871263136,
+      "median_normal_force_n": 1.5695947277534974,
+      "median_tangent_force_n": 0.2020051871867573,
+      "median_tangent_velocity_mps": 0.0013615041561779173,
+      "probe": "stick",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 90.0,
+      "driven_displacement_m": 1.8136492650701324,
+      "file": "slip_repeat_1.npz",
+      "final_300ms_displacement_m": 0.9042803850509382,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.1247834958135206,
+      "median_normal_force_n": 2.41743736711983,
+      "median_tangent_force_n": 1.4404394437511259,
+      "median_tangent_velocity_mps": 1.157077808350755,
+      "probe": "slip",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 90.0,
+      "driven_displacement_m": 1.8136492650701324,
+      "file": "slip_repeat_2.npz",
+      "final_300ms_displacement_m": 0.9042803850509382,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.1247834958135206,
+      "median_normal_force_n": 2.41743736711983,
+      "median_tangent_force_n": 1.4404394437511259,
+      "median_tangent_velocity_mps": 1.157077808350755,
+      "probe": "slip",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 90.0,
+      "driven_displacement_m": 1.8136492650701324,
+      "file": "slip_repeat_3.npz",
+      "final_300ms_displacement_m": 0.9042803850509382,
+      "label_pass": true,
+      "median_jam_window_progress_m": 0.1247834958135206,
+      "median_normal_force_n": 2.41743736711983,
+      "median_tangent_force_n": 1.4404394437511259,
+      "median_tangent_velocity_mps": 1.157077808350755,
+      "probe": "slip",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 842.0,
+      "driven_displacement_m": 0.11007496829418804,
+      "file": "jam_repeat_1.npz",
+      "final_300ms_displacement_m": 1.9607040182417768e-06,
+      "label_pass": true,
+      "median_jam_window_progress_m": -8.325244548329502e-07,
+      "median_normal_force_n": 1.7287471308776763,
+      "median_tangent_force_n": 0.15699368599791338,
+      "median_tangent_velocity_mps": 0.0024132028575160674,
+      "probe": "jam",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 842.0,
+      "driven_displacement_m": 0.11007496829418804,
+      "file": "jam_repeat_2.npz",
+      "final_300ms_displacement_m": 1.9607040182417768e-06,
+      "label_pass": true,
+      "median_jam_window_progress_m": -8.325244548329502e-07,
+      "median_normal_force_n": 1.7287471308776763,
+      "median_tangent_force_n": 0.15699368599791338,
+      "median_tangent_velocity_mps": 0.0024132028575160674,
+      "probe": "jam",
+      "raw_pass": true
+    },
+    {
+      "contact_dwell_ms": 842.0,
+      "driven_displacement_m": 0.11007496829418804,
+      "file": "jam_repeat_3.npz",
+      "final_300ms_displacement_m": 1.9607040182417768e-06,
+      "label_pass": true,
+      "median_jam_window_progress_m": -8.325244548329502e-07,
+      "median_normal_force_n": 1.7287471308776763,
+      "median_tangent_force_n": 0.15699368599791338,
+      "median_tangent_velocity_mps": 0.0024132028575160674,
+      "probe": "jam",
+      "raw_pass": true
+    }
+  ],
+  "episodes_completed": 12,
+  "mujoco_version": "3.2.3",
+  "regimes": {
+    "free": {
+      "label_pass_count": 3,
+      "median_contact_dwell_ms": 0.0,
+      "median_driven_displacement_m": 6.536143394249727e-14,
+      "median_final_300ms_displacement_m": 6.913046595227312e-14,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangent_force_n": 0.0,
+      "median_tangent_velocity_mps": 0.0,
+      "raw_pass_count": 3,
+      "repeats": 3
+    },
+    "jam": {
+      "label_pass_count": 3,
+      "median_contact_dwell_ms": 842.0,
+      "median_driven_displacement_m": 0.11007496829418804,
+      "median_final_300ms_displacement_m": 1.9607040182417768e-06,
+      "median_jam_window_progress_m": -8.325244548329502e-07,
+      "median_normal_force_n": 1.7287471308776763,
+      "median_tangent_force_n": 0.15699368599791338,
+      "median_tangent_velocity_mps": 0.0024132028575160674,
+      "raw_pass_count": 3,
+      "repeats": 3
+    },
+    "slip": {
+      "label_pass_count": 3,
+      "median_contact_dwell_ms": 90.0,
+      "median_driven_displacement_m": 1.8136492650701324,
+      "median_final_300ms_displacement_m": 0.9042803850509382,
+      "median_jam_window_progress_m": 0.1247834958135206,
+      "median_normal_force_n": 2.41743736711983,
+      "median_tangent_force_n": 1.4404394437511259,
+      "median_tangent_velocity_mps": 1.157077808350755,
+      "raw_pass_count": 3,
+      "repeats": 3
+    },
+    "stick": {
+      "label_pass_count": 3,
+      "median_contact_dwell_ms": 1000.0,
+      "median_driven_displacement_m": 0.002234183088322764,
+      "median_final_300ms_displacement_m": 0.00014799870127303908,
+      "median_jam_window_progress_m": 0.00013180882871263136,
+      "median_normal_force_n": 1.5695947277534974,
+      "median_tangent_force_n": 0.2020051871867573,
+      "median_tangent_velocity_mps": 0.0013615041561779173,
+      "raw_pass_count": 3,
+      "repeats": 3
+    }
+  },
+  "thresholds": {
+    "command_active_speed_min_mps": 0.005,
+    "contact_normal_force_min_n": 0.05,
+    "jam_normal_force_min_n": 0.5,
+    "jam_progress_max_m": 0.0005,
+    "jam_window_ms": 100,
+    "minimum_mode_duration_ms": 80,
+    "slip_tangent_speed_min_mps": 0.005,
+    "stick_tangent_speed_max_mps": 0.002,
+    "wall_lateral_friction": 0.6
+  },
+  "verdict": "PHASE0S_MJ_GO"
+}

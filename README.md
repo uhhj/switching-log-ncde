@@ -27,3 +27,15 @@ python scripts/analyze_phase0b.py --config configs/phase0b_t2_constriction.yaml
 python scripts/run_phase0c0_contact_capability.py --config configs/phase0c0_contact_capability.yaml --preflight
 python scripts/run_phase0c0_contact_capability.py --config configs/phase0c0_contact_capability.yaml
 ```
+
+## Current simulator path
+
+Phase 0C0 established that PyBullet contact extraction and Oracle labels can
+recognize stick/slip/jam, while the DeformableRavens bead-chain task could not
+realize them reliably. Phase 0S-MJ then demonstrated free/stick/slip/jam
+capability with MuJoCo 1D flex.
+
+Current phase: Phase 0M, a single MuJoCo flex constrained-passage task. Do not
+expand DeformableRavens as a parallel primary simulator. Do not train dynamics
+models until Phase 0M and the subsequent matched-state/matched-action audit
+pass.

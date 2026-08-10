@@ -1,0 +1,34 @@
+{
+  "branches": {
+    "centered": {
+      "final_progress_m": 0.059713052021825995,
+      "samples": 1650,
+      "success": false
+    },
+    "centered_repeat": {
+      "final_progress_m": 0.05971305202182599,
+      "samples": 1650,
+      "success": false
+    },
+    "offset_large": {
+      "final_progress_m": 0.056998626872097516,
+      "samples": 1650,
+      "success": false
+    },
+    "offset_medium": {
+      "final_progress_m": 0.0596889583166371,
+      "samples": 1650,
+      "success": false
+    }
+  },
+  "preparation": {
+    "finite_state": true,
+    "fixture_contact_free": true,
+    "head_before_entry": true,
+    "initial_y_m": -0.0004478846972430597,
+    "low_speed": true,
+    "max_node_speed_mps": 1.406739114386852e-06,
+    "pass": true,
+    "seed": 83005
+  }
+}
