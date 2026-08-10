@@ -7,7 +7,11 @@ benchmark before any predictive model is trained.
 
 - Phase0A hidden friction: NO-GO.
 - Phase0B open channel: NO-GO.
-- Current: Phase0B-T2 constriction passage qualification.
+- Phase0B-T2: NO-GO. Contact is real and repeatable, but stick/slip/jam were
+  not established.
+- Current: Phase0C0 contact-regime capability probe, separating task
+  representation failure, Oracle definition failure, and simulator contact
+  capability failure.
 
 The active task uses constraint-consistent canonical cable spawn, a converging
 funnel and a narrow throat. Four deterministic branches start from one common
@@ -20,4 +24,6 @@ pytest -q tests/phase0b
 python scripts/preflight_phase0b.py --config configs/phase0b_t2_constriction.yaml
 python scripts/run_phase0b.py --config configs/phase0b_t2_constriction.yaml --seeds 83001 83002 83003 83004 83005
 python scripts/analyze_phase0b.py --config configs/phase0b_t2_constriction.yaml
+python scripts/run_phase0c0_contact_capability.py --config configs/phase0c0_contact_capability.yaml --preflight
+python scripts/run_phase0c0_contact_capability.py --config configs/phase0c0_contact_capability.yaml
 ```

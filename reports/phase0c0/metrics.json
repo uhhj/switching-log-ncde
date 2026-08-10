@@ -1,0 +1,289 @@
+{
+  "capability_matrix": {
+    "jam": {
+      "label": true,
+      "raw": true
+    },
+    "slip": {
+      "label": true,
+      "raw": true
+    },
+    "stick": {
+      "label": true,
+      "raw": true
+    }
+  },
+  "episodes": [
+    {
+      "contact_dwell_ms": 0.0,
+      "displacement_driven_m": 0.0,
+      "displacement_final_300ms_m": 0.0,
+      "free_label_fraction": 1.0,
+      "free_raw_fraction": 1.0,
+      "label_dwell_ms": 500.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.0,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangential_speed_mps": 0.0,
+      "probe": "free_control",
+      "raw_pass": true,
+      "repeat": 1
+    },
+    {
+      "contact_dwell_ms": 0.0,
+      "displacement_driven_m": 0.0,
+      "displacement_final_300ms_m": 0.0,
+      "free_label_fraction": 1.0,
+      "free_raw_fraction": 1.0,
+      "label_dwell_ms": 500.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.0,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangential_speed_mps": 0.0,
+      "probe": "free_control",
+      "raw_pass": true,
+      "repeat": 2
+    },
+    {
+      "contact_dwell_ms": 0.0,
+      "displacement_driven_m": 0.0,
+      "displacement_final_300ms_m": 0.0,
+      "free_label_fraction": 1.0,
+      "free_raw_fraction": 1.0,
+      "label_dwell_ms": 500.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.0,
+      "median_jam_window_progress_m": Infinity,
+      "median_normal_force_n": 0.0,
+      "median_tangential_speed_mps": 0.0,
+      "probe": "free_control",
+      "raw_pass": true,
+      "repeat": 3
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": -1.0635136475034252e-05,
+      "displacement_final_300ms_m": 1.417647371789005e-07,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 995.8333333333334,
+      "label_pass": true,
+      "median_friction_force_n": 0.24507921554192447,
+      "median_jam_window_progress_m": -4.761185208859836e-08,
+      "median_normal_force_n": 0.9809999984736962,
+      "median_tangential_speed_mps": 4.866585241353176e-06,
+      "probe": "stick_probe",
+      "raw_pass": true,
+      "repeat": 1
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": -1.0635136475034252e-05,
+      "displacement_final_300ms_m": 1.417647371789005e-07,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 995.8333333333334,
+      "label_pass": true,
+      "median_friction_force_n": 0.24507921554192447,
+      "median_jam_window_progress_m": -4.761185208859836e-08,
+      "median_normal_force_n": 0.9809999984736962,
+      "median_tangential_speed_mps": 4.866585241353176e-06,
+      "probe": "stick_probe",
+      "raw_pass": true,
+      "repeat": 2
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": -1.0635136475034252e-05,
+      "displacement_final_300ms_m": 1.417647371789005e-07,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 995.8333333333334,
+      "label_pass": true,
+      "median_friction_force_n": 0.24507921554192447,
+      "median_jam_window_progress_m": -4.761185208859836e-08,
+      "median_normal_force_n": 0.9809999984736962,
+      "median_tangential_speed_mps": 4.866585241353176e-06,
+      "probe": "stick_probe",
+      "raw_pass": true,
+      "repeat": 3
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": 5.305288196595997,
+      "displacement_final_300ms_m": 2.599703429332449,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 1000.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.3205896131672683,
+      "median_jam_window_progress_m": 0.5516695754295575,
+      "median_normal_force_n": 0.8905267032424118,
+      "median_tangential_speed_mps": 5.5022465003752625,
+      "probe": "slip_probe",
+      "raw_pass": true,
+      "repeat": 1
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": 5.305288196595997,
+      "displacement_final_300ms_m": 2.599703429332449,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 1000.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.3205896131672683,
+      "median_jam_window_progress_m": 0.5516695754295575,
+      "median_normal_force_n": 0.8905267032424118,
+      "median_tangential_speed_mps": 5.5022465003752625,
+      "probe": "slip_probe",
+      "raw_pass": true,
+      "repeat": 2
+    },
+    {
+      "contact_dwell_ms": 1000.0,
+      "displacement_driven_m": 5.305288196595997,
+      "displacement_final_300ms_m": 2.599703429332449,
+      "free_label_fraction": 0.0,
+      "free_raw_fraction": 0.0,
+      "label_dwell_ms": 1000.0,
+      "label_pass": true,
+      "median_friction_force_n": 0.3205896131672683,
+      "median_jam_window_progress_m": 0.5516695754295575,
+      "median_normal_force_n": 0.8905267032424118,
+      "median_tangential_speed_mps": 5.5022465003752625,
+      "probe": "slip_probe",
+      "raw_pass": true,
+      "repeat": 3
+    },
+    {
+      "contact_dwell_ms": 958.3333333333334,
+      "displacement_driven_m": 0.014675578832768904,
+      "displacement_final_300ms_m": 6.403286317013812e-07,
+      "free_label_fraction": 0.041666666666666664,
+      "free_raw_fraction": 0.041666666666666664,
+      "label_dwell_ms": 862.5,
+      "label_pass": true,
+      "median_friction_force_n": 0.5814559101826824,
+      "median_jam_window_progress_m": -3.01253055690065e-06,
+      "median_normal_force_n": 1.990831862530209,
+      "median_tangential_speed_mps": 0.0001893596681604547,
+      "probe": "jam_probe",
+      "raw_pass": true,
+      "repeat": 1
+    },
+    {
+      "contact_dwell_ms": 958.3333333333334,
+      "displacement_driven_m": 0.014675578832768904,
+      "displacement_final_300ms_m": 6.403286317013812e-07,
+      "free_label_fraction": 0.041666666666666664,
+      "free_raw_fraction": 0.041666666666666664,
+      "label_dwell_ms": 862.5,
+      "label_pass": true,
+      "median_friction_force_n": 0.5814559101826824,
+      "median_jam_window_progress_m": -3.01253055690065e-06,
+      "median_normal_force_n": 1.990831862530209,
+      "median_tangential_speed_mps": 0.0001893596681604547,
+      "probe": "jam_probe",
+      "raw_pass": true,
+      "repeat": 2
+    },
+    {
+      "contact_dwell_ms": 958.3333333333334,
+      "displacement_driven_m": 0.014675578832768904,
+      "displacement_final_300ms_m": 6.403286317013812e-07,
+      "free_label_fraction": 0.041666666666666664,
+      "free_raw_fraction": 0.041666666666666664,
+      "label_dwell_ms": 862.5,
+      "label_pass": true,
+      "median_friction_force_n": 0.5814559101826824,
+      "median_jam_window_progress_m": -3.01253055690065e-06,
+      "median_normal_force_n": 1.990831862530209,
+      "median_tangential_speed_mps": 0.0001893596681604547,
+      "probe": "jam_probe",
+      "raw_pass": true,
+      "repeat": 3
+    }
+  ],
+  "free": {
+    "label_pass": true,
+    "label_pass_count": 3,
+    "raw_pass": true,
+    "raw_pass_count": 3
+  },
+  "jam": {
+    "label": {
+      "pass": true,
+      "pass_count": 3
+    },
+    "median_contact_dwell_ms": 958.3333333333334,
+    "median_displacement_driven_m": 0.014675578832768904,
+    "median_displacement_final_300ms_m": 6.403286317013812e-07,
+    "median_friction_force_n": 0.5814559101826824,
+    "median_jam_window_progress_m": -3.01253055690065e-06,
+    "median_label_dwell_ms": 862.5,
+    "median_normal_force_n": 1.990831862530209,
+    "median_tangential_speed_mps": 0.0001893596681604547,
+    "raw": {
+      "pass": true,
+      "pass_count": 3
+    }
+  },
+  "setup": {
+    "bead_collision_half_width_m": 0.005,
+    "bead_mass_kg": 0.1,
+    "cpu_only": true,
+    "hz": 240,
+    "label_thresholds": {
+      "command_active_speed_min_mps": 0.005,
+      "contact_normal_force_min_n": 0.05,
+      "jam_normal_force_min_n": 0.5,
+      "jam_progress_max_m": 0.0005,
+      "jam_window_ms": 100,
+      "minimum_mode_duration_ms": 80,
+      "slip_tangent_speed_min_mps": 0.005,
+      "stick_tangent_speed_max_mps": 0.002,
+      "wall_lateral_friction": 0.6
+    },
+    "lateral_friction": 0.6
+  },
+  "slip": {
+    "label": {
+      "pass": true,
+      "pass_count": 3
+    },
+    "median_contact_dwell_ms": 1000.0,
+    "median_displacement_driven_m": 5.305288196595997,
+    "median_displacement_final_300ms_m": 2.599703429332449,
+    "median_friction_force_n": 0.3205896131672683,
+    "median_jam_window_progress_m": 0.5516695754295575,
+    "median_label_dwell_ms": 1000.0,
+    "median_normal_force_n": 0.8905267032424118,
+    "median_tangential_speed_mps": 5.5022465003752625,
+    "raw": {
+      "pass": true,
+      "pass_count": 3
+    }
+  },
+  "stick": {
+    "label": {
+      "pass": true,
+      "pass_count": 3
+    },
+    "median_contact_dwell_ms": 1000.0,
+    "median_displacement_driven_m": -1.0635136475034252e-05,
+    "median_displacement_final_300ms_m": 1.417647371789005e-07,
+    "median_friction_force_n": 0.24507921554192447,
+    "median_jam_window_progress_m": -4.761185208859836e-08,
+    "median_label_dwell_ms": 995.8333333333334,
+    "median_normal_force_n": 0.9809999984736962,
+    "median_tangential_speed_mps": 4.866585241353176e-06,
+    "raw": {
+      "pass": true,
+      "pass_count": 3
+    }
+  },
+  "verdict": "PHASE0C0_LABELS_CAPABLE_TASK_REPRESENTATION_SUSPECT"
+}

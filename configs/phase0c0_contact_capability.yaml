@@ -1,0 +1,24 @@
+experiment:
+  name: phase0c0_contact_regime_capability
+  repeats: 3
+
+simulation:
+  hz: 240
+  duration_s: 1.0
+  settle_s: 0.25
+  gravity_mps2: -9.81
+
+probe:
+  lateral_friction: 0.60
+  wall_lateral_friction: 0.60
+  stick_force_n: 0.20
+  slip_force_n: 1.50
+  jam_push_force_n: 2.00
+  wall_x_m: 0.08
+  initial_wall_clearance_m: 0.015
+
+labels:
+  source_config: configs/phase0b_t2_constriction.yaml
+
+outputs:
+  report_root: reports/phase0c0

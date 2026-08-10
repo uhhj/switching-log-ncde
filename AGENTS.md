@@ -16,3 +16,15 @@ must naturally realize hierarchical contact, stick/slip and jam states.
 
 Do not restore the deleted channel/local-teleport runtime paths.
 Do not train dynamics models until Phase 0 task qualification passes.
+
+## Current phase: Phase 0C0
+
+Phase 0B-T2 established reliable preparation, repeatability and real fixture
+contact, but no sustained stick/slip/jam.
+
+Before changing task geometry again, Phase 0C0 isolates simulator/contact
+representation from DLO task mechanics using minimal single-bead contact
+probes.
+
+The key decision is raw-physics capability versus Oracle-label capability.
+Do not tune the T2 fixture or train models during Phase 0C0.
