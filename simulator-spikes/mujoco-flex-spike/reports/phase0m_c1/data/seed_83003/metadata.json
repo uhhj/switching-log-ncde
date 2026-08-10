@@ -1,0 +1,58 @@
+{
+  "branches": {
+    "centered": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18231747176645338,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null
+    },
+    "centered_repeat": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18231747176645338,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null
+    },
+    "offset_large": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18159474660548267,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null
+    },
+    "offset_medium": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.1819445848809046,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null
+    }
+  },
+  "preparation": {
+    "finite_state": true,
+    "fixture_contact_free": true,
+    "head_before_entry": true,
+    "initial_y_m": -7.700427234621609e-05,
+    "low_speed": true,
+    "max_node_speed_mps": 1.406739114477757e-06,
+    "pass": true,
+    "seed": 83003
+  }
+}

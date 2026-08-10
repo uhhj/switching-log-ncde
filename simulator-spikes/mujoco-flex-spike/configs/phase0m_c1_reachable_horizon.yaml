@@ -1,0 +1,61 @@
+experiment:
+  name: phase0m_c1_reachable_horizon
+  seeds: [83001, 83002, 83003, 83004, 83005]
+
+simulation:
+  source_model: models/cable.xml
+  timestep_s: 0.002
+  settle_s: 0.25
+  gravity_mps2: -9.81
+
+geometry:
+  funnel_entry_half_gap_r: 2.4
+  throat_half_gap_r: 1.18
+  funnel_length_r: 10.0
+  throat_length_r: 10.0
+  wall_thickness_r: 1.0
+  wall_height_r: 4.0
+  pre_entry_distance_r: 8.0
+  exit_margin_r: 3.0
+
+seed_variation:
+  initial_y_uniform_r: 0.10
+
+controller:
+  forward_speed_mps: 0.03
+  branch_duration_s: 3.0
+  post_command_hold_s: 0.30
+  position_kp_npm: 40.0
+  velocity_kd_ns_per_m: 1.0
+  force_limit_n: 2.0
+
+protocol:
+  mode: geometric_distance_budget
+  safety_spacing_count: 2.0
+  max_extra_time_s: 0.75
+  post_success_hold_s: 0.30
+  post_jam_hold_s: 0.30
+
+branches:
+  centered_offset_r: 0.0
+  medium_offset_r: 0.65
+  large_offset_r: 1.55
+
+gates:
+  preparation_required: 5
+  preparation_max_node_speed_mps: 0.01
+  repeat_median_rmse_500ms_max_m: 0.0010
+  repeat_seed_rmse_500ms_max_m: 0.0015
+  repeat_seed_pass_count: 4
+  centered_success_count: 4
+  medium_contact_count: 4
+  large_contact_count: 4
+  medium_slip_count: 3
+  large_jam_count: 3
+  dataset_stick_episode_count: 3
+
+oracle:
+  source_config: ../../configs/phase0b_t2_constriction.yaml
+
+paths:
+  report_root: reports/phase0m_c1

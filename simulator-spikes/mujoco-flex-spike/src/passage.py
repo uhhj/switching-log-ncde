@@ -189,6 +189,24 @@ class PassageScene:
             relative_velocity,
         )
 
+    def fixture_region_contacts(self, relative_velocity) -> Dict[str, Dict[str, Any]]:
+        return {
+            "funnel": extract_contacts(
+                self.simulator.model,
+                self.simulator.data,
+                self.simulator.flex_id,
+                self.fixture_ids[:2],
+                relative_velocity,
+            ),
+            "throat": extract_contacts(
+                self.simulator.model,
+                self.simulator.data,
+                self.simulator.flex_id,
+                self.fixture_ids[2:],
+                relative_velocity,
+            ),
+        }
+
     def floor_contact(self, relative_velocity) -> Dict[str, Any]:
         return extract_contacts(
             self.simulator.model,

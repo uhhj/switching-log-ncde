@@ -42,3 +42,11 @@ Current phase: Phase 0M, a single MuJoCo flex constrained-passage task.
 Do not expand DeformableRavens as a parallel primary simulator.
 Do not train dynamics models until Phase 0M and the subsequent
 matched-state/matched-action audit pass.
+
+## Phase 0M-C1
+
+The original Phase 0M fixed-duration rollout had insufficient geometric
+reachability for the leading-4 passage criterion. C1 changed only the
+longitudinal drive-distance / horizon protocol; geometry, controller speed,
+branch offsets, friction and Oracle definitions remained unchanged. The
+corrected batch reached the constrained region but remained a task NO-GO.

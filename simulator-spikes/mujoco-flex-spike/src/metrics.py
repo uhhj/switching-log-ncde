@@ -9,7 +9,13 @@ import numpy as np
 
 from .labels import derive_labels, sustained_mask
 from .passage import cable_radius, geometry_from_config
-from .phase0m import BRANCHES, NON_REPEAT_BRANCHES, resolve_phase0m
+from .phase0m import (
+    BRANCHES,
+    NON_REPEAT_BRANCHES,
+    resolve_c1_drive_protocol,
+    resolve_phase0m,
+)
+from .passage import PassageScene
 from .probes import PROBES, resolve_setup
 
 
@@ -275,6 +281,16 @@ def _phase0m_trajectory_summary(
     stick_dwell = 1000.0 * longest_true_run(stick) / hz
     slip_dwell = 1000.0 * longest_true_run(slip) / hz
     jam_dwell = 1000.0 * longest_true_run(jam) / hz
+    funnel_contact = (
+        np.asarray(trace["funnel_contact_count"], dtype=np.int64) > 0
+        if "funnel_contact_count" in trace
+        else np.zeros(contact.shape, dtype=bool)
+    )
+    throat_contact = (
+        np.asarray(trace["throat_contact_count"], dtype=np.int64) > 0
+        if "throat_contact_count" in trace
+        else np.zeros(contact.shape, dtype=bool)
+    )
     events = np.asarray(trace["events"], dtype=bool)
     event_names = np.asarray(trace["event_names"]).astype(str)
     event_counts = {
@@ -298,6 +314,12 @@ def _phase0m_trajectory_summary(
         "stick_dwell_ms": stick_dwell,
         "slip_dwell_ms": slip_dwell,
         "jam_dwell_ms": jam_dwell,
+        "funnel_contact_dwell_ms": 1000.0
+        * longest_true_run(funnel_contact)
+        / hz,
+        "throat_contact_dwell_ms": 1000.0
+        * longest_true_run(throat_contact)
+        / hz,
         "contact_occupancy": float(np.mean(contact)),
         "stick_occupancy": float(np.mean(stick)),
         "slip_occupancy": float(np.mean(slip)),
@@ -319,6 +341,47 @@ def _phase0m_trajectory_summary(
         "friction_sequence": _compress(trace["friction_layer"]),
         "failure_sequence": _compress(trace["failure_layer"]),
         "samples": int(np.asarray(trace["time"]).size),
+        **(
+            {
+                "required_translation_m": float(
+                    np.asarray(trace["required_translation_m"]).item()
+                ),
+                "command_distance_m": float(
+                    np.asarray(trace["command_distance_m"]).item()
+                ),
+                "max_duration_s": float(
+                    np.asarray(trace["max_duration_s"]).item()
+                ),
+                "actual_reference_travel_m": float(
+                    np.asarray(trace["actual_reference_travel_m"]).item()
+                ),
+                "actual_episode_duration_s": float(
+                    np.asarray(trace["actual_episode_duration_s"]).item()
+                ),
+                "success_time_s": (
+                    None
+                    if np.isnan(float(np.asarray(trace["success_time_s"]).item()))
+                    else float(np.asarray(trace["success_time_s"]).item())
+                ),
+                "head_entered_funnel": bool(
+                    np.asarray(trace["head_entered_funnel"]).item()
+                ),
+                "head_entered_throat": bool(
+                    np.asarray(trace["head_entered_throat"]).item()
+                ),
+                "leading4_entered_throat": bool(
+                    np.asarray(trace["leading4_entered_throat"]).item()
+                ),
+                "head_crossed_exit": bool(
+                    np.asarray(trace["head_crossed_exit"]).item()
+                ),
+                "leading4_passage_success": bool(
+                    np.asarray(trace["leading4_passage_success"]).item()
+                ),
+            }
+            if "command_distance_m" in trace
+            else {}
+        ),
     }
 
 
@@ -583,12 +646,241 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
         "gates": gates,
         "per_seed": per_seed,
     }
+    is_c1 = config.get("protocol", {}).get("mode") == "geometric_distance_budget"
+    if is_c1:
+        scene = PassageScene(source_model, config)
+        protocol = resolve_c1_drive_protocol(spike_root, scene, config)
+        centered_sufficient = sum(
+            bool(item["success"])
+            or item["actual_reference_travel_m"]
+            >= item["command_distance_m"] - 1e-12
+            for item in centered
+        )
+        medium_entered = sum(
+            bool(item["leading4_entered_throat"]) for item in medium
+        )
+        large_entered = sum(
+            bool(item["leading4_entered_throat"]) for item in large
+        )
+        protocol_reachability = {
+            "centered_sufficient_travel_count": centered_sufficient,
+            "medium_entered_throat_count": medium_entered,
+            "large_entered_throat_count": large_entered,
+            "centered_sufficient_travel_pass": centered_sufficient == len(seeds),
+            "medium_entered_throat_pass": medium_entered >= 4,
+            "large_entered_throat_pass": large_entered >= 4,
+        }
+        protocol_pass = all(
+            value
+            for key, value in protocol_reachability.items()
+            if key.endswith("_pass")
+        )
+        if preparation_pass < int(gates_config["preparation_required"]):
+            verdict = "PHASE0M_C1_ENGINEERING_BLOCKED"
+        elif protocol_pass and all(gates.values()):
+            verdict = "PHASE0M_C1_GO"
+        elif protocol_pass:
+            verdict = "PHASE0M_C1_TASK_NO_GO"
+        else:
+            verdict = "PHASE0M_C1_ENGINEERING_BLOCKED"
+        with (spike_root / "reports" / "phase0m_c1" / "reachability_audit.json").open(
+            "r", encoding="utf-8"
+        ) as handle:
+            reachability_audit = json.load(handle)
+        with (spike_root / "reports" / "phase0m" / "metrics.json").open(
+            "r", encoding="utf-8"
+        ) as handle:
+            old_metrics = json.load(handle)
+        funnel_dwell = _positive_median(
+            [item[2]["funnel_contact_dwell_ms"] for item in all_summaries]
+        )
+        throat_dwell = _positive_median(
+            [item[2]["throat_contact_dwell_ms"] for item in all_summaries]
+        )
+        metrics.update(
+            {
+                "verdict": verdict,
+                "reachability_audit": reachability_audit,
+                "protocol": protocol,
+                "protocol_reachability": protocol_reachability,
+                "contact": {
+                    **metrics["contact"],
+                    "funnel_median_dwell_ms": funnel_dwell,
+                    "throat_median_dwell_ms": throat_dwell,
+                },
+                "comparison_to_phase0m": {
+                    "centered_success": {
+                        "phase0m": old_metrics["passage"]["centered_success_count"],
+                        "c1": centered_success,
+                    },
+                    "medium_contact": {
+                        "phase0m": old_metrics["contact"]["medium_count"],
+                        "c1": medium_contact,
+                    },
+                    "large_contact": {
+                        "phase0m": old_metrics["contact"]["large_count"],
+                        "c1": large_contact,
+                    },
+                    "stick": {
+                        "phase0m": old_metrics["friction"][
+                            "non_repeat_stick_episode_count"
+                        ],
+                        "c1": stick_episodes,
+                    },
+                    "slip": {
+                        "phase0m": old_metrics["friction"]["medium_slip_count"],
+                        "c1": medium_slip,
+                    },
+                    "jam": {
+                        "phase0m": old_metrics["failure"]["large_jam_count"],
+                        "c1": large_jam,
+                    },
+                },
+            }
+        )
     report_root.mkdir(parents=True, exist_ok=True)
     with (report_root / "metrics.json").open("w", encoding="utf-8") as handle:
         json.dump(metrics, handle, indent=2, sort_keys=True)
         handle.write("\n")
-    _write_phase0m_report(report_root / "RESULT.md", metrics)
+    if is_c1:
+        _write_phase0m_c1_report(report_root / "RESULT.md", metrics)
+    else:
+        _write_phase0m_report(report_root / "RESULT.md", metrics)
     return metrics
+
+
+def _write_phase0m_c1_report(path: Path, metrics: Mapping[str, Any]) -> None:
+    failed = ", ".join(
+        name for name, value in metrics["gates"].items() if not value
+    ) or "none"
+    if metrics["verdict"] == "PHASE0M_C1_GO":
+        fact = (
+            "The distance-derived C1 protocol removed the old reachability confound "
+            "and all original Phase 0M scientific gates passed."
+        )
+        inference = "The unified MuJoCo passage now supports the required contact regimes."
+        scientific = (
+            "The task is qualified for the matched-state/matched-action necessity audit, "
+            "but not yet for dynamics-model training."
+        )
+        next_action = "Run the Phase 0M2 matched-state/matched-action mode-necessity audit."
+    elif metrics["verdict"] == "PHASE0M_C1_ENGINEERING_BLOCKED":
+        fact = "The corrected C1 pipeline did not establish all required protocol-reachability gates."
+        inference = "The scientific task result cannot be interpreted from this incomplete correction."
+        scientific = "This is an engineering qualification block, not a task-level scientific result."
+        next_action = "Repair only the C1 runner or trace pipeline and rerun the same fixed protocol."
+    else:
+        fact = (
+            "The old horizon was confounded; under the corrected distance-derived protocol, "
+            f"all branches reached the intended region but these scientific gates failed: {failed}."
+        )
+        inference = (
+            "The horizon confound is removed, so the remaining failure belongs to the frozen "
+            "task, controller coupling, or contact realization."
+        )
+        scientific = (
+            "The current passage does not naturally supply all required sustained regimes; "
+            "contact chatter after throat entry is not merely a truncated approach."
+        )
+        next_action = "Choose one minimal task correction versus switching to SOFA BeamAdapter."
+    protocol = metrics["protocol"]
+    preparation = metrics["preparation"]
+    reach = metrics["protocol_reachability"]
+    repeat = metrics["repeat"]
+    passage = metrics["passage"]
+    contact = metrics["contact"]
+    friction = metrics["friction"]
+    failure = metrics["failure"]
+    events = metrics["events"]
+    coverage = metrics["mode_coverage"]
+    comparison = metrics["comparison_to_phase0m"]
+    text = f"""# Phase 0M-C1 Reachable-Horizon Correction
+
+## Verdict
+{metrics['verdict']}
+
+## Protocol correction
+- old command budget: {protocol['old_command_budget_m']:.9f} m
+- required geometric translation: {protocol['required_translation_m']:.9f} m
+- new command distance: {protocol['command_distance_m']:.9f} m
+- new nominal drive time: {protocol['nominal_drive_time_s']:.9f} s
+- new max duration: {protocol['max_duration_s']:.9f} s
+- only changed variable: longitudinal command distance / drive horizon and its termination logic
+
+## Preparation
+- PASS: {preparation['pass_count']}/5
+
+## Protocol reachability
+- centered sufficient travel: {reach['centered_sufficient_travel_count']}/5
+- medium entered throat: {reach['medium_entered_throat_count']}/5
+- large entered throat: {reach['large_entered_throat_count']}/5
+
+## Repeat
+- RMSE @100 ms: {repeat['median_rmse_100ms_m']:.9f} m
+- RMSE @250 ms: {repeat['median_rmse_250ms_m']:.9f} m
+- RMSE @500 ms: {repeat['median_rmse_500ms_m']:.9f} m
+- seeds <=1.5 mm: {repeat['seeds_le_1_5mm']}/5
+
+## Passage
+- centered success: {passage['centered_success_count']}/5
+- median centered progress: {passage['median_centered_final_progress_m']:.9f} m
+
+## Contact
+- centered contact: {contact['centered_count']}/5
+- medium contact: {contact['medium_count']}/5
+- large contact: {contact['large_count']}/5
+- median contact dwell: {contact['median_dwell_ms']:.3f} ms
+
+## Friction
+- sustained stick episodes: {friction['non_repeat_stick_episode_count']}/15 non-repeat
+- medium sustained slip: {friction['medium_slip_count']}/5
+- median stick dwell: {friction['median_stick_dwell_ms']:.3f} ms
+- median slip dwell: {friction['median_slip_dwell_ms']:.3f} ms
+
+## Failure
+- large sustained jam: {failure['large_jam_count']}/5
+- median jam dwell: {failure['median_jam_dwell_ms']:.3f} ms
+- median jam normal force: {failure['median_large_jam_normal_force_n']:.9f} N
+- median jam-window progress: {failure['median_large_jam_window_progress_m']:.9f} m
+
+## Events
+- touch: {events['touch']}
+- release: {events['release']}
+- stick->slip: {events['stick_to_slip']}
+- slip->stick: {events['slip_to_stick']}
+- jam onset: {events['jam_onset']}
+- jam release: {events['jam_release']}
+
+## Region dwell
+- funnel contact dwell: {contact['funnel_median_dwell_ms']:.3f} ms
+- throat contact dwell: {contact['throat_median_dwell_ms']:.3f} ms
+
+## Mode coverage
+- occupancy: {coverage['occupancy']}
+- episode coverage: {coverage['episode_coverage']}
+- dwell: {coverage['median_dwell_ms']}
+
+## Phase0M vs C1
+- centered success: {comparison['centered_success']['phase0m']} -> {comparison['centered_success']['c1']}
+- medium contact: {comparison['medium_contact']['phase0m']} -> {comparison['medium_contact']['c1']}
+- large contact: {comparison['large_contact']['phase0m']} -> {comparison['large_contact']['c1']}
+- stick: {comparison['stick']['phase0m']} -> {comparison['stick']['c1']}
+- slip: {comparison['slip']['phase0m']} -> {comparison['slip']['c1']}
+- jam: {comparison['jam']['phase0m']} -> {comparison['jam']['c1']}
+
+## Fact
+{fact}
+
+## Inference
+{inference}
+
+## Scientific interpretation
+{scientific}
+
+## Next action
+{next_action}
+"""
+    path.write_text(text, encoding="utf-8")
 
 
 def _write_phase0m_report(path: Path, metrics: Mapping[str, Any]) -> None:
