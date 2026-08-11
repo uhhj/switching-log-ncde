@@ -1,0 +1,24 @@
+{
+  "seed": 84000,
+  "runtime": {
+    "image": "sofa-v2606-python312-runner:ubuntu24",
+    "sofa_root": "/root/workspace/third_party/SOFA_v26.06.00_Linux"
+  },
+  "beam": {
+    "length_m": 0.12,
+    "radius_m": 0.002,
+    "nodes": 7,
+    "young_modulus_pa": 1000000.0,
+    "mass_density_kg_m3": 1000.0
+  },
+  "simulation": {
+    "dt_s": 0.002,
+    "friction": 0.8,
+    "normal_preload_force_n": 0.001,
+    "contact_distance_m": 0.002,
+    "initial_clearance_m": 0.001,
+    "dwell_ms": 80,
+    "progress_window_ms": 100,
+    "breakaway_window_ms": 50
+  }
+}

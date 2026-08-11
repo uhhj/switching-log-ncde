@@ -1,0 +1,18 @@
+{
+  "seed": 84000,
+  "cpu_only": true,
+  "native_contact_extraction": {
+    "component": "ContactListener",
+    "primitive_type": "PointCollisionModel",
+    "listener_methods": [],
+    "native_identity_available": false
+  },
+  "ramp_max_n": 0.0016,
+  "stages": {},
+  "verdict": "PHASE0S_SOFA_ENGINEERING_BLOCKED",
+  "failure_reason": "v26.06 ContactListener binding did not expose native IDs, points, or normals",
+  "fact": "The official v26.06 binary created ContactListener, but its Python binding exposed no getter methods. A 20-step planar wall-contact audit consequently produced no Python-readable native pair identity, contact point, or contact normal.",
+  "inference": "The R1 formal contact signal cannot be constructed with the validated official SofaPython3 runtime; no Oracle threshold was fitted or frozen and later stages were not run.",
+  "unknown": "Whether a C++ listener adapter or a different officially exposed native-contact API can provide the required per-contact identity remains untested. Held-out capability and unified-passage behavior remain untested.",
+  "next_action": "Review the failed controlled physical separation before any capability or passage experiment."
+}
