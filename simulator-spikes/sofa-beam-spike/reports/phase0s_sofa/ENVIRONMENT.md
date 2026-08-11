@@ -2,48 +2,62 @@
 
 ## Verdict
 
-PHASE0S_SOFA_ENGINEERING_BLOCKED
+ENVIRONMENT_PASS
 
-## Runtime discovery
+## Runtime
 
-- CPU-only: yes (`CUDA_VISIBLE_DEVICES` was empty; no SofaCUDA preset used).
-- `runSofa`: unavailable on the server.
-- existing BeamAdapter/SofaPython3 installation: none found under the checked
-  system and workspace locations.
-- system Python: 3.8.10.
-- SOFA source: official `v26.06.00` tag, commit
-  `7c18e95d5c5f2839079892c69e7d89a313c79603`, cloned at
-  `/root/workspace/third_party/sofa-v26.06`.
-- SOFA build metadata: the matching source provides Pixi/CMake presets and a
-  CPU-capable `standard` environment with SofaPython3 support.
+- CPU-only: yes.  Every smoke command used `runSofa -g batch` in Docker
+  without a GPU device request, `SofaCUDA`, or a CUDA preset.
+- Official binary: `SOFA_v26.06.00_Linux_Python3.12.zip`, unpacked at
+  `/root/workspace/third_party/SOFA_v26.06.00_Linux` on the execution host.
+- Runner: `/sofa/bin/runSofa` from that unmodified release, executed in the
+  local CPU-only image `sofa-v2606-python312-runner:ubuntu24`
+  (`sha256:1046e3369c588223988f51938ff7ef8a83522e38aba6acba37b9bb640b590796`).
+  The image provides Ubuntu 24.04's compatible glibc, Python 3.12 runtime,
+  NumPy, and required OpenGL shared libraries; the SOFA release directory is
+  mounted read-only at `/sofa`.
+- SOFA source provenance: official `v26.06.00` tag, commit
+  `7c18e95d5c5f2839079892c69e7d89a313c79603`.
+- BeamAdapter: release-bundled plugin, commit
+  `cac4005bd7c9f266c5c775ab88cebbd7c7fa83c7` (detached `origin/v26.06`).
+- SofaPython3: release-bundled plugin, commit
+  `727ce05f6956369a04f67e3f98da73de33f37a4a` (v26.06), using Python 3.12.3
+  in the runtime image.
 
-## Provisioning attempt
+The Ubuntu 20.04 host cannot directly execute the official binary because it
+lacks the release's required newer glibc/libstdc++ ABI.  The compatibility
+container is therefore an execution adapter, not a replacement build and not
+a Pixi-provisioned environment.
 
-Pixi 0.76.2 was installed from its official installer. Two attempts to resolve
-the official `standard` environment ran for more than fifty minutes in total.
-They downloaded and unpacked hundreds of MiB of dependencies, but never
-produced an executable environment Python, `runSofa`, or a loadable
-BeamAdapter runtime. The remaining live resolver was stopped after the second
-attempt so it would not consume the shared server indefinitely.
+## Official example smoke
 
-## Unrun checks
+All commands used the final image, mounted the official release read-only,
+and ran headlessly for exactly 20 simulation steps.
 
-- official free-beam example: not run (no runner)
-- official collision-beam example: not run (no runner)
-- custom beam smoke: not run (no verified API/runtime)
+| Official scene | Command suffix | Result |
+| --- | --- | --- |
+| `plugins/BeamAdapter/examples/SingleBeam.scn` | `runSofa -g batch -n 20 SingleBeam.scn` | PASS; BeamAdapter loaded; 20 iterations; exit 0 |
+| `plugins/BeamAdapter/examples/SingleBeamDeploymentCollision.scn` | `runSofa -g batch -n 20 SingleBeamDeploymentCollision.scn` | PASS; BeamAdapter and collision/deployment components loaded; 20 iterations; exit 0 |
+| `plugins/BeamAdapter/examples/python3/SingleBeam.py` | `runSofa -l SofaPython3 -g batch -n 20 SingleBeam.py` | PASS; SofaPython3 and BeamAdapter loaded; 20 iterations; exit 0 |
+
+Final logs contain no `ERROR` or `NaN` entries.  The XML free and collision
+examples are the two required BeamAdapter smoke cases; the Python scene is an
+additional executable check that SofaPython3 is functional, rather than merely
+present on disk.
 
 ## Fact
 
-The required CPU SOFA + BeamAdapter + SofaPython3 runtime was not available on
-the provisioned server, and the official v26.06.00 dependency path did not
-complete to a usable runner.
+An official, release-matched SOFA v26.06.00 CPU runtime with executable
+`runSofa`, BeamAdapter, and SofaPython3 now exists on the server, and the two
+official BeamAdapter examples complete their 20-step headless smoke runs.
 
 ## Inference
 
-No scientific statement about BeamAdapter mechanics, Oracle calibration,
-capability, or the unified passage task is justified.
+The environment gate is cleared.  This establishes only simulator and plugin
+executability; it provides no evidence yet about contact-regime capability,
+Oracle calibration, or the constrained-passage task.
 
 ## Next action
 
-Repair the SOFA/Pixi runtime provisioning only, then rerun the unchanged
-environment smoke.
+Run the unchanged one-shot SOFA Oracle calibration before adding any custom
+contact-regime or passage scene.
