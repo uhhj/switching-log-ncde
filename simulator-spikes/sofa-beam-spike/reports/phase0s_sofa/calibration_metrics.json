@@ -1,0 +1,62 @@
+{
+  "verdict": "PHASE0S_SOFA_ORACLE_CALIBRATION_FAIL",
+  "seed": 84000,
+  "cpu_only": true,
+  "force_sanity_terminal_median_speed_mps": 0.016610137831843157,
+  "force_selection_rule": "Initial 0.00005 N retained: the one-time adjustment condition (<0.005 m/s or >0.10 m/s) was not met.",
+  "config": {
+    "beam": {
+      "length_m": 0.12,
+      "radius_m": 0.002,
+      "nodes": 7,
+      "young_modulus_pa": 1000000.0,
+      "mass_density_kg_m3": 1000.0
+    },
+    "simulation": {
+      "dt_s": 0.002,
+      "steps": 300,
+      "friction": 0.8,
+      "minimum_mode_duration_ms": 80,
+      "jam_progress_window_ms": 100
+    },
+    "commands": {
+      "forward_force_n": 0.00005,
+      "normal_preload_force_n": 0.001
+    }
+  },
+  "raw_channels": [
+    "timestamp_s",
+    "beam_node_positions_m",
+    "beam_node_velocities_mps",
+    "command_force_n",
+    "command_active",
+    "contact_count_proxy",
+    "active_contact",
+    "contact_wall_identity",
+    "reaction_force_proxy",
+    "wall_tangent_relative_speed_mps",
+    "task_progress_m"
+  ],
+  "traces": {
+    "free_calibration": {"samples": 300, "contact_samples": 0, "max_contact_count_proxy": 0},
+    "stick_calibration": {"samples": 300, "contact_samples": 148, "max_contact_count_proxy": 2},
+    "slip_calibration": {"samples": 300, "contact_samples": 148, "max_contact_count_proxy": 2},
+    "free_forward_calibration": {"samples": 300, "contact_samples": 0, "max_contact_count_proxy": 0},
+    "jam_calibration": {"samples": 300, "contact_samples": 0, "max_contact_count_proxy": 0}
+  },
+  "separation": {
+    "free_force_p99": 0.0,
+    "stick_force_p10": 0.0,
+    "slip_force_p10": 0.0,
+    "contact_force_p10": 0.0,
+    "stick_speed_p95": 0.3816830856090605,
+    "slip_speed_p05": 0.04117341128026757,
+    "free_progress_p10_at_100ms_m": 0.0003413151813847673,
+    "jam_progress_p90_at_100ms_m": 0.001661676889807026
+  },
+  "failures": [
+    "contact_reaction_overlap",
+    "stick_slip_speed_overlap",
+    "jam_free_progress_overlap"
+  ]
+}
