@@ -61,3 +61,19 @@ contact-compatible Cartesian impedance.
 
 If C2 fails the original Phase 0M gates, no further MuJoCo passage tuning
 is allowed; the next simulator path is SOFA BeamAdapter.
+
+## Current simulator path: Phase 0S-SOFA
+
+MuJoCo 1D flex demonstrated controlled free/stick/slip/jam capability,
+but the unified constrained-passage task remained a final NO-GO after
+reachability correction and the final controller comparison.
+
+No further MuJoCo passage tuning is allowed.
+
+The current Phase 0 task evaluates SOFA BeamAdapter. It first calibrates
+simulator-specific numerical Oracle thresholds in controlled scenes,
+validates held-out free/stick/slip/jam capability, and only then runs one
+unified constrained-passage smoke.
+
+Do not train dynamics models before this P0 task and the subsequent
+matched-state/matched-action audit pass.
