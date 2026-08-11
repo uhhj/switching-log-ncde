@@ -47,3 +47,17 @@ reachability for the leading-4 passage criterion. C1 changed only the
 longitudinal drive-distance / horizon protocol; geometry, controller speed,
 branch offsets, friction and Oracle definitions remained unchanged. The
 corrected batch reached the constrained region but remained a task NO-GO.
+
+## Current phase: Phase 0M-C2
+
+C1 removed the fixed-horizon reachability confound, but the unified MuJoCo
+flex passage task still showed short contact chatter and no sustained
+stick/slip/jam.
+
+C2 is the final MuJoCo task correction. Geometry, friction, forward
+reference speed, offsets, solver and Oracle definitions stay frozen.
+Only endpoint actuation changes from position-reference control to bounded
+contact-compatible Cartesian impedance.
+
+If C2 fails the original Phase 0M gates, no further MuJoCo passage tuning
+is allowed; the next simulator path is SOFA BeamAdapter.

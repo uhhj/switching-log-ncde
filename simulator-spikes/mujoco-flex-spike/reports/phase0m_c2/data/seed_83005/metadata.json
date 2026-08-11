@@ -1,0 +1,71 @@
+{
+  "branches": {
+    "centered": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18233401727444262,
+      "lateral_control_activated": true,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null,
+      "x_force_saturation_fraction": 0.0,
+      "y_force_saturation_fraction": 0.0
+    },
+    "centered_repeat": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18233401727444262,
+      "lateral_control_activated": true,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null,
+      "x_force_saturation_fraction": 0.0,
+      "y_force_saturation_fraction": 0.0
+    },
+    "offset_large": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18141013157875038,
+      "lateral_control_activated": true,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null,
+      "x_force_saturation_fraction": 0.0,
+      "y_force_saturation_fraction": 0.0
+    },
+    "offset_medium": {
+      "actual_episode_duration_s": 7.5840000000000005,
+      "actual_reference_travel_m": 0.20500449704096682,
+      "command_distance_m": 0.20500449704096682,
+      "final_progress_m": 0.18183639229560322,
+      "lateral_control_activated": true,
+      "max_duration_s": 7.583483234698894,
+      "required_translation_m": 0.18500452564876235,
+      "samples": 3792,
+      "success": false,
+      "success_time_s": null,
+      "x_force_saturation_fraction": 0.0,
+      "y_force_saturation_fraction": 0.0
+    }
+  },
+  "controller_mode": "bounded_cartesian_impedance",
+  "preparation": {
+    "finite_state": true,
+    "fixture_contact_free": true,
+    "head_before_entry": true,
+    "initial_y_m": -0.0004478846972430597,
+    "low_speed": true,
+    "max_node_speed_mps": 1.406739114386852e-06,
+    "pass": true,
+    "seed": 83005
+  }
+}

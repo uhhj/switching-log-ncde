@@ -12,6 +12,7 @@ from .passage import cable_radius, geometry_from_config
 from .phase0m import (
     BRANCHES,
     NON_REPEAT_BRANCHES,
+    c2_controller_parameters,
     resolve_c1_drive_protocol,
     resolve_phase0m,
 )
@@ -260,6 +261,54 @@ def _positive_median(values: Sequence[float]) -> float:
     return float(np.median(positive)) if positive else 0.0
 
 
+def _true_run_lengths(mask: Sequence[bool]) -> list[int]:
+    lengths: list[int] = []
+    current = 0
+    for value in np.asarray(mask, dtype=bool):
+        if value:
+            current += 1
+        elif current:
+            lengths.append(current)
+            current = 0
+    if current:
+        lengths.append(current)
+    return lengths
+
+
+def _dataset_contact_chatter(
+    data_root: Path,
+    seeds: Sequence[int],
+    hz: float,
+    minimum_duration_ms: float,
+) -> Dict[str, Any]:
+    durations_ms: list[float] = []
+    for seed in seeds:
+        seed_root = data_root / f"seed_{seed}"
+        for branch in BRANCHES:
+            path = seed_root / f"{branch}.npz"
+            if not path.is_file():
+                continue
+            with np.load(path) as trace:
+                raw_contact = (
+                    np.asarray(trace["fixture_contact_count"], dtype=np.int64) > 0
+                )
+            durations_ms.extend(
+                1000.0 * length / hz for length in _true_run_lengths(raw_contact)
+            )
+    short_count = sum(value < minimum_duration_ms for value in durations_ms)
+    return {
+        "episode_count": len(durations_ms),
+        "median_episode_duration_ms": (
+            float(np.median(durations_ms)) if durations_ms else 0.0
+        ),
+        "short_episode_count": short_count,
+        "short_episode_fraction": (
+            float(short_count / len(durations_ms)) if durations_ms else 0.0
+        ),
+        "short_threshold_ms": float(minimum_duration_ms),
+    }
+
+
 def _phase0m_trajectory_summary(
     trace: Mapping[str, np.ndarray], thresholds: Mapping[str, Any], hz: float
 ) -> Dict[str, Any]:
@@ -398,6 +447,13 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
     preparations = []
     all_summaries = []
     repeat_values = {100: [], 250: [], 500: []}
+    controller_samples: Dict[str, list[np.ndarray]] = {
+        "tracking_error_x": [],
+        "tracking_error_y_active": [],
+        "force_saturated_x": [],
+        "force_saturated_y": [],
+    }
+    success_plane_x = geometry.exit_x_m + geometry.exit_margin_m
     for seed in seeds:
         seed_root = data_root / f"seed_{seed}"
         common_path = seed_root / "common_state.npz"
@@ -405,6 +461,7 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
         if not common_path.is_file() or not all(path.is_file() for path in branch_paths.values()):
             continue
         with np.load(common_path) as common:
+            leading_indices = np.asarray(common["leading_indices"], dtype=np.int64)
             preparation = {
                 "pass": bool(np.asarray(common["preparation_pass"]).item()),
                 "max_node_speed_mps": float(
@@ -423,6 +480,32 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
                 trace = {key: loaded[key] for key in loaded.files}
             traces[branch] = trace
             summary = _phase0m_trajectory_summary(trace, thresholds, hz)
+            final_leading_x = np.asarray(
+                trace["ordered_vertex_positions"], dtype=np.float64
+            )[-1, leading_indices, 0]
+            summary["distance_remaining_to_success_m"] = max(
+                0.0, success_plane_x - float(np.min(final_leading_x))
+            )
+            if "tracking_error_x" in trace:
+                lateral_active = np.asarray(
+                    trace["lateral_control_active"], dtype=bool
+                )
+                controller_samples["tracking_error_x"].append(
+                    np.abs(np.asarray(trace["tracking_error_x"], dtype=np.float64))
+                )
+                controller_samples["tracking_error_y_active"].append(
+                    np.abs(
+                        np.asarray(trace["tracking_error_y"], dtype=np.float64)[
+                            lateral_active
+                        ]
+                    )
+                )
+                controller_samples["force_saturated_x"].append(
+                    np.asarray(trace["force_saturated_x"], dtype=np.float64)
+                )
+                controller_samples["force_saturated_y"].append(
+                    np.asarray(trace["force_saturated_y"], dtype=np.float64)
+                )
             branch_summaries[branch] = summary
             all_summaries.append((seed, branch, summary))
         for horizon in repeat_values:
@@ -646,8 +729,166 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
         "gates": gates,
         "per_seed": per_seed,
     }
-    is_c1 = config.get("protocol", {}).get("mode") == "geometric_distance_budget"
-    if is_c1:
+    is_c2 = (
+        config.get("controller", {}).get("mode")
+        == "bounded_cartesian_impedance"
+    )
+    is_c1 = (
+        config.get("protocol", {}).get("mode") == "geometric_distance_budget"
+        and not is_c2
+    )
+    if is_c2:
+        scene = PassageScene(source_model, config)
+        protocol = resolve_c1_drive_protocol(spike_root, scene, config)
+        controller = c2_controller_parameters(
+            config,
+            float(protocol["local_spacing_m"]),
+            scene.geometry.entry_x_m,
+        )
+        model = scene.simulator.model
+        body_id = scene.simulator.endpoint_body_id
+        first_joint = int(model.body_jntadr[body_id])
+        joint_ids = list(
+            range(first_joint, first_joint + int(model.body_jntnum[body_id]))
+        )
+        controller["endpoint_mapping"] = {
+            "body_id": body_id,
+            "body_name": mujoco.mj_id2name(
+                model, mujoco.mjtObj.mjOBJ_BODY, body_id
+            ),
+            "joint_ids": joint_ids,
+            "dof_addresses": [int(model.jnt_dofadr[j]) for j in joint_ids],
+            "actuator_count": int(model.nu),
+            "force_path": "data.xfrc_applied on endpoint body",
+        }
+
+        def combined(name: str) -> np.ndarray:
+            arrays = [value for value in controller_samples[name] if value.size]
+            return np.concatenate(arrays) if arrays else np.asarray([], dtype=float)
+
+        tracking_x = combined("tracking_error_x")
+        tracking_y = combined("tracking_error_y_active")
+        saturated_x = combined("force_saturated_x")
+        saturated_y = combined("force_saturated_y")
+        controller_diagnostics = {
+            "median_abs_tracking_error_x_m": (
+                float(np.median(tracking_x)) if tracking_x.size else 0.0
+            ),
+            "p95_abs_tracking_error_x_m": (
+                float(np.percentile(tracking_x, 95.0)) if tracking_x.size else 0.0
+            ),
+            "median_abs_tracking_error_y_active_m": (
+                float(np.median(tracking_y)) if tracking_y.size else 0.0
+            ),
+            "x_force_saturation_fraction": (
+                float(np.mean(saturated_x)) if saturated_x.size else 0.0
+            ),
+            "y_force_saturation_fraction": (
+                float(np.mean(saturated_y)) if saturated_y.size else 0.0
+            ),
+        }
+        minimum_duration_ms = float(thresholds["minimum_mode_duration_ms"])
+        chatter = _dataset_contact_chatter(
+            data_root, seeds, hz, minimum_duration_ms
+        )
+        c1_root = spike_root / "reports" / "phase0m_c1"
+        c1_chatter = _dataset_contact_chatter(
+            c1_root / "data", seeds, hz, minimum_duration_ms
+        )
+        with (c1_root / "metrics.json").open("r", encoding="utf-8") as handle:
+            c1_metrics = json.load(handle)
+        centered_failures = [item for item in centered if not item["success"]]
+        metrics["passage"]["failed_distance_remaining_m"] = [
+            float(item["distance_remaining_to_success_m"])
+            for item in centered_failures
+        ]
+        metrics["contact"].update(
+            {
+                **chatter,
+                "funnel_median_dwell_ms": _positive_median(
+                    [item[2]["funnel_contact_dwell_ms"] for item in all_summaries]
+                ),
+                "throat_median_dwell_ms": _positive_median(
+                    [item[2]["throat_contact_dwell_ms"] for item in all_summaries]
+                ),
+            }
+        )
+        complete = (
+            len(preparations) == len(seeds)
+            and len(all_summaries) == len(seeds) * len(BRANCHES)
+            and preparation_pass == int(gates_config["preparation_required"])
+        )
+        if not complete:
+            verdict = "PHASE0M_C2_ENGINEERING_BLOCKED"
+        elif all(gates.values()):
+            verdict = "PHASE0M_C2_GO"
+        else:
+            verdict = "PHASE0M_C2_FINAL_MUJOCO_NO_GO"
+        metrics.update(
+            {
+                "verdict": verdict,
+                "controller": controller,
+                "controller_diagnostics": controller_diagnostics,
+                "protocol": protocol,
+                "frozen_task": {
+                    "geometry": "C1 inherited unchanged",
+                    "friction": "C1 inherited unchanged",
+                    "solver_timestep": "C1 inherited unchanged",
+                    "forward_speed_mps": float(
+                        config["controller"]["forward_speed_mps"]
+                    ),
+                    "offsets": dict(config["branches"]),
+                    "oracle": "C1 inherited unchanged",
+                    "success_and_hold_logic": "C1 inherited unchanged",
+                    "drive_protocol": "C1 inherited unchanged",
+                },
+                "comparison_to_c1": {
+                    "contact_dwell_ms": {
+                        "c1": c1_metrics["contact"]["median_dwell_ms"],
+                        "c2": dwell["contact"],
+                    },
+                    "centered_success": {
+                        "c1": c1_metrics["passage"]["centered_success_count"],
+                        "c2": centered_success,
+                    },
+                    "contact_episode_count": {
+                        "c1": c1_chatter["episode_count"],
+                        "c2": chatter["episode_count"],
+                    },
+                    "median_contact_episode_duration_ms": {
+                        "c1": c1_chatter["median_episode_duration_ms"],
+                        "c2": chatter["median_episode_duration_ms"],
+                    },
+                    "short_contact_episode_fraction": {
+                        "c1": c1_chatter["short_episode_fraction"],
+                        "c2": chatter["short_episode_fraction"],
+                    },
+                    "touch": {
+                        "c1": c1_metrics["events"]["touch"],
+                        "c2": event_totals["touch"],
+                    },
+                    "release": {
+                        "c1": c1_metrics["events"]["release"],
+                        "c2": event_totals["release"],
+                    },
+                    "stick": {
+                        "c1": c1_metrics["friction"][
+                            "non_repeat_stick_episode_count"
+                        ],
+                        "c2": stick_episodes,
+                    },
+                    "slip": {
+                        "c1": c1_metrics["friction"]["medium_slip_count"],
+                        "c2": medium_slip,
+                    },
+                    "jam": {
+                        "c1": c1_metrics["failure"]["large_jam_count"],
+                        "c2": large_jam,
+                    },
+                },
+            }
+        )
+    elif is_c1:
         scene = PassageScene(source_model, config)
         protocol = resolve_c1_drive_protocol(spike_root, scene, config)
         centered_sufficient = sum(
@@ -742,11 +983,170 @@ def analyze_phase0m(config_path: Path) -> Dict[str, Any]:
     with (report_root / "metrics.json").open("w", encoding="utf-8") as handle:
         json.dump(metrics, handle, indent=2, sort_keys=True)
         handle.write("\n")
-    if is_c1:
+    if is_c2:
+        _write_phase0m_c2_report(report_root / "RESULT.md", metrics)
+    elif is_c1:
         _write_phase0m_c1_report(report_root / "RESULT.md", metrics)
     else:
         _write_phase0m_report(report_root / "RESULT.md", metrics)
     return metrics
+
+
+def _write_phase0m_c2_report(path: Path, metrics: Mapping[str, Any]) -> None:
+    verdict = str(metrics["verdict"])
+    failed = ", ".join(
+        name for name, value in metrics["gates"].items() if not value
+    ) or "none"
+    if verdict == "PHASE0M_C2_GO":
+        fact = (
+            "With all task variables frozen, bounded Cartesian impedance passed "
+            "every original Phase 0M qualification gate."
+        )
+        inference = (
+            "Endpoint contact compatibility was sufficient for the unified passage "
+            "to realize the required sustained regimes."
+        )
+        scientific = (
+            "The task is qualified for a matched-state/matched-action necessity "
+            "audit; dynamics-model training remains out of scope."
+        )
+        next_action = (
+            "Run the Phase 0M2 matched-state / matched-action mode necessity audit."
+        )
+    elif verdict == "PHASE0M_C2_ENGINEERING_BLOCKED":
+        fact = (
+            "The C2 dataset is incomplete or the fixed implementation pipeline did "
+            "not complete normally."
+        )
+        inference = "No scientific task verdict can be drawn from incomplete evidence."
+        scientific = (
+            "This is an implementation qualification block, not evidence for or "
+            "against contact-regime sufficiency."
+        )
+        next_action = "Repair only the blocking C2 implementation bug and rerun C2 unchanged."
+    else:
+        fact = (
+            "C2 completed normally with geometry, friction, solver, forward reference, "
+            f"offsets, Oracle and C1 drive protocol frozen; failed gates: {failed}."
+        )
+        inference = (
+            "Contact-compatible endpoint control did not make the unified MuJoCo "
+            "passage naturally realize every required sustained regime."
+        )
+        scientific = (
+            "MuJoCo basic regime capability and corrected reachability are already "
+            "established, so the constrained-passage realization now has sufficient "
+            "negative evidence and receives no further tuning."
+        )
+        next_action = "Start SOFA BeamAdapter DLO spike."
+
+    controller = metrics["controller"]
+    mapping = controller["endpoint_mapping"]
+    preparation = metrics["preparation"]
+    repeat = metrics["repeat"]
+    passage = metrics["passage"]
+    contact = metrics["contact"]
+    friction = metrics["friction"]
+    failure = metrics["failure"]
+    diagnostics = metrics["controller_diagnostics"]
+    events = metrics["events"]
+    comparison = metrics["comparison_to_c1"]
+    remaining = passage["failed_distance_remaining_m"]
+    median_remaining = float(np.median(remaining)) if remaining else 0.0
+    text = f"""# Phase 0M-C2 Contact-Compatible Endpoint Control
+
+## Verdict
+{verdict}
+
+## Frozen task
+- MuJoCo: {metrics['setup']['mujoco_version']} (CPU only)
+- geometry: C1 unchanged
+- friction: C1 unchanged
+- forward speed: {metrics['frozen_task']['forward_speed_mps']:.9f} m/s, C1 unchanged
+- C1 drive protocol: unchanged
+- Oracle: C1 unchanged
+- seeds: {metrics['setup']['seeds']}
+
+## Controller change
+- old controller: legacy moving position-reference Cartesian PD force with a vector-norm cap
+- new controller: bounded contact-compatible Cartesian impedance with per-axis force caps
+- endpoint mapping: body {mapping['body_id']} ({mapping['body_name']}), joints {mapping['joint_ids']}, DOFs {mapping['dof_addresses']}, force via {mapping['force_path']}
+- Kx/Dx: {controller['kx_npm']:.6f} N/m / {controller['dx_ns_per_m']:.6f} N s/m
+- Fx max + source: {controller['fx_max_n']:.6f} N / {controller['fx_source']}
+- Ky/Dy: {controller['ky_shared_npm']:.6f} N/m / {controller['dy_shared_ns_per_m']:.6f} N s/m
+- shared Fy max + source: {controller['fy_max_shared_n']:.6f} N / {controller['fy_shared_source']}
+- shared across centered/medium/large: {'yes' if controller['same_fy_cap_all_branches'] else 'no'}
+- lateral activation rule: leading-4 mean x >= {controller['lateral_activation_x_m']:.9f} m
+
+## Preparation
+- PASS: {preparation['pass_count']}/5
+
+## Repeat
+- RMSE @100 ms: {repeat['median_rmse_100ms_m']:.9f} m
+- RMSE @250 ms: {repeat['median_rmse_250ms_m']:.9f} m
+- RMSE @500 ms: {repeat['median_rmse_500ms_m']:.9f} m
+- seeds <=1.5 mm: {repeat['seeds_le_1_5mm']}/5
+
+## Passage
+- centered success: {passage['centered_success_count']}/5
+- median centered progress: {passage['median_centered_final_progress_m']:.9f} m
+- median distance remaining on failures: {median_remaining:.9f} m
+
+## Contact
+- centered / medium / large: {contact['centered_count']}/5 / {contact['medium_count']}/5 / {contact['large_count']}/5
+- funnel / throat dwell: {contact['funnel_median_dwell_ms']:.3f} ms / {contact['throat_median_dwell_ms']:.3f} ms
+- contact episode count: {contact['episode_count']}
+- median dwell: {contact['median_dwell_ms']:.3f} ms
+- median raw episode duration: {contact['median_episode_duration_ms']:.3f} ms
+- short-contact fraction (<{contact['short_threshold_ms']:.1f} ms): {contact['short_episode_fraction']:.9f}
+
+## Friction
+- sustained stick: {friction['non_repeat_stick_episode_count']}/15 non-repeat
+- medium sustained slip: {friction['medium_slip_count']}/5
+- stick / slip dwell: {friction['median_stick_dwell_ms']:.3f} ms / {friction['median_slip_dwell_ms']:.3f} ms
+
+## Failure
+- large sustained jam: {failure['large_jam_count']}/5
+- dwell: {failure['median_jam_dwell_ms']:.3f} ms
+- normal force: {failure['median_large_jam_normal_force_n']:.9f} N
+- jam-window progress: {failure['median_large_jam_window_progress_m']:.9f} m
+
+## Controller diagnostics
+- median x tracking error: {diagnostics['median_abs_tracking_error_x_m']:.9f} m
+- p95 x tracking error: {diagnostics['p95_abs_tracking_error_x_m']:.9f} m
+- median y tracking error while active: {diagnostics['median_abs_tracking_error_y_active_m']:.9f} m
+- x force saturation fraction: {diagnostics['x_force_saturation_fraction']:.9f}
+- y force saturation fraction: {diagnostics['y_force_saturation_fraction']:.9f}
+
+## Events
+- touch: {events['touch']}
+- release: {events['release']}
+- stick->slip: {events['stick_to_slip']}
+- slip->stick: {events['slip_to_stick']}
+- jam onset: {events['jam_onset']}
+- jam release: {events['jam_release']}
+
+## C1 vs C2
+- touch/release: {comparison['touch']['c1']}/{comparison['release']['c1']} -> {comparison['touch']['c2']}/{comparison['release']['c2']}
+- contact dwell: {comparison['contact_dwell_ms']['c1']:.3f} -> {comparison['contact_dwell_ms']['c2']:.3f} ms
+- centered success: {comparison['centered_success']['c1']} -> {comparison['centered_success']['c2']}
+- stick: {comparison['stick']['c1']} -> {comparison['stick']['c2']}
+- slip: {comparison['slip']['c1']} -> {comparison['slip']['c2']}
+- jam: {comparison['jam']['c1']} -> {comparison['jam']['c2']}
+
+## Fact
+{fact}
+
+## Inference
+{inference}
+
+## Scientific interpretation
+{scientific}
+
+## Next action
+{next_action}
+"""
+    path.write_text(text, encoding="utf-8")
 
 
 def _write_phase0m_c1_report(path: Path, metrics: Mapping[str, Any]) -> None:

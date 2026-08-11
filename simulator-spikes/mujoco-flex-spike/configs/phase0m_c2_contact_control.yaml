@@ -1,0 +1,21 @@
+base_config: phase0m_c1_reachable_horizon.yaml
+
+experiment:
+  name: phase0m_c2_contact_compatible_endpoint_control
+  seeds: [83001, 83002, 83003, 83004, 83005]
+
+controller:
+  mode: bounded_cartesian_impedance
+  x:
+    reference_source: phase0m_c1
+    gain_source: existing_controller
+    force_limit_source: existing_phase0m_endpoint_force_limit
+  y:
+    target_source: phase0m_c1_offsets
+    activation_before_funnel_spacing: 2.0
+    gain_source: existing_controller
+    force_limit_policy: shared_across_all_branches
+    shared_force_limit_source: existing_phase0m_endpoint_force_limit
+
+paths:
+  report_root: reports/phase0m_c2

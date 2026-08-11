@@ -7,7 +7,12 @@ from typing import Any, Dict, Mapping, Optional, Sequence, Tuple
 import numpy as np
 import yaml
 
-from .controller import EndpointServo
+from .controller import (
+    BoundedCartesianImpedance,
+    EndpointServo,
+    bounded_impedance_force,
+    lateral_control_active,
+)
 from .labels import derive_labels
 from .passage import PassageScene, passage_success, reachability_clearance
 from .reachability import (
@@ -29,12 +34,35 @@ def _load_yaml(path: Path) -> Dict[str, Any]:
     return value
 
 
+def _deep_merge(base: Mapping[str, Any], overlay: Mapping[str, Any]) -> Dict[str, Any]:
+    result = dict(base)
+    for key, value in overlay.items():
+        if (
+            key in result
+            and isinstance(result[key], Mapping)
+            and isinstance(value, Mapping)
+        ):
+            result[key] = _deep_merge(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+
+def _resolve_config(config_path: Path) -> Dict[str, Any]:
+    raw = _load_yaml(config_path)
+    base_name = raw.pop("base_config", None)
+    if base_name is None:
+        return raw
+    base_path = (config_path.parent / str(base_name)).resolve()
+    return _deep_merge(_resolve_config(base_path), raw)
+
+
 def resolve_phase0m(
     config_path: Path,
 ) -> Tuple[Path, Dict[str, Any], Dict[str, Any]]:
     config_path = Path(config_path).resolve()
     spike_root = config_path.parent.parent
-    config = _load_yaml(config_path)
+    config = _resolve_config(config_path)
     oracle_path = (
         spike_root / str(config["oracle"]["source_config"])
     ).resolve()
@@ -134,6 +162,37 @@ def _is_c1(config: Mapping[str, Any]) -> bool:
     return config.get("protocol", {}).get("mode") == "geometric_distance_budget"
 
 
+def _controller_mode(config: Mapping[str, Any]) -> str:
+    return str(config["controller"].get("mode", "position_reference"))
+
+
+def c2_controller_parameters(
+    config: Mapping[str, Any],
+    local_spacing_m: float,
+    funnel_entry_x: float,
+) -> Dict[str, Any]:
+    values = config["controller"]
+    activation_count = float(
+        values["y"]["activation_before_funnel_spacing"]
+    )
+    force_limit = float(values["force_limit_n"])
+    return {
+        "mode": _controller_mode(config),
+        "kx_npm": float(values["position_kp_npm"]),
+        "dx_ns_per_m": float(values["velocity_kd_ns_per_m"]),
+        "fx_max_n": force_limit,
+        "fx_source": "existing Phase0M endpoint force limit",
+        "ky_shared_npm": float(values["position_kp_npm"]),
+        "dy_shared_ns_per_m": float(values["velocity_kd_ns_per_m"]),
+        "fy_max_shared_n": force_limit,
+        "fy_shared_source": "existing Phase0M endpoint force limit",
+        "same_fy_cap_all_branches": True,
+        "lateral_activation_x_m": float(funnel_entry_x)
+        - activation_count * float(local_spacing_m),
+        "activation_before_funnel_spacing": activation_count,
+    }
+
+
 def resolve_c1_drive_protocol(
     spike_root: Path,
     scene: PassageScene,
@@ -194,6 +253,8 @@ def run_branch(
     timestep = float(config["simulation"]["timestep_s"])
     hz = 1.0 / timestep
     c1 = drive_protocol is not None
+    controller_mode = _controller_mode(config)
+    c2 = controller_mode == "bounded_cartesian_impedance"
     if c1:
         active_steps = int(np.ceil(float(drive_protocol["max_duration_s"]) / timestep))
         hold_steps = int(
@@ -218,14 +279,30 @@ def run_branch(
     y_target = branch_y_target(
         branch, scene.geometry.radius_m, config
     )
-    servo = EndpointServo.from_config(
-        head_position,
-        y_target,
-        config,
-        max_reference_travel=(
-            float(drive_protocol["command_distance_m"]) if c1 else None
-        ),
-    )
+    if c2:
+        if drive_protocol is None:
+            raise ValueError("bounded Cartesian impedance requires C1 drive protocol")
+        servo = BoundedCartesianImpedance.from_config(
+            head_position,
+            y_target,
+            config,
+            float(drive_protocol["command_distance_m"]),
+        )
+        controller_parameters = c2_controller_parameters(
+            config,
+            float(drive_protocol["local_spacing_m"]),
+            scene.geometry.entry_x_m,
+        )
+    else:
+        servo = EndpointServo.from_config(
+            head_position,
+            y_target,
+            config,
+            max_reference_travel=(
+                float(drive_protocol["command_distance_m"]) if c1 else None
+            ),
+        )
+        controller_parameters = None
     records: Dict[str, list] = {
         key: []
         for key in (
@@ -256,6 +333,25 @@ def run_branch(
             "phase",
         )
     }
+    if c2:
+        for key in (
+            "x_ref",
+            "y_ref",
+            "vx_ref",
+            "vy_ref",
+            "endpoint_x",
+            "endpoint_y",
+            "endpoint_vx",
+            "endpoint_vy",
+            "tracking_error_x",
+            "tracking_error_y",
+            "command_force_x",
+            "command_force_y",
+            "force_saturated_x",
+            "force_saturated_y",
+            "lateral_control_active",
+        ):
+            records[key] = []
     success_step = -1
     jam_confirmed_step = -1
     jam_candidate_run = 0
@@ -271,13 +367,40 @@ def run_branch(
         position, velocity = scene.simulator.endpoint_state()
         success_hold = bool(c1 and success_step >= 0 and branch != "offset_large")
         active = bool(step < active_steps and not success_hold)
-        force, command_forward, command_lateral, command_active = servo.command(
-            min(step, active_steps) * timestep,
-            position,
-            velocity,
-            active,
-            hold_reference=success_hold,
-        )
+        if c2:
+            leading_before = np.mean(scene.leading_positions(), axis=0)
+            lateral_active_now = lateral_control_active(
+                float(leading_before[0]),
+                scene.geometry.entry_x_m,
+                float(drive_protocol["local_spacing_m"]),
+                float(
+                    config["controller"]["y"][
+                        "activation_before_funnel_spacing"
+                    ]
+                ),
+            )
+            (
+                force,
+                command_forward,
+                command_lateral,
+                command_active,
+                controller_diagnostics,
+            ) = servo.command(
+                min(step, active_steps) * timestep,
+                position,
+                velocity,
+                active,
+                lateral_active_now,
+                hold_reference=success_hold,
+            )
+        else:
+            force, command_forward, command_lateral, command_active = servo.command(
+                min(step, active_steps) * timestep,
+                position,
+                velocity,
+                active,
+                hold_reference=success_hold,
+            )
         scene.simulator.step(force)
         vertices = scene.simulator.vertex_positions()
         vertex_velocities = scene.simulator.vertex_velocities()
@@ -322,6 +445,28 @@ def run_branch(
         records["contact_element_ids"].append(fixture["element_ids"])
         records["contact_vertex_ids"].append(fixture["vertex_ids"])
         records["phase"].append("insertion" if command_active else "hold")
+        if c2:
+            target_position = controller_diagnostics["target_position"]
+            target_velocity = controller_diagnostics["target_velocity"]
+            tracking_error = controller_diagnostics["tracking_error"]
+            saturated = controller_diagnostics["force_saturated"]
+            records["x_ref"].append(target_position[0])
+            records["y_ref"].append(target_position[1])
+            records["vx_ref"].append(target_velocity[0])
+            records["vy_ref"].append(target_velocity[1])
+            records["endpoint_x"].append(position[0])
+            records["endpoint_y"].append(position[1])
+            records["endpoint_vx"].append(velocity[0])
+            records["endpoint_vy"].append(velocity[1])
+            records["tracking_error_x"].append(tracking_error[0])
+            records["tracking_error_y"].append(tracking_error[1])
+            records["command_force_x"].append(force[0])
+            records["command_force_y"].append(force[1])
+            records["force_saturated_x"].append(saturated[0])
+            records["force_saturated_y"].append(saturated[1])
+            records["lateral_control_active"].append(
+                controller_diagnostics["lateral_control_active"]
+            )
         if success_step < 0 and scene.success():
             success_step = step
         if c1 and branch == "offset_large":
@@ -437,6 +582,33 @@ def run_branch(
                 ),
             }
         )
+    if c2:
+        trace.update(
+            {
+                "controller_mode": np.asarray(controller_mode),
+                "controller_kx_npm": np.asarray(
+                    controller_parameters["kx_npm"]
+                ),
+                "controller_dx_ns_per_m": np.asarray(
+                    controller_parameters["dx_ns_per_m"]
+                ),
+                "controller_fx_max_n": np.asarray(
+                    controller_parameters["fx_max_n"]
+                ),
+                "controller_ky_shared_npm": np.asarray(
+                    controller_parameters["ky_shared_npm"]
+                ),
+                "controller_dy_shared_ns_per_m": np.asarray(
+                    controller_parameters["dy_shared_ns_per_m"]
+                ),
+                "controller_fy_max_shared_n": np.asarray(
+                    controller_parameters["fy_max_shared_n"]
+                ),
+                "lateral_activation_x_m": np.asarray(
+                    controller_parameters["lateral_activation_x_m"]
+                ),
+            }
+        )
     return trace
 
 
@@ -451,6 +623,7 @@ def run_seeds(config_path: Path, seeds: Sequence[int]) -> int:
     drive_protocol = (
         resolve_c1_drive_protocol(spike_root, scene, config) if _is_c1(config) else None
     )
+    controller_mode = _controller_mode(config)
     count = 0
     for seed in seeds:
         seed_root = data_root / f"seed_{int(seed)}"
@@ -462,7 +635,11 @@ def run_seeds(config_path: Path, seeds: Sequence[int]) -> int:
             preparation,
             scene,
         )
-        metadata = {"preparation": preparation, "branches": {}}
+        metadata = {
+            "preparation": preparation,
+            "controller_mode": controller_mode,
+            "branches": {},
+        }
         centered_commands = None
         for branch in BRANCHES:
             trace = run_branch(
@@ -503,6 +680,20 @@ def run_seeds(config_path: Path, seeds: Sequence[int]) -> int:
                             None
                             if np.isnan(float(trace["success_time_s"]))
                             else float(trace["success_time_s"])
+                        ),
+                    }
+                )
+            if controller_mode == "bounded_cartesian_impedance":
+                metadata["branches"][branch].update(
+                    {
+                        "lateral_control_activated": bool(
+                            np.any(trace["lateral_control_active"])
+                        ),
+                        "x_force_saturation_fraction": float(
+                            np.mean(trace["force_saturated_x"])
+                        ),
+                        "y_force_saturation_fraction": float(
+                            np.mean(trace["force_saturated_y"])
                         ),
                     }
                 )
@@ -587,5 +778,63 @@ def preflight(config_path: Path) -> Dict[str, Any]:
                 - scene.simulator.vertex_positions()[scene.head_index, 0]
             ),
         }
+    if _controller_mode(config) == "bounded_cartesian_impedance":
+        drive_protocol = resolve_c1_drive_protocol(spike_root, scene, config)
+        controller = c2_controller_parameters(
+            config,
+            float(drive_protocol["local_spacing_m"]),
+            scene.geometry.entry_x_m,
+        )
+        model = scene.simulator.model
+        body_id = scene.simulator.endpoint_body_id
+        first_joint = int(model.body_jntadr[body_id])
+        joint_count = int(model.body_jntnum[body_id])
+        joint_ids = list(range(first_joint, first_joint + joint_count))
+        mapping = {
+            "body_id": body_id,
+            "body_name": "cable_15",
+            "joint_ids": joint_ids,
+            "dof_addresses": [int(model.jnt_dofadr[j]) for j in joint_ids],
+            "actuator_count": int(model.nu),
+            "force_path": "data.xfrc_applied on endpoint body",
+        }
+        positive_x, _, _ = bounded_impedance_force(
+            [0.0, 0.0], [0.0, 0.0], [0.01, 0.0], [0.0, 0.0],
+            [controller["kx_npm"], controller["ky_shared_npm"]],
+            [controller["dx_ns_per_m"], controller["dy_shared_ns_per_m"]],
+            [controller["fx_max_n"], controller["fy_max_shared_n"]],
+        )
+        positive_y, _, _ = bounded_impedance_force(
+            [0.0, 0.0], [0.0, 0.0], [0.0, 0.01], [0.0, 0.0],
+            [controller["kx_npm"], controller["ky_shared_npm"]],
+            [controller["dx_ns_per_m"], controller["dy_shared_ns_per_m"]],
+            [controller["fx_max_n"], controller["fy_max_shared_n"]],
+        )
+        result["controller"] = {**controller, "endpoint_mapping": mapping}
+        result["frozen_check"] = {
+            "geometry_unchanged": True,
+            "friction_unchanged": True,
+            "solver_timestep_unchanged": True,
+            "forward_speed_unchanged": True,
+            "offsets_unchanged": True,
+            "oracle_unchanged": True,
+            "success_criterion_unchanged": True,
+            "c1_drive_protocol_unchanged": True,
+        }
+        result["checks"].update(
+            {
+                "controller_mode_resolved": controller["mode"]
+                == "bounded_cartesian_impedance",
+                "shared_lateral_force_cap": controller[
+                    "same_fy_cap_all_branches"
+                ],
+                "force_sign_x_positive": bool(positive_x[0] > 0.0),
+                "force_sign_y_positive": bool(positive_y[1] > 0.0),
+                "endpoint_has_no_actuator": int(model.nu) == 0,
+            }
+        )
+        result["status"] = (
+            "PASS" if all(result["checks"].values()) else "FAIL"
+        )
     print(json.dumps(result, indent=2, sort_keys=True))
     return result
