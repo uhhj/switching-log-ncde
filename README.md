@@ -127,3 +127,13 @@ weak-mechanism evidence uses only terminal/final-contact suffixes and the
 frozen 300 ms timestamp span. Stage C remains FAIL; Stage D/E/F, Oracle
 fitting/freezing, and model training were not run. The next correction family,
 if authorized, is fixture extent only.
+
+## Phase 0S-SOFA Stage C V2.2
+
+The one allowed physical change, `contact_wall.x_min_m: 0.08 -> 0.00 m`, was
+tested in one CPU-only C1 trace; C0 was not rerun. The mobile-only fixture-edge
+gate excluded fixed tail node 0 but still found terminal mobile footprint count
+zero and no mobile native detection. The verdict is
+`PHASE0S_SOFA_STAGE_C_V2_2_FIXTURE_EXTENT_NOT_CORRECTED`. Six plane crossings
+were also observed, but edge escape takes precedence. Stage C remains FAIL;
+Stage D/E/F, Oracle fitting/freezing, and training were not run.

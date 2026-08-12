@@ -1,0 +1,366 @@
+{
+  "stage": "Phase 0S-SOFA Stage C V2.2",
+  "cpu_only": true,
+  "formal_c1_runs_requested": 1,
+  "formal_c1_runs_completed": 1,
+  "c0_rerun": false,
+  "stage_d_executed": false,
+  "stages_e_f_executed": false,
+  "oracle_fitted": false,
+  "oracle_frozen": false,
+  "training_executed": false,
+  "input_provenance": {
+    "base_head": "86fe72385db067946f91b284339eb1c817e62b75",
+    "implementation_head": "6440241206198c707ccfe0890d581df688b1bb4f",
+    "implementation_parent": "86fe72385db067946f91b284339eb1c817e62b75",
+    "implementation_parent_matches_base": true,
+    "branch": "phase0s-sofa-beamadapter",
+    "working_tree_clean_at_audit_start": true,
+    "implementation_changed_files": [
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2_2_fixture_extent.json",
+      "simulator-spikes/sofa-beam-spike/scripts/audit_stage_c_fixture_extent_v2_2.py",
+      "simulator-spikes/sofa-beam-spike/tests/test_stage_c_fixture_extent_v2_2.py"
+    ],
+    "required_implementation_files": [
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2_2_fixture_extent.json",
+      "simulator-spikes/sofa-beam-spike/scripts/audit_stage_c_fixture_extent_v2_2.py",
+      "simulator-spikes/sofa-beam-spike/tests/test_stage_c_fixture_extent_v2_2.py"
+    ],
+    "implementation_scope_exact": true,
+    "blob_hashes": {
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2.json": "1aaab0991983b65c2acf7613b173c5920615e86c",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_stable_contact_v2_scene.py": "96df7abc3a72bf2221bf5393424203d432ac0c82",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_contact_semantics.py": "a130d83e11ba4702c44b94344f766f44df6abbc7",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_contact_loss_morphology.py": "fc45ae04dbc4e27072cf5301b848ae661014e4ee",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_stable_contact_v2_metrics.json": "9f89484d2b862793b2d12790ddde2d80ccef1fe6",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_contact_semantics_v2_1_metrics.json": "f4bac4d185b820fb2ec70900f82312013f748fc9",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_contact_loss_morphology_v2_1l_metrics.json": "6a8322f915c6648c00735c61e14296eaf4da469b"
+    },
+    "expected_blob_hashes": {
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2.json": "1aaab0991983b65c2acf7613b173c5920615e86c",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_stable_contact_v2_scene.py": "96df7abc3a72bf2221bf5393424203d432ac0c82",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_contact_semantics.py": "a130d83e11ba4702c44b94344f766f44df6abbc7",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_contact_loss_morphology.py": "fc45ae04dbc4e27072cf5301b848ae661014e4ee",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_stable_contact_v2_metrics.json": "9f89484d2b862793b2d12790ddde2d80ccef1fe6",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_contact_semantics_v2_1_metrics.json": "f4bac4d185b820fb2ec70900f82312013f748fc9",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_contact_loss_morphology_v2_1l_metrics.json": "6a8322f915c6648c00735c61e14296eaf4da469b"
+    },
+    "pass": true
+  },
+  "config_delta": {
+    "diff_paths": [
+      "contact_wall.x_min_m"
+    ],
+    "old_x_min_m": 0.08,
+    "new_x_min_m": 0.0,
+    "nominal_beam_x_min_m": 0.0,
+    "nominal_beam_x_max_m": 0.12,
+    "pass": true
+  },
+  "historical_c0": {
+    "instrumentation_pass": true,
+    "baseline_pass": true,
+    "reaction_p99": 0.0,
+    "reused_without_rerun": true
+  },
+  "instrumentation": {
+    "material": {
+      "checks": {
+        "default_young_modulus_pa": {
+          "values": [
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0
+          ],
+          "requested": 1000000.0,
+          "pass": true
+        },
+        "default_poisson_ratio": {
+          "values": [
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4
+          ],
+          "requested": 0.4,
+          "pass": true
+        },
+        "radius_m": {
+          "values": [
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002
+          ],
+          "requested": 0.002,
+          "pass": true
+        },
+        "mass_density_kg_m3": {
+          "values": [
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0
+          ],
+          "requested": 1000.0,
+          "pass": true
+        }
+      },
+      "pass": true
+    },
+    "bridge": {
+      "step_indices_exact": true,
+      "serials_exact": true,
+      "source_serial_matches": true,
+      "duplicates": 0,
+      "gaps": 0,
+      "regressions": 0,
+      "pass": true
+    },
+    "timing": {
+      "start_error_max_s": 7.771561172376096e-16,
+      "end_error_max_s": 7.771561172376096e-16,
+      "interval_error_max_s": 1.0928757898653885e-16,
+      "pass": true
+    },
+    "force": {
+      "target_index": 6,
+      "shape_or_index_mismatch_steps": [],
+      "force_mismatch_steps": [],
+      "max_abs_error_n": 0.0,
+      "pass": true
+    },
+    "bridge_ready_all": true,
+    "tail_translation_max_m": 0.0,
+    "tail_anchor_pass": true,
+    "pass": true
+  },
+  "effective_contact_distance_m": 0.002,
+  "zero_load": {
+    "samples": 50,
+    "native_detection_frames": 50,
+    "proximity_only_frames": 50,
+    "geometric_contact_frames": 0,
+    "lcp_row_frames": 50,
+    "reaction_active_frames": 0,
+    "pass": true
+  },
+  "contact": {
+    "measurement_samples": 350,
+    "episode": {
+      "occupancy": 0.0,
+      "episodes": 0,
+      "longest_duration_s": 0.0,
+      "median_duration_s": 0.0,
+      "episode_records": []
+    },
+    "longest_episode": null,
+    "required_occupancy": 0.9,
+    "required_dwell_s": 0.3,
+    "time_tolerance_s": 1e-10,
+    "duration_semantics": "timestamp_span_end_minus_start",
+    "pass": false
+  },
+  "reaction": {
+    "geometric_measurement_frames": 0,
+    "lcp_fraction": 0.0,
+    "positive_reaction_fraction": 0.0,
+    "reaction_floor_c0_p99": 0.0,
+    "p10": null,
+    "p50": null,
+    "p90": null,
+    "max": null,
+    "geometric_onset_s": 0.1240000000000001,
+    "reaction_onset_s": 0.1220000000000001,
+    "reaction_minus_geometric_onset_s": -0.0020000000000000018,
+    "allowed_positive_onset_lag_s": 0.004,
+    "time_tolerance_s": 1e-10,
+    "causal_order_pass": false,
+    "upper_lag_pass": true,
+    "pre_geometric_reaction_frames": 1,
+    "pass": false
+  },
+  "geometry": {
+    "evaluated": true,
+    "geometric_contact_samples": 0,
+    "pass": false
+  },
+  "mobile_fixture_edge_gate": {
+    "evaluated": true,
+    "formal_onset_source": "geometric_contact",
+    "geometric_first_index": 61,
+    "geometric_first_time_s": 0.1240000000000001,
+    "excluded_translation_fixed_node_ids": [
+      0
+    ],
+    "mobile_node_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "ever_mobile_footprint_after_onset": true,
+    "terminal_mobile_footprint_node_ids": [],
+    "terminal_mobile_footprint_node_count": 0,
+    "terminal_mobile_native_detection_ids": [],
+    "terminal_mobile_native_detection": false,
+    "terminal_all_node_footprint_node_ids_diagnostic": [
+      0
+    ],
+    "terminal_all_node_footprint_node_count_diagnostic": 1,
+    "terminal_all_native_detection_diagnostic": false,
+    "fixture_edge_escape": true,
+    "pass": false
+  },
+  "secondary_morphology": {
+    "verdict": "PHASE0S_SOFA_STAGE_C_LOSS_MORPHOLOGY_AMBIGUOUS",
+    "selected_mechanism": "ambiguous",
+    "formal_onsets": {
+      "diagnostic_onset_index": 61,
+      "diagnostic_onset_source": "geometric_contact",
+      "geometric_first_index": 61,
+      "geometric_first_time_s": 0.1240000000000001,
+      "geometric_last_index": 145,
+      "geometric_last_time_s": 0.2920000000000002,
+      "load_bearing_first_index": 61,
+      "load_bearing_first_time_s": 0.1240000000000001,
+      "load_bearing_last_index": 144,
+      "load_bearing_last_time_s": 0.2900000000000002
+    },
+    "terminal": {
+      "time_s": 1.0000000000000007,
+      "native_detection": false,
+      "footprint_node_ids": [
+        0
+      ],
+      "footprint_node_count": 1,
+      "minimum_abs_plane_distance_m": 0.003,
+      "surrogate_gap_m": 0.001,
+      "within_effective_envelope": false,
+      "all_positive_outside_envelope": true,
+      "any_negative_outside_envelope": false,
+      "all_negative_outside_envelope": false,
+      "minimum_signed_plane_distance_m": 0.003,
+      "maximum_signed_plane_distance_m": 0.003
+    },
+    "crossing_scan_start_index": 60,
+    "crossing_scan_start_time_s": 0.1220000000000001,
+    "crossing_events": [
+      {
+        "node_id": 6,
+        "from_record_index": 70,
+        "to_record_index": 71,
+        "from_time_s": 0.1420000000000001,
+        "to_time_s": 0.1440000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 1.2301278259588998e-05,
+        "to_signed_plane_distance_m": -0.00020900080685008087
+      },
+      {
+        "node_id": 5,
+        "from_record_index": 76,
+        "to_record_index": 77,
+        "from_time_s": 0.1540000000000001,
+        "to_time_s": 0.1560000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00016095192374247246,
+        "to_signed_plane_distance_m": -2.4276536499422825e-05
+      },
+      {
+        "node_id": 4,
+        "from_record_index": 85,
+        "to_record_index": 86,
+        "from_time_s": 0.17200000000000013,
+        "to_time_s": 0.17400000000000013,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00013136378118970446,
+        "to_signed_plane_distance_m": -3.9017465274988163e-05
+      },
+      {
+        "node_id": 3,
+        "from_record_index": 95,
+        "to_record_index": 96,
+        "from_time_s": 0.19200000000000014,
+        "to_time_s": 0.19400000000000014,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.0001388965471950745,
+        "to_signed_plane_distance_m": -1.8495175081744595e-05
+      },
+      {
+        "node_id": 2,
+        "from_record_index": 107,
+        "to_record_index": 108,
+        "from_time_s": 0.21600000000000016,
+        "to_time_s": 0.21800000000000017,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.798459234670657e-05,
+        "to_signed_plane_distance_m": -5.913359911552571e-05
+      },
+      {
+        "node_id": 1,
+        "from_record_index": 127,
+        "to_record_index": 128,
+        "from_time_s": 0.25600000000000017,
+        "to_time_s": 0.2580000000000002,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.691071045831292e-06,
+        "to_signed_plane_distance_m": -8.825787638322558e-05
+      }
+    ],
+    "crossing_event_count": 6,
+    "weak_mechanism_anchors": {
+      "migration_terminal_suffix_start_index": null,
+      "migration_terminal_suffix_start_time_s": null,
+      "migration_terminal_suffix_end_index": null,
+      "migration_terminal_suffix_end_time_s": null,
+      "reaction_final_geometric_suffix_start_index": 145,
+      "reaction_final_geometric_suffix_start_time_s": 0.2920000000000002,
+      "reaction_final_geometric_suffix_end_index": 145,
+      "reaction_final_geometric_suffix_end_time_s": 0.2920000000000002
+    },
+    "final_loss_no_native_near_wall_terminal_run_steps": 0,
+    "final_loss_no_native_near_wall_terminal_duration_s": 0.0,
+    "final_geometric_without_reaction_terminal_run_steps": 1,
+    "final_geometric_without_reaction_terminal_duration_s": 0.0,
+    "weak_mechanism_duration_semantics": "timestamp_span_end_minus_start",
+    "weak_minimum_dwell_s": 0.3,
+    "frozen_max_native_lcp_onset_lag_steps_diagnostic_only": 2,
+    "candidate_flags": {
+      "cross_through": false,
+      "rebound_escape": false,
+      "fixture_edge_escape": false,
+      "contact_migration": false,
+      "reaction_collapse": false
+    },
+    "trajectory_summary": {
+      "frames": 500,
+      "footprint_node_count_min": 1,
+      "footprint_node_count_max": 7,
+      "surrogate_gap_min_m": -0.0019923089289541687,
+      "surrogate_gap_max_m": 0.001,
+      "minimum_signed_plane_distance_min_m": -0.11720315804302056,
+      "maximum_signed_plane_distance_max_m": 0.0030729939002027526
+    },
+    "offline_geometry_surrogate_is_formal_contact_signal": false
+  },
+  "trace": {
+    "path": "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_2_fixture_extent_trace.json",
+    "sha256": "faed94b5a184c104692a500a136de376116c2283e19bdd6fa1c0228c2b740964"
+  },
+  "verdict": "PHASE0S_SOFA_STAGE_C_V2_2_FIXTURE_EXTENT_NOT_CORRECTED",
+  "fact": "Fixture-edge escape still occurs after x_min is moved to the nominal beam-domain boundary.",
+  "inference": "The single x_min correction is insufficient to remove finite-fixture escape.",
+  "unknown": "Reaction coupling and later stages remain unqualified.",
+  "next_action": "STOP; do not expand x_max/z without a new morphology-based justification."
+}

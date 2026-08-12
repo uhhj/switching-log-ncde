@@ -123,5 +123,17 @@ only final suffixes with the frozen 300 ms timestamp-span gate, and Stage
 D/E/F, Oracle fitting/freezing, and training remain unexecuted. The only
 authorized next family is one bounded fixture-extent correction.
 
+## Phase 0S-SOFA Stage C V2.2
+
+The single permitted fixture-extent correction changed only
+`contact_wall.x_min_m` from 0.08 m to 0.00 m and ran one CPU-only C1 trace;
+C0 was reused without rerun. Verdict:
+`PHASE0S_SOFA_STAGE_C_V2_2_FIXTURE_EXTENT_NOT_CORRECTED`. The mobile-only edge
+gate excluded fixed tail node 0 and still found terminal mobile footprint
+count zero with no mobile native detection. Six post-onset plane crossings
+were recorded, but edge escape has precedence. Stage C remains FAIL; Stage
+D/E/F, Oracle fitting/freezing, and training remain unexecuted. No further
+fixture expansion is authorized without a new morphology-based instruction.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.
