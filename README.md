@@ -116,3 +116,14 @@ The immutable C1 measurement window still has 0% native, geometric, and
 load-bearing contact, below the frozen 90% occupancy and 300 ms dwell gates.
 Stage C is therefore a contact-construction FAIL; no reaction, geometry, or
 later capability stage was evaluated.
+
+## Phase 0S-SOFA Stage C V2.1-L
+
+An offline-only final contact-loss morphology audit of the immutable C1 trace
+selected `PHASE0S_SOFA_STAGE_C_LOSS_FIXTURE_EDGE_ESCAPE`: after the preferred
+geometric onset at 0.124 s, the terminal beam left the finite fixture x/z
+footprint and native contact was absent. The node geometry is diagnostic only;
+weak-mechanism evidence uses only terminal/final-contact suffixes and the
+frozen 300 ms timestamp span. Stage C remains FAIL; Stage D/E/F, Oracle
+fitting/freezing, and model training were not run. The next correction family,
+if authorized, is fixture extent only.

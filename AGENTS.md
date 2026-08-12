@@ -112,5 +112,16 @@ is a contact-construction FAIL. Reaction coupling, geometry, and all later
 stages remain unqualified. Do not run Stage D/E/F, Oracle calibration,
 held-out capability, passage, or training without a new instruction.
 
+## Phase 0S-SOFA Stage C V2.1-L
+
+The immutable C1 trace was re-audited offline for final contact-loss
+morphology. The geometric-first onset occurred at 0.124 s; the terminal beam
+had left the finite fixture x/z footprint with native contact absent. Verdict:
+`PHASE0S_SOFA_STAGE_C_LOSS_FIXTURE_EDGE_ESCAPE`. This does not repair Stage C:
+the diagnostic surrogate is not a formal contact signal, weak mechanisms use
+only final suffixes with the frozen 300 ms timestamp-span gate, and Stage
+D/E/F, Oracle fitting/freezing, and training remain unexecuted. The only
+authorized next family is one bounded fixture-extent correction.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.
