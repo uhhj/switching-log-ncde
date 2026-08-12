@@ -1,0 +1,11 @@
+{
+  "seed": 84000,
+  "runtime": {"image": "sofa-v2606-python312-runner:ubuntu24", "sofa_root": "/root/workspace/third_party/SOFA_v26.06.00_Linux"},
+  "beam": {"length_m": 0.12, "radius_m": 0.002, "nodes": 7, "young_modulus_pa": 1000000.0, "poisson_ratio": 0.4, "mass_density_kg_m3": 1000.0},
+  "simulation": {"dt_s": 0.002, "friction": 0.8, "normal_load_n": 0.001, "contact_distance_m": 0.002, "alarm_distance_m": 0.01, "zero_load_end_ms": 100, "measurement_start_ms": 300, "baseline_steps": 300, "contact_steps": 500},
+  "tail_constraint": {"node_index": 0, "fixed_directions": [1, 1, 1, 0, 0, 0]},
+  "baseline_sentinel": {"plane_y_m": -1.0, "x_min_m": -0.1, "x_max_m": 0.3, "z_half_extent_m": 0.1, "minimum_clearance_m": 0.5},
+  "contact_wall": {"plane_y_m": 0.0, "beam_initial_y_m": 0.003, "x_min_m": 0.0, "x_max_m": 0.18, "z_half_extent_m": 0.05},
+  "integrity": {"time_tolerance_s": 1e-10, "tail_translation_max_m": 1e-9},
+  "gates": {"minimum_measurement_contact_occupancy": 0.90, "minimum_observed_contact_dwell_ms": 300, "minimum_contact_lcp_fraction": 0.90, "minimum_contact_positive_reaction_fraction": 0.90, "maximum_native_lcp_onset_lag_steps": 2, "maximum_fixture_plane_error_m": 1e-6, "minimum_normal_alignment_p10": 0.90, "maximum_unique_beam_primitives_p95": 3, "maximum_contact_x_span_p95_m": 0.04}
+}
