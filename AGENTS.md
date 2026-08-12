@@ -102,5 +102,15 @@ baseline passed. C1 is instrumentation-blocked because the frozen zero-load
 initial geometry already produced native contact; no Stage-C science gate or
 later stage may proceed without a new instruction.
 
+## Phase 0S-SOFA Stage C V2.1
+
+The offline LocalMinDistance semantics re-audit established that the V2
+zero-load native detections were proximity-only: reconstructed gap was +1 mm,
+with no geometric contact or positive reaction. The frozen C1 trace still has
+zero geometric-contact occupancy in the formal measurement window, so Stage C
+is a contact-construction FAIL. Reaction coupling, geometry, and all later
+stages remain unqualified. Do not run Stage D/E/F, Oracle calibration,
+held-out capability, passage, or training without a new instruction.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.

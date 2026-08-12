@@ -1,0 +1,176 @@
+# Phase 0S-SOFA Stage C Contact Semantics V2.1
+
+## Verdict
+
+`PHASE0S_SOFA_STAGE_C_CONTACT_CONSTRUCTION_FAIL`
+
+## Scope
+
+Offline-only re-audit of immutable Stage-C V2 C0/C1 traces. No simulator execution and no physics/configuration change occurred.
+
+## Metrics
+
+```json
+{
+  "stage": "Phase 0S-SOFA Stage C V2.1",
+  "offline_only": true,
+  "simulator_executed": false,
+  "physics_changed": false,
+  "config_changed": false,
+  "native_bridge_changed": false,
+  "stage_d_executed": false,
+  "stages_e_f_executed": false,
+  "oracle_fitted": false,
+  "oracle_frozen": false,
+  "input_provenance": {
+    "head": "fca0db8a4230b13865760fa68323d50072c0b737",
+    "required_head": "fca0db8a4230b13865760fa68323d50072c0b737",
+    "branch": "phase0s-sofa-beamadapter",
+    "required_branch": "phase0s-sofa-beamadapter",
+    "working_tree_status_at_audit": [
+      "?? simulator-spikes/sofa-beam-spike/scripts/audit_stage_c_contact_semantics_v2_1.py",
+      "?? simulator-spikes/sofa-beam-spike/src/stage_c_contact_semantics.py",
+      "?? simulator-spikes/sofa-beam-spike/tests/test_stage_c_contact_semantics_v2_1.py"
+    ],
+    "blob_hashes": {
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2.json": "1aaab0991983b65c2acf7613b173c5920615e86c",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_stable_contact_v2_scene.py": "96df7abc3a72bf2221bf5393424203d432ac0c82",
+      "simulator-spikes/sofa-beam-spike/native-contact-bridge/src/NativeContactBridge/NativeContactBridge.cpp": "e6fb41f9b903e53c33583a3cbde3334f9c117dbb",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_material_anchor_baseline_trace.json": "4e00923dfe37b7ffa6bf778095fa9e7994ec2844",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_stable_contact_trace.json": "e1aa1477d5fe70b92a441a55a2225d85a016825e",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_stable_contact_v2_metrics.json": "9f89484d2b862793b2d12790ddde2d80ccef1fe6"
+    },
+    "expected_blob_hashes": {
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_stable_contact_v2.json": "1aaab0991983b65c2acf7613b173c5920615e86c",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_stable_contact_v2_scene.py": "96df7abc3a72bf2221bf5393424203d432ac0c82",
+      "simulator-spikes/sofa-beam-spike/native-contact-bridge/src/NativeContactBridge/NativeContactBridge.cpp": "e6fb41f9b903e53c33583a3cbde3334f9c117dbb",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_material_anchor_baseline_trace.json": "4e00923dfe37b7ffa6bf778095fa9e7994ec2844",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_stable_contact_trace.json": "e1aa1477d5fe70b92a441a55a2225d85a016825e",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/stage_c_stable_contact_v2_metrics.json": "9f89484d2b862793b2d12790ddde2d80ccef1fe6"
+    },
+    "trace_sha256": {
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_material_anchor_baseline_trace.json": "5c1aac465a90f5eb9b2b6f58c4229495b74df4e9f8b38f7623171bbdc909d527",
+      "simulator-spikes/sofa-beam-spike/reports/phase0s_sofa/data/stage_c_v2_stable_contact_trace.json": "9e4b8680978286cb020aa52a64af1376c748394c39d34d19062929316c294df3"
+    },
+    "pass": true
+  },
+  "sofa_release": {
+    "tag": "v26.06.00",
+    "commit": "7c18e95d5c5f2839079892c69e7d89a313c79603",
+    "local_min_distance_source": "Sofa/Component/Collision/Detection/Intersection/src/sofa/component/collision/detection/intersection/LocalMinDistance.cpp",
+    "collision_model_source": "Sofa/framework/Core/src/sofa/core/CollisionModel.cpp",
+    "intersector": "TriangleCollisionModel<Vec3> <-> PointCollisionModel<Vec3>",
+    "model_contact_distance_default_m": 0.0
+  },
+  "effective_contact_distance": {
+    "intersection_contact_distance_m": 0.002,
+    "beam_model_contact_distance_m": 0.0,
+    "fixture_model_contact_distance_m": 0.0,
+    "effective_contact_distance_m": 0.002,
+    "source_qualified": true
+  },
+  "historical_stage_c_v2": {
+    "verdict": "PHASE0S_SOFA_STAGE_C_INSTRUMENTATION_BLOCKED",
+    "c0_instrumentation_pass": true,
+    "c0_baseline_pass": true,
+    "c1_instrumentation_pass": true,
+    "note": "Historical evidence is preserved. V2.1 replaces only the analysis-layer equation DetectionOutput == physical contact."
+  },
+  "c1_zero_load_semantics": {
+    "samples": 50,
+    "native_detection_frames": 50,
+    "native_detection_count_total": 100,
+    "proximity_only_frames": 50,
+    "geometric_contact_frames": 0,
+    "lcp_rows_present_frames": 50,
+    "reaction_active_frames": 0,
+    "gap_summary": {
+      "samples": 100,
+      "min_m": 0.001,
+      "p10_m": 0.001,
+      "p50_m": 0.001,
+      "p90_m": 0.001,
+      "max_m": 0.001
+    },
+    "pass": true
+  },
+  "c1_measurement_contact": {
+    "native_detection_episode": {
+      "occupancy": 0.0,
+      "episodes": 0,
+      "longest_duration_s": 0.0,
+      "median_duration_s": 0.0,
+      "episode_records": []
+    },
+    "geometric_contact_episode": {
+      "occupancy": 0.0,
+      "episodes": 0,
+      "longest_duration_s": 0.0,
+      "median_duration_s": 0.0,
+      "episode_records": []
+    },
+    "load_bearing_episode": {
+      "occupancy": 0.0,
+      "episodes": 0,
+      "longest_duration_s": 0.0,
+      "median_duration_s": 0.0,
+      "episode_records": []
+    },
+    "gap_summary": {
+      "samples": 0,
+      "min_m": null,
+      "p10_m": null,
+      "p50_m": null,
+      "p90_m": null,
+      "max_m": null
+    },
+    "required_geometric_occupancy": 0.9,
+    "required_geometric_dwell_s": 0.3,
+    "pass": false
+  },
+  "c1_relation": {
+    "(2, 0, 6, False)": 76,
+    "(2, 0, 6, True)": 1,
+    "(2, 1, 6, True)": 10,
+    "(2, 2, 6, True)": 15,
+    "(2, 1, 6, False)": 1,
+    "(1, 0, 3, False)": 9,
+    "(0, 0, 0, False)": 388
+  },
+  "onsets": {
+    "native_detection": 0.002,
+    "geometric_contact": 0.1240000000000001,
+    "reaction_active": 0.1220000000000001,
+    "load_bearing_contact": 0.1240000000000001
+  },
+  "reaction": {
+    "evaluated": false,
+    "reason": "sustained geometric-contact prerequisite failed"
+  },
+  "geometry": {
+    "evaluated": false,
+    "reason": "sustained geometric-contact prerequisite failed"
+  },
+  "verdict": "PHASE0S_SOFA_STAGE_C_CONTACT_CONSTRUCTION_FAIL",
+  "fact": "Stage-C V2 provenance remains qualified and corrected zero-load semantics are contact-free, but the immutable measurement window fails the frozen geometric-contact occupancy/dwell gate.",
+  "inference": "The previous zero-load failure was a proximity-detection semantic error; the actual frozen C1 construction still fails to sustain the required wall contact.",
+  "unknown": "Loaded-contact reaction coupling, contact geometry, breakaway, stick/slip, jam, Oracle calibration, held-out capability, and passage remain unqualified.",
+  "next_action": "Design one bounded Stage-C contact-construction correction while keeping material, friction, dt, solver, Oracle thresholds, and later stages frozen."
+}
+```
+
+## Fact
+
+Stage-C V2 provenance remains qualified and corrected zero-load semantics are contact-free, but the immutable measurement window fails the frozen geometric-contact occupancy/dwell gate.
+
+## Inference
+
+The previous zero-load failure was a proximity-detection semantic error; the actual frozen C1 construction still fails to sustain the required wall contact.
+
+## Unknown
+
+Loaded-contact reaction coupling, contact geometry, breakaway, stick/slip, jam, Oracle calibration, held-out capability, and passage remain unqualified.
+
+## Next action
+
+Design one bounded Stage-C contact-construction correction while keeping material, friction, dt, solver, Oracle thresholds, and later stages frozen.

@@ -106,3 +106,13 @@ trace. It also requires fresh bridge frames, direct `ConstantForceField` Data
 readback, and timestamp-span dwell. C0 passed, while C1 was blocked because
 its zero-load geometry already produced native contact; no contact-mechanics
 gate was evaluated.
+
+## Phase 0S-SOFA Stage C V2.1
+
+Offline reconstruction of the frozen SOFA v26.06.00 Point/Triangle
+`LocalMinDistance` value corrected the V2 interpretation: the 50 zero-load
+native-detection frames were all proximity-only (+1 mm gap) and reaction-free.
+The immutable C1 measurement window still has 0% native, geometric, and
+load-bearing contact, below the frozen 90% occupancy and 300 ms dwell gates.
+Stage C is therefore a contact-construction FAIL; no reaction, geometry, or
+later capability stage was evaluated.
