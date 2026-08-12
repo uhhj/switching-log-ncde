@@ -1,0 +1,48 @@
+{
+  "seed": 84000,
+  "cpu_only": true,
+  "scope": "Stage B only",
+  "runtime": {
+    "image": "sofa-v2606-python312-runner:ubuntu24",
+    "sofa_root": "/root/workspace/third_party/SOFA_v26.06.00_Linux"
+  },
+  "result": {
+    "verdict": "PHASE0S_SOFA_STAGE_B_REACTION_PROXY_CLEAN",
+    "steps": 300,
+    "measurement_samples": 251,
+    "bridge_ready_all": true,
+    "frame_serial_min": 1,
+    "frame_serial_max": 300,
+    "frame_serial_advances": true,
+    "native_contact_total": 0,
+    "native_contact_total_measurement": 0,
+    "native_contact_max_per_frame": 0,
+    "constraint_vector_size_max": 0,
+    "constraint_vector_size_max_measurement": 0,
+    "constraint_nonempty_frames": 0,
+    "constraint_nonempty_measurement_frames": 0,
+    "reaction_p50_measurement": 0.0,
+    "reaction_p90_measurement": 0.0,
+    "reaction_p99_measurement": 0.0,
+    "reaction_max_measurement": 0.0,
+    "tail_translation_displacement_max_m": 0.0,
+    "tip_displacement_max_m": 0.18365494657655682,
+    "minimum_centerline_to_sentinel_min_m": 0.8799117653874217,
+    "load_active_fraction_measurement": 1.0,
+    "checks": {
+      "bridge_ready": true,
+      "frame_serial_advances": true,
+      "native_contact_zero": true,
+      "lcp_vector_empty": true,
+      "reaction_exact_zero": true,
+      "tail_anchor_active": true,
+      "load_schedule_valid": true,
+      "sentinel_noncontact_valid": true
+    },
+    "interpretation": "The translation-only projective tail anchor did not directly contaminate the current global LCP reaction proxy in this no-contact control.",
+    "next_action": "Run Stage C stable normal-contact construction with NativeContactBridge as formal contact identity and test whether real wall contact produces sustained nonzero reaction proxy."
+  },
+  "stages_c_to_f_executed": false,
+  "oracle_fitted": false,
+  "oracle_frozen": false
+}

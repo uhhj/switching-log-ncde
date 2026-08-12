@@ -85,5 +85,13 @@ getters. An out-of-tree C++ bridge exposes existing narrow-phase contact Data
 without rebuilding SOFA. Stage A native contact observability passed; stages
 B-F and all physical-regime conclusions remain untested.
 
+## Phase 0S-SOFA Stage B
+
+The anchored-free sentinel control verified that the translation-only tail
+projective constraint leaves the global LCP `constraintForces` vector empty and
+zero in the absence of native contact. This excludes direct tail contamination
+only; real wall-contact reaction validity is untested and stages C-F remain
+unexecuted.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.

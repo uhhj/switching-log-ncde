@@ -87,3 +87,12 @@ through ordinary SOFA Data: native beam/fixture primitive IDs, contact points,
 beam-outward normal, and raw detection value. It performs no collision
 detection and uses no nearest-point or endpoint proxy. Only Stage A is
 validated; controlled contact stages B-F remain unexecuted.
+
+## Phase 0S-SOFA Stage B
+
+The anchored-free control used the translation-only tail projective constraint
+planned for controlled stick/slip, with the same 0.001 N normal endpoint load
+and no native collision contact. `LCPConstraintSolver.constraintForces`
+remained structurally empty and zero, so the tail does not directly contaminate
+the current global LCP reaction proxy. This does not validate the proxy as a
+physically correct wall-contact force; Stage C remains unexecuted.
