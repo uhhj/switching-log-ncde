@@ -10,4 +10,5 @@ reports/phase0a/raw/
 *.avi
 dist/
 build/
+simulator-spikes/sofa-beam-spike/native-contact-bridge/build/
 *.egg-info/

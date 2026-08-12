@@ -1,0 +1,35 @@
+{
+  "scope": "Stage A only",
+  "cpu_only": true,
+  "plugin": {
+    "path": "/root/workspace/switching-log-ncde/simulator-spikes/sofa-beam-spike/native-contact-bridge/build/lib/libNativeContactBridge.so",
+    "source": "NarrowPhaseDetection::getDetectionOutputs",
+    "formal_proxy_fallback": false
+  },
+  "stages_b_to_f_executed": false,
+  "oracle_fitted": false,
+  "audit": {
+    "pass": true,
+    "failures": [],
+    "frames": 20,
+    "ready_frames": 20,
+    "serial_min": 1,
+    "serial_max": 20,
+    "contact_frames": 20,
+    "total_native_contacts": 120,
+    "max_contacts_per_frame": 6,
+    "beam_primitive_id_min": 0,
+    "beam_primitive_id_max": 6,
+    "fixture_primitive_id_min": 0,
+    "fixture_primitive_id_max": 1,
+    "normal_norm_min": 1.0,
+    "normal_norm_median": 1.0,
+    "normal_norm_max": 1.0,
+    "detection_value_min": -0.001,
+    "detection_value_max": -0.0006241090541037936
+  },
+  "verdict": "PHASE0S_SOFA_NATIVE_CONTACT_BRIDGE_PASS",
+  "fact": "The bridge read only the official v26.06 narrow-phase DetectionOutput map and exported ordinary SOFA Data.",
+  "inference": "The native-contact observability path is validated; controlled contact mechanics remain untested.",
+  "unknown": "Stages B-F, Oracle calibration, held-out capability, and unified passage remain untested."
+}

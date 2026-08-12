@@ -1,0 +1,9 @@
+#pragma once
+
+#include <sofa/config.h>
+
+#if defined(NATIVE_CONTACT_BRIDGE_BUILD)
+#  define NATIVE_CONTACT_BRIDGE_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#else
+#  define NATIVE_CONTACT_BRIDGE_API SOFA_IMPORT_DYNAMIC_LIBRARY
+#endif

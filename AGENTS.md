@@ -78,5 +78,12 @@ simulator-specific numerical Oracle thresholds in controlled scenes,
 validates held-out free/stick/slip/jam capability, and only then runs one
 unified constrained-passage smoke.
 
+## Phase 0S-SOFA Native Contact Bridge R1-B
+
+The official SofaPython3 runtime does not bind the native `ContactListener`
+getters. An out-of-tree C++ bridge exposes existing narrow-phase contact Data
+without rebuilding SOFA. Stage A native contact observability passed; stages
+B-F and all physical-regime conclusions remain untested.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.

@@ -77,3 +77,13 @@ unified constrained-passage smoke.
 
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.
+
+## Phase 0S-SOFA Native Contact Bridge R1-B
+
+SofaPython3 v26.06 does not expose the C++ `ContactListener` getters used by
+the revised controlled-contact audit. A minimal out-of-tree
+`NativeContactBridge` exports existing narrow-phase `DetectionOutput` fields
+through ordinary SOFA Data: native beam/fixture primitive IDs, contact points,
+beam-outward normal, and raw detection value. It performs no collision
+detection and uses no nearest-point or endpoint proxy. Only Stage A is
+validated; controlled contact stages B-F remain unexecuted.

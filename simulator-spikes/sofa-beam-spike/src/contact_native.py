@@ -100,3 +100,33 @@ def percentile(values: Iterable[float], q: float) -> float:
     if not array.size or not np.isfinite(array).all():
         raise ValueError("metric has no finite samples")
     return float(np.percentile(array, q))
+
+
+def unpack_bridge_frame(frame: dict) -> dict:
+    """Validate the structured Data exported by NativeContactBridge.
+
+    This intentionally performs no contact reconstruction or geometric proxy
+    lookup: every primitive id and point originates in DetectionOutput.
+    """
+    count = int(frame["contact_count"])
+    if count < 0:
+        raise ValueError("negative contact count")
+    contact_ids = np.asarray(frame["contact_ids"], dtype=np.int64).reshape(-1)
+    beam_ids = np.asarray(frame["beam_element_ids"], dtype=int).reshape(-1)
+    fixture_ids = np.asarray(frame["fixture_element_ids"], dtype=int).reshape(-1)
+    beam_points = np.asarray(frame["beam_contact_points"], dtype=float).reshape(count, 3)
+    fixture_points = np.asarray(frame["fixture_contact_points"], dtype=float).reshape(count, 3)
+    normals = np.asarray(frame["beam_outward_normals"], dtype=float).reshape(count, 3)
+    detection_values = np.asarray(frame["detection_values"], dtype=float).reshape(count)
+    if contact_ids.size != count or beam_ids.size != count or fixture_ids.size != count:
+        raise ValueError("bridge primitive count mismatch")
+    return {
+        "count": count,
+        "contact_ids": contact_ids,
+        "beam_ids": beam_ids,
+        "fixture_ids": fixture_ids,
+        "beam_points": beam_points,
+        "fixture_points": fixture_points,
+        "normals": normals,
+        "detection_values": detection_values,
+    }
