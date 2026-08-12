@@ -93,5 +93,14 @@ zero in the absence of native contact. This excludes direct tail contamination
 only; real wall-contact reaction validity is untested and stages C-F remain
 unexecuted.
 
+## Phase 0S-SOFA Stage C V2
+
+Stage C V2 explicitly binds `BeamInterpolation.defaultYoungModulus` and
+requires post-init material readback, one fresh bridge frame per step, exact
+force-Data provenance, and timestamp-span dwell. The material-matched C0
+baseline passed. C1 is instrumentation-blocked because the frozen zero-load
+initial geometry already produced native contact; no Stage-C science gate or
+later stage may proceed without a new instruction.
+
 Do not train dynamics models before this P0 task and the subsequent
 matched-state/matched-action audit pass.

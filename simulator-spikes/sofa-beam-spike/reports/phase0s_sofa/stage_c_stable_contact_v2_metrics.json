@@ -1,0 +1,255 @@
+{
+  "seed": 84000,
+  "cpu_only": true,
+  "stages_d_to_f_executed": false,
+  "oracle_fitted": false,
+  "oracle_frozen": false,
+  "c0_instrumentation": {
+    "material": {
+      "checks": {
+        "default_young_modulus_pa": {
+          "values": [
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 1000000.0,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "default_poisson_ratio": {
+          "values": [
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 0.4,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "radius_m": {
+          "values": [
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 0.002,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "mass_density_kg_m3": {
+          "values": [
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 1000.0,
+          "max_abs_error": 0.0,
+          "pass": true
+        }
+      },
+      "pass": true
+    },
+    "freshness": {
+      "step_indices_exact": true,
+      "serials_exact": true,
+      "source_serial_matches": true,
+      "duplicates": 0,
+      "gaps": 0,
+      "regressions": 0,
+      "pass": true
+    },
+    "timing": {
+      "start_error_max_s": 4.440892098500626e-16,
+      "end_error_max_s": 4.440892098500626e-16,
+      "interval_error_max_s": 5.377642775528102e-17,
+      "pass": true
+    },
+    "force": {
+      "target_index": 6,
+      "shape_or_index_mismatch_steps": [],
+      "force_mismatch_steps": [],
+      "max_abs_error_n": 0.0,
+      "pass": true
+    },
+    "bridge_ready_all": true,
+    "tail_translation_max_m": 0.0,
+    "tail_anchor_pass": true,
+    "pass": true
+  },
+  "c0_baseline": {
+    "native_contacts": 0,
+    "sentinel_min_clearance_m": 0.8797893053550452,
+    "lcp_size_max": 0,
+    "reaction_p99": 0.0,
+    "reaction_max": 0.0,
+    "pass": true
+  },
+  "c1_instrumentation": {
+    "material": {
+      "checks": {
+        "default_young_modulus_pa": {
+          "values": [
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            1000000.0
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 1000000.0,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "default_poisson_ratio": {
+          "values": [
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4,
+            0.4
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 0.4,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "radius_m": {
+          "values": [
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002,
+            0.002
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 0.002,
+          "max_abs_error": 0.0,
+          "pass": true
+        },
+        "mass_density_kg_m3": {
+          "values": [
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0,
+            1000.0
+          ],
+          "count": 6,
+          "expected_count": 6,
+          "requested": 1000.0,
+          "max_abs_error": 0.0,
+          "pass": true
+        }
+      },
+      "pass": true
+    },
+    "freshness": {
+      "step_indices_exact": true,
+      "serials_exact": true,
+      "source_serial_matches": true,
+      "duplicates": 0,
+      "gaps": 0,
+      "regressions": 0,
+      "pass": true
+    },
+    "timing": {
+      "start_error_max_s": 7.771561172376096e-16,
+      "end_error_max_s": 7.771561172376096e-16,
+      "interval_error_max_s": 1.0928757898653885e-16,
+      "pass": true
+    },
+    "force": {
+      "target_index": 6,
+      "shape_or_index_mismatch_steps": [],
+      "force_mismatch_steps": [],
+      "max_abs_error_n": 0.0,
+      "pass": true
+    },
+    "bridge_ready_all": true,
+    "tail_translation_max_m": 0.0,
+    "tail_anchor_pass": true,
+    "pass": true
+  },
+  "c1": {
+    "zero_load": {
+      "samples": 50,
+      "native_contacts": 100,
+      "lcp_size_max": 6,
+      "reaction_max": 0.0,
+      "pass": false
+    },
+    "contact": {
+      "measurement_samples": 350,
+      "episode": {
+        "occupancy": 0.0,
+        "episodes": 0,
+        "longest_duration_s": 0.0,
+        "median_duration_s": 0.0,
+        "episode_records": []
+      },
+      "longest": null,
+      "ids": [],
+      "beam_ids": [],
+      "fixture_ids": [],
+      "pass": false
+    },
+    "reaction": {
+      "lcp_fraction": 0.0,
+      "positive_fraction": 0.0,
+      "p10": null,
+      "p50": null,
+      "p90": null,
+      "max": null,
+      "native_onset_s": 0.002,
+      "lcp_onset_s": 0.1220000000000001,
+      "onset_lag_s": 0.12000000000000009,
+      "no_native_lcp_clean": true,
+      "pass": false
+    },
+    "geometry": {
+      "unique_beam_p95": null,
+      "x_span_p95_m": null,
+      "fixture_plane_error_max_m": null,
+      "normal_alignment_p10": null,
+      "max_node_displacement_m": 0.23984214966656076,
+      "max_transverse_deflection_m": 0.12021027393577303,
+      "pass": false
+    },
+    "relation": {
+      "(0, 0, 0)": 350
+    }
+  },
+  "verdict": "PHASE0S_SOFA_STAGE_C_INSTRUMENTATION_BLOCKED",
+  "fact": "Stage C V2 records post-init material readback, exact per-step force Data, exact bridge serials, and timestamp-span dwell before scientific gates.",
+  "inference": "Scientific contact conclusions are conditional on all provenance gates shown in the metrics.",
+  "unknown": "Stages D-F, Oracle calibration, held-out capability, and unified passage remain untested.",
+  "next_action": "Repair only the failing instrumentation/provenance gate and rerun the unchanged C0/C1 sequence as appropriate."
+}

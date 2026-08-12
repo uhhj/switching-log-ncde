@@ -96,3 +96,13 @@ and no native collision contact. `LCPConstraintSolver.constraintForces`
 remained structurally empty and zero, so the tail does not directly contaminate
 the current global LCP reaction proxy. This does not validate the proxy as a
 physically correct wall-contact force; Stage C remains unexecuted.
+
+## Phase 0S-SOFA Stage C V2
+
+The earlier Stage-B configuration requested a 1 MPa Young modulus but did not
+wire it into `BeamInterpolation`. Stage C V2 explicitly binds and reads back
+`defaultYoungModulus` before its C0 material-matched baseline and C1 contact
+trace. It also requires fresh bridge frames, direct `ConstantForceField` Data
+readback, and timestamp-span dwell. C0 passed, while C1 was blocked because
+its zero-load geometry already produced native contact; no contact-mechanics
+gate was evaluated.

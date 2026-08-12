@@ -49,6 +49,35 @@ def contact_episode_stats(mask: Sequence[bool], dt_s: float) -> dict[str, float 
     }
 
 
+def contact_episode_stats_timestamps(timestamps_s: Sequence[float], mask: Sequence[bool]) -> dict:
+    """Conservative contact dwell measured from observation timestamps.
+
+    Unlike the legacy sample-count helper, an isolated observation has zero
+    observed duration and an N-sample episode spans end_timestamp-start_timestamp.
+    """
+    times = np.asarray(timestamps_s, dtype=float).reshape(-1)
+    active = np.asarray(mask, dtype=bool).reshape(-1)
+    if times.size != active.size:
+        raise ValueError("timestamp/mask length mismatch")
+    if times.size and not np.isfinite(times).all():
+        raise ValueError("non-finite contact timestamp")
+    if times.size > 1 and np.any(np.diff(times) <= 0.0):
+        raise ValueError("contact timestamps must be strictly increasing")
+    episodes, start = [], None
+    for index, value in enumerate(active):
+        if value and start is None:
+            start = index
+        elif not value and start is not None:
+            end = index - 1
+            episodes.append({"start_index": int(start), "end_index": int(end), "start_s": float(times[start]), "end_s": float(times[end]), "samples": int(end - start + 1), "duration_s": float(times[end] - times[start])})
+            start = None
+    if start is not None:
+        end = active.size - 1
+        episodes.append({"start_index": int(start), "end_index": int(end), "start_s": float(times[start]), "end_s": float(times[end]), "samples": int(end - start + 1), "duration_s": float(times[end] - times[start])})
+    durations = [float(episode["duration_s"]) for episode in episodes]
+    return {"occupancy": float(active.mean()) if active.size else 0.0, "episodes": len(episodes), "longest_duration_s": max(durations) if durations else 0.0, "median_duration_s": float(np.median(durations)) if durations else 0.0, "episode_records": episodes}
+
+
 def reaction_proxy_clean(native_contact_counts: Sequence[int], constraint_sizes: Sequence[int], reactions: Sequence[float]) -> bool:
     return bool(
         np.all(np.asarray(native_contact_counts, dtype=int) == 0)
