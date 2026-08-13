@@ -1,58 +1,64 @@
 #!/usr/bin/env python3
-"""Run the single preregistered V2.3 C1 and audit it in gate order."""
+"""Repair V2.3 execution plumbing and run the first actual Sphere C1."""
 from __future__ import annotations
-import argparse, hashlib, json, os, subprocess, sys, tempfile
+import argparse,json,os,subprocess,sys
 from pathlib import Path
+import numpy as np
 ROOT=Path(__file__).resolve().parents[3];SPIKE=ROOT/'simulator-spikes'/'sofa-beam-spike';sys.path.insert(0,str(SPIKE/'src'))
-from stage_c_collision_radius_v2_3 import *
-REPORT_DIR=SPIKE/'reports'/'phase0s_sofa';TRACE=REPORT_DIR/'data'/'stage_c_v2_3_collision_radius_trace.json';METRICS=REPORT_DIR/'stage_c_collision_radius_v2_3_metrics.json';REPORT=REPORT_DIR/'STAGE_C_COLLISION_RADIUS_V2_3.md';PLUGIN=SPIKE/'native-contact-bridge'/'build'/'lib'/'libNativeContactBridge.so'
-BASE='60f542eaa1161c8491a40651c7b012ebd799c85b';FROZEN={SPIKE/'configs'/'stage_c_stable_contact_v2_2_fixture_extent.json':'0e7f1bc9a4b82defc602701bdeb14022acc4e543',SPIKE/'src'/'stage_c_stable_contact_v2_scene.py':'96df7abc3a72bf2221bf5393424203d432ac0c82',SPIKE/'src'/'stage_c_contact_semantics.py':'a130d83e11ba4702c44b94344f766f44df6abbc7',SPIKE/'src'/'stage_c_contact_loss_morphology.py':'fc45ae04dbc4e27072cf5301b848ae661014e4ee',SPIKE/'native-contact-bridge'/'src'/'NativeContactBridge'/'NativeContactBridge.cpp':'e6fb41f9b903e53c33583a3cbde3334f9c117dbb',REPORT_DIR/'stage_c_fixture_extent_v2_2_metrics.json':'7c63358435c7108226b5f2eca8a585775cc19388',REPORT_DIR/'stage_c_loss_temporal_order_v2_2l_metrics.json':'97b3e0f4fe21e8524fc7aea1e0e331ef804ef566'}
-IMPL={SPIKE/'configs'/'stage_c_collision_radius_v2_3.json',SPIKE/'src'/'stage_c_collision_radius_v2_3.py',SPIKE/'src'/'stage_c_collision_radius_v2_3_scene.py',Path(__file__),SPIKE/'tests'/'test_stage_c_collision_radius_v2_3.py'}
-def sha(p):return hashlib.sha1(p.read_bytes()).hexdigest()
-def existing_evidence_paths(paths=None):return [p for p in (paths or (TRACE,METRICS,REPORT)) if p.exists()]
-def existing_evidence_message(ps):return 'PHASE0S_SOFA_STAGE_C_V2_3_EXISTING_EVIDENCE_REFUSAL: '+', '.join(map(str,ps))
-def git(*args):return subprocess.run(['git',*args],cwd=ROOT,text=True,capture_output=True,check=False)
-def provenance():
- parent=git('rev-parse','HEAD^').stdout.strip();changed={ROOT/x for x in git('diff','--name-only','HEAD^','HEAD').stdout.splitlines()};dirty=git('status','--porcelain').stdout.splitlines();return {'base':BASE,'implementation_commit':git('rev-parse','HEAD').stdout.strip(),'implementation_parent':parent,'implementation_parent_pass':parent==BASE,'implementation_scope_paths':[str(x.relative_to(ROOT)) for x in sorted(changed)],'implementation_scope_pass':changed==IMPL,'clean_formal_run_tree_pass':not dirty,'frozen_blobs':{str(p.relative_to(ROOT)):sha(p) for p in FROZEN},'frozen_blobs_pass':all(sha(p)==v for p,v in FROZEN.items())}
-def instrumentation(payload,cfg):
- rs=payload.get('records',[]); meta=payload.get('metadata',{}); serial=[int(r.get('bridge_frame_serial',-1)) for r in rs];return {'records':len(rs),'expected_records':int(cfg['simulation']['contact_steps']),'material_readback':bool(meta.get('material_snapshot')),'bridge_ready_all':bool(rs) and all(r.get('bridge_ready') for r in rs),'fresh_serial_each_step':len(serial)==len(set(serial)) and all(x>=0 for x in serial),'pass':len(rs)==int(cfg['simulation']['contact_steps']) and bool(meta.get('material_snapshot')) and bool(rs) and all(r.get('bridge_ready') for r in rs) and len(serial)==len(set(serial))}
-def skipped(reason):return {'evaluated':False,'reason':reason,'pass':False}
+from stage_c_collision_radius_v2_3 import V_INST,V_SEMANTICS,V_ZERO,V_CROSS,V_EDGE,V_CONTACT,V_REACTION,V_GEOMETRY,V_PASS,compensated_intervention_gate,classify_trace,semantics_gate,zero_load_gate,barrier_crossing_gate,mobile_fixture_edge_gate,contact_gate,reaction_gate,geometry_gate,relation_table
+BRANCH='phase0s-sofa-beamadapter'; SCIENTIFIC_BASE='60f542eaa1161c8491a40651c7b012ebd799c85b'; V23_IMPLEMENTATION='9a81d0a750464c6ce109635b358a7135b5ad6e82'; R1_EVIDENCE='d36eee2f503df85e9657712b9c806d2280965810'
+BASE_CONFIG=SPIKE/'configs'/'stage_c_stable_contact_v2_2_fixture_extent.json';CONFIG=SPIKE/'configs'/'stage_c_collision_radius_v2_3.json';SCENE=SPIKE/'src'/'stage_c_collision_radius_v2_3_scene.py';PLUGIN=SPIKE/'native-contact-bridge'/'build'/'lib'/'libNativeContactBridge.so';V22_METRICS=SPIKE/'reports'/'phase0s_sofa'/'stage_c_fixture_extent_v2_2_metrics.json';REPORT_DIR=SPIKE/'reports'/'phase0s_sofa';TRACE=REPORT_DIR/'data'/'stage_c_v2_3_r2_collision_radius_trace.json';METRICS=REPORT_DIR/'stage_c_collision_radius_v2_3_r2_metrics.json';REPORT=REPORT_DIR/'STAGE_C_COLLISION_RADIUS_V2_3_R2.md'
+EXPECTED_V23_FILES={'simulator-spikes/sofa-beam-spike/'+x for x in ('configs/stage_c_collision_radius_v2_3.json','scripts/audit_stage_c_collision_radius_v2_3.py','src/stage_c_collision_radius_v2_3.py','src/stage_c_collision_radius_v2_3_scene.py','tests/test_stage_c_collision_radius_v2_3.py')};EXPECTED_R2_FILES=EXPECTED_V23_FILES-{'simulator-spikes/sofa-beam-spike/configs/stage_c_collision_radius_v2_3.json'}
+def git(*args,check=True):return subprocess.run(['git',*args],cwd=ROOT,text=True,capture_output=True,check=check)
+def text(*args):return git(*args).stdout.strip()
+def diff_names(a,b):return {x for x in text('diff','--name-only',a,b).splitlines() if x}
+def ancestor(a,b):return git('merge-base','--is-ancestor',a,b,check=False).returncode==0
+def evidence_exists():return [p for p in (TRACE,METRICS,REPORT) if p.exists()]
+def preflight():
+ head=text('rev-parse','HEAD');cfg=git('diff','--quiet',V23_IMPLEMENTATION,head,'--',str(CONFIG.relative_to(ROOT)),check=False).returncode==0;out={'branch':text('branch','--show-current'),'head':head,'r2_descends_from_r1_evidence':ancestor(R1_EVIDENCE,head),'original_v23_scope':sorted(diff_names(SCIENTIFIC_BASE,V23_IMPLEMENTATION)),'r2_scope':sorted(diff_names(R1_EVIDENCE,head)),'candidate_config_unchanged':cfg,'working_tree_clean':text('status','--porcelain')==''};out['original_v23_scope_pass']=set(out['original_v23_scope'])==EXPECTED_V23_FILES;out['r2_scope_pass']=set(out['r2_scope'])==EXPECTED_R2_FILES;out['pass']=out['branch']==BRANCH and all(out[k] for k in ('r2_descends_from_r1_evidence','original_v23_scope_pass','r2_scope_pass','candidate_config_unchanged','working_tree_clean'));return out
+def skipped(reason):return {'evaluated':False,'reason':reason}
+def material_gate(payload,c):
+ snap=payload['metadata']['material_snapshot'];expected=int(c['beam']['nodes'])-1;checks={}
+ for k,target in {'default_young_modulus_pa':c['beam']['young_modulus_pa'],'default_poisson_ratio':c['beam']['poisson_ratio'],'mass_density_kg_m3':c['beam']['mass_density_kg_m3']}.items():
+  a=np.asarray(snap[k],float).reshape(-1);checks[k]=bool(a.size==expected and np.allclose(a,float(target),rtol=0,atol=1e-12))
+ return {'checks':checks,'pass':all(checks.values())}
+def timing_force_gate(records,c):
+ dt=float(c['simulation']['dt_s']);tol=float(c['integrity']['time_tolerance_s']);endpoint=int(c['beam']['nodes'])-1;zero_end=float(c['simulation']['zero_load_end_ms'])/1000;measure=float(c['simulation']['measurement_start_ms'])/1000;load=float(c['simulation']['normal_load_n']);d_err=cont_err=f_err=0.;schedule=target=True
+ for i,r in enumerate(records):
+  st,en=float(r['step_start_time_s']),float(r['step_end_time_s']);d_err=max(d_err,abs(en-st-dt));cont_err=max(cont_err,0 if not i else abs(st-float(records[i-1]['step_end_time_s'])));zero=st<zero_end;expected=np.asarray([0,0,0] if zero else [0,-load,0.],float);schedule=bool(schedule and bool(r['zero_load_phase'])==zero and bool(r['measurement_active'])==(st>=measure) and np.allclose(r['scheduled_force_n'],expected,rtol=0,atol=1e-15));bi=np.asarray(r['force_field_indices_begin'],int).reshape(-1);ei=np.asarray(r['force_field_indices_end'],int).reshape(-1);target=bool(target and np.array_equal(bi,[endpoint]) and np.array_equal(ei,[endpoint]));bf=np.asarray(r['force_field_force_data_begin_n'],float).reshape(-1,6)[0,:3];ef=np.asarray(r['force_field_force_data_end_n'],float).reshape(-1,6)[0,:3];af=np.asarray(r['actual_applied_force_n'],float).reshape(3);f_err=max(f_err,float(max(abs(bf-expected).max(),abs(ef-expected).max(),abs(af-expected).max())))
+ out={'dt_s':dt,'endpoint_index':endpoint,'max_step_duration_error_s':d_err,'max_step_continuity_error_s':cont_err,'schedule_pass':schedule,'target_index_pass':target,'max_force_readback_error_n':f_err};out['pass']=bool(d_err<=tol and cont_err<=tol and schedule and target and f_err<=1e-15);return out
+def instrumentation_gate(payload,c):
+ rs=payload['records'];mat=material_gate(payload,c);tim=timing_force_gate(rs,c);serial=[int(r['bridge_frame_serial']) for r in rs];ready=bool(rs and all(r['bridge_ready'] for r in rs));fresh=bool(len(serial)==len(set(serial)) and all(b>a for a,b in zip(serial,serial[1:])));tail=max((float(r['tail_translation_displacement_m']) for r in rs),default=float('inf'));out={'records':len(rs),'expected_records':int(c['simulation']['contact_steps']),'material':mat,'timing_force':tim,'bridge_ready_all':ready,'serials_fresh':fresh,'tail_translation_max_m':tail,'tail_anchor_pass':tail<=float(c['integrity']['tail_translation_max_m'])};out['pass']=bool(len(rs)==out['expected_records'] and mat['pass'] and tim['pass'] and ready and fresh and out['tail_anchor_pass']);return out
+def build_runsofa_command(c):return ['docker','run','--rm','--network','none','-e','CUDA_VISIBLE_DEVICES=','-e','SOFA_STAGE_C_V23_CONFIG=/work/'+str(CONFIG.relative_to(ROOT)),'-e','SOFA_STAGE_C_V23_TRACE=/work/'+str(TRACE.relative_to(ROOT)),'-e','LD_LIBRARY_PATH=/sofa/lib','-v',f'{ROOT}:/work','-v',f"{c['runtime']['sofa_root']}:/sofa:ro",c['runtime']['image'],'/sofa/bin/runSofa','-l','SofaPython3','-l','/work/'+str(PLUGIN.relative_to(ROOT)),'-g','batch','-n',str(int(c['simulation']['contact_steps'])),'/work/'+str(SCENE.relative_to(ROOT))]
+def formal_run(c):
+ p=subprocess.run(build_runsofa_command(c),cwd=ROOT,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,env={**os.environ,'CUDA_VISIBLE_DEVICES':''})
+ if p.returncode or not TRACE.is_file():raise RuntimeError('V2.3-R2 C1 did not complete.\n'+'\n'.join(p.stdout.splitlines()[-80:]))
 def narrative(v):
- if v==V_PASS:return {'fact':'The one C1 trace satisfied every preregistered Stage-C V2.3 gate.','inference':'Sphere/Triangle contact observability is qualified for Stage C; no later stage was run.','unknown':'Held-out contact-regime capability remains untested.','next_action':'Obtain a new instruction before any later Stage-C or capability work.'}
- return {'fact':'The single preregistered C1 trace was evaluated only through the first failing ordered gate.','inference':'This result does not authorize any subsequent Stage-C or capability experiment.','unknown':'No conclusion is drawn about later physical regimes.','next_action':'Review this one V2.3-R1 result before any further simulator experiment.'}
+ msg={V_INST:('The first actual C1 was not instrumentationally qualified.','No Sphere/Triangle physics conclusion is permitted.','Repair only the concrete execution/instrumentation blocker.'),V_SEMANTICS:('Sphere/Triangle DetectionOutput semantics failed qualification.','Downstream contact physics is not formally interpreted.','Repair the semantics/readback issue only.'),V_ZERO:('The compensated representation fails the zero-load gate.','The initial contact-free baseline is not preserved.','Review the effective-envelope implementation before changing physics.'),V_CROSS:('At least one mobile node still crosses the wall plane after contact onset.','The Sphere collision representation does not eliminate cross-through.','Review the barrier failure before another bounded collision intervention.'),V_EDGE:('Cross-through is excluded but terminal mobile fixture escape persists.','Fixture escape remains a distinct Stage-C failure.','Inspect the fixture trajectory before any boundary change.'),V_CONTACT:('Barrier and fixture-edge gates pass but sustained stable contact fails.','The current representation still does not establish stable normal contact.','Inspect the observed contact-loss morphology before changing physics.'),V_REACTION:('Stable geometric contact passes but reaction coupling fails.','The reaction proxy is not yet qualified for Stage D.','Inspect reaction/constraint coupling with geometry frozen.'),V_GEOMETRY:('Contact and reaction pass but local-contact geometry fails.','The contact distribution is not qualified for Stage D.','Inspect contact distribution without relaxing frozen gates.')}
+ if v==V_PASS:return {'fact':'The first actual compensated Sphere/Triangle C1 passed every Stage-C V2.3 gate.','inference':'Controlled stable normal contact is qualified under the V2.3 radius-carrying collision representation.','unknown':'Breakaway, stick/slip, jam, Oracle capability, passage, matched-state necessity and models remain untested.','next_action':'Review this result before authorizing Stage D breakaway characterization.'}
+ a,b,n=msg[v];return {'fact':a,'inference':b,'unknown':'All stages after the first failing gate remain scientifically unqualified.','next_action':n}
 def write_outputs(m):
- REPORT_DIR.mkdir(parents=True,exist_ok=True);METRICS.write_text(json.dumps(m,indent=2)+'\n');REPORT.write_text('# Phase 0S-SOFA Stage C V2.3-R1 Collision Radius Audit\n\n## Verdict\n\n`'+m['verdict']+'`\n\n## Metrics\n\n```json\n'+json.dumps(m,indent=2)+'\n```\n\n## Fact\n\n'+m['fact']+'\n\n## Inference\n\n'+m['inference']+'\n\n## Unknown\n\n'+m['unknown']+'\n\n## Next action\n\n'+m['next_action']+'\n')
-def formal_run(cfg):
- if not PLUGIN.exists():raise RuntimeError('NativeContactBridge artifact missing: '+str(PLUGIN))
- with tempfile.TemporaryDirectory() as td:
-  cp=Path(td)/'config.json';cp.write_text(json.dumps(cfg));env=os.environ.copy();env.update({'CUDA_VISIBLE_DEVICES':'','SOFA_STAGE_C_V23_CONFIG':'/work/'+str(cp.relative_to(ROOT)),'SOFA_STAGE_C_V23_TRACE':'/work/'+str(TRACE.relative_to(ROOT))})
-  # Mounting the repository makes the temporary config inaccessible, so create it under repo only transiently is disallowed; Docker reads host config through /work existing configuration.
-  env['SOFA_STAGE_C_V23_CONFIG']='/work/simulator-spikes/sofa-beam-spike/configs/stage_c_collision_radius_v2_3.json'
-  cmd=['docker','run','--rm','--network','none','-e','CUDA_VISIBLE_DEVICES=','-e','SOFA_STAGE_C_V23_CONFIG='+env['SOFA_STAGE_C_V23_CONFIG'],'-e','SOFA_STAGE_C_V23_TRACE='+env['SOFA_STAGE_C_V23_TRACE'],'-e','LD_LIBRARY_PATH=/sofa/lib','-v',f'{ROOT}:/work','-v','/root/workspace/third_party/SOFA_v26.06.00_Linux:/sofa:ro','sofa-v2606-python312-runner:ubuntu24','/sofa/bin/runSofa','-l','SofaPython3','-l','/work/'+str(PLUGIN.relative_to(ROOT)),'-g','batch','-n','/work/simulator-spikes/sofa-beam-spike/src/stage_c_collision_radius_v2_3_scene.py']
-  p=subprocess.run(cmd,text=True,capture_output=True,env=env);out=(p.stdout+'\n'+p.stderr).splitlines();bad=[x for x in out if 'Plugin not found: "NativeContactBridge"' not in x]
-  if p.returncode or not TRACE.exists():raise RuntimeError('runSofa failed or no trace; last 80 stdout/stderr:\n'+'\n'.join(bad[-80:]))
+ REPORT_DIR.mkdir(parents=True,exist_ok=True);METRICS.write_text(json.dumps(m,indent=2)+'\n',encoding='utf-8');REPORT.write_text('# Phase 0S-SOFA Stage C V2.3-R2\n\n## Verdict\n\n`'+m['verdict']+'`\n\n## Metrics\n\n```json\n'+json.dumps(m,indent=2)+'\n```\n\n## Fact\n\n'+m['fact']+'\n\n## Inference\n\n'+m['inference']+'\n\n## Unknown\n\n'+m['unknown']+'\n\n## Next action\n\n'+m['next_action']+'\n',encoding='utf-8')
+def gates(payload,c,base,floor):
+ ins=instrumentation_gate(payload,c);out={'instrumentation':ins}
+ if not ins['pass']:out.update(verdict=V_INST,semantics=skipped('instrumentation failed'),zero_load=skipped('instrumentation failed'),barrier=skipped('instrumentation failed'),mobile_fixture_edge=skipped('instrumentation failed'),contact=skipped('instrumentation failed'),reaction=skipped('instrumentation failed'),geometry=skipped('instrumentation failed'));return out
+ cs=classify_trace(payload['records'],effective_contact_distance_m=float(compensated_intervention_gate(base,c)['new_effective_contact_distance_m']),reaction_floor=floor);sem=semantics_gate(payload,cs,c,base);out['semantics']=sem
+ if not sem['pass']:out.update(verdict=V_SEMANTICS,zero_load=skipped('sphere semantics failed'),barrier=skipped('sphere semantics failed'),mobile_fixture_edge=skipped('sphere semantics failed'),contact=skipped('sphere semantics failed'),reaction=skipped('sphere semantics failed'),geometry=skipped('sphere semantics failed'));return out
+ for key,fn,verdict,rest in [('zero_load',lambda:zero_load_gate(payload['records'],cs),V_ZERO,['barrier','mobile_fixture_edge','contact','reaction','geometry']),('barrier',lambda:barrier_crossing_gate(payload['records'],cs,c),V_CROSS,['mobile_fixture_edge','contact','reaction','geometry']),('mobile_fixture_edge',lambda:mobile_fixture_edge_gate(payload['records'],cs,c),V_EDGE,['contact','reaction','geometry']),('contact',lambda:contact_gate(payload['records'],cs,c),V_CONTACT,['reaction','geometry']),('reaction',lambda:reaction_gate(payload['records'],cs,c,reaction_floor=floor),V_REACTION,['geometry'])]:
+  x=fn();out[key]=x
+  if not x['pass']:out.update(verdict=verdict,**{z:skipped(key+' gate failed') for z in rest});return out
+ geo=geometry_gate(payload['records'],cs,c);out.update(geometry=geo,formal_measurement_relation=relation_table(payload['records'],cs),verdict=V_PASS if geo['pass'] else V_GEOMETRY);return out
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--config',required=True);a=ap.parse_args();existing=existing_evidence_paths()
- if existing:print(existing_evidence_message(existing),file=sys.stderr);return 2
- cfg=json.loads(Path(a.config).read_text());m={'stage':'Phase 0S-SOFA Stage C V2.3-R1','cpu_only':True,'seed':cfg['seed'],'formal_c1_runs_requested':1,'formal_c1_runs_completed':0,'automatic_retry':False,'provenance':provenance(),'existing_evidence_guard':{'pass':True,'checked_paths':[str(p.relative_to(ROOT)) for p in (TRACE,METRICS,REPORT)]}}
- if not (m['provenance']['implementation_parent_pass'] and m['provenance']['implementation_scope_pass'] and m['provenance']['frozen_blobs_pass']):m['verdict']=V_INPUT;m.update(narrative(m['verdict']));write_outputs(m);print(m['verdict']);return 2
- base=json.loads((SPIKE/'configs'/'stage_c_stable_contact_v2_2_fixture_extent.json').read_text());inter=compensated_intervention_gate(base,cfg);m['compensated_intervention_gate']=inter
- if not inter['pass']:m['verdict']=V_INPUT;m.update(narrative(m['verdict']));write_outputs(m);print(m['verdict']);return 2
- try: formal_run(cfg);m['formal_c1_runs_completed']=1;payload=json.loads(TRACE.read_text())
- except Exception as e:m['formal_run_error']=str(e);m['verdict']=V_INST;m.update(narrative(m['verdict']));write_outputs(m);print(m['verdict']);return 0
- inst=instrumentation(payload,cfg);m['instrumentation']=inst
- if not inst['pass']:m.update({'semantics':skipped('instrumentation failed'),'verdict':V_INST});m.update(narrative(V_INST));write_outputs(m);print(V_INST);return 0
- classes=classify_trace(payload['records'],effective_contact_distance_m=cfg['beam']['radius_m'],reaction_floor=0.);sem=semantics_gate(payload,classes,cfg,base);m['semantics']=sem
- if not sem['pass']:m.update({'zero_load':skipped('semantics failed'),'verdict':V_SEMANTICS});m.update(narrative(V_SEMANTICS));write_outputs(m);print(V_SEMANTICS);return 0
- zero=zero_load_gate(payload['records'],classes);m['zero_load']=zero
- if not zero['pass']:m.update({'barrier':skipped('zero-load failed'),'verdict':V_ZERO});m.update(narrative(V_ZERO));write_outputs(m);print(V_ZERO);return 0
- barrier=barrier_crossing_gate(payload['records'],classes,cfg);m['barrier']=barrier
- if not barrier['pass']:m.update({'mobile_fixture_edge':skipped('barrier failed'),'verdict':V_CROSS});m.update(narrative(V_CROSS));write_outputs(m);print(V_CROSS);return 0
- edge=mobile_fixture_edge_gate(payload['records'],classes,cfg);m['mobile_fixture_edge']=edge
- if not edge['pass']:m.update({'contact':skipped('edge failed'),'verdict':V_EDGE});m.update(narrative(V_EDGE));write_outputs(m);print(V_EDGE);return 0
- con=contact_gate(payload['records'],classes,cfg);m['contact']=con
- if not con['pass']:m.update({'reaction':skipped('contact failed'),'verdict':V_CONTACT});m.update(narrative(V_CONTACT));write_outputs(m);print(V_CONTACT);return 0
- rea=reaction_gate(payload['records'],classes,cfg);m['reaction']=rea
- if not rea['pass']:m.update({'geometry':skipped('reaction failed'),'verdict':V_REACTION});m.update(narrative(V_REACTION));write_outputs(m);print(V_REACTION);return 0
- geo=geometry_gate(payload['records'],classes,cfg);m.update({'geometry':geo,'formal_measurement_relation':relation_table(payload['records'],classes),'verdict':V_PASS if geo['pass'] else V_GEOMETRY});m.update(narrative(m['verdict']));write_outputs(m);print(m['verdict']);return 0
+ ap=argparse.ArgumentParser();ap.add_argument('--preflight-only',action='store_true');args=ap.parse_args();ex=evidence_exists()
+ if ex:print('V2.3-R2 evidence already exists: '+', '.join(str(p.relative_to(ROOT)) for p in ex),file=sys.stderr);return 2
+ pre=preflight()
+ if not pre['pass']:print(json.dumps(pre,indent=2));return 2
+ c=json.loads(CONFIG.read_text());base=json.loads(BASE_CONFIG.read_text());comp=compensated_intervention_gate(base,c)
+ if not comp['pass']:print(json.dumps(comp,indent=2));return 2
+ if args.preflight_only:print(json.dumps({'preflight':pre,'compensated_intervention':comp},indent=2));return 0
+ if not PLUGIN.is_file():print('NativeContactBridge artifact missing: '+str(PLUGIN),file=sys.stderr);return 2
+ floor=float(json.loads(V22_METRICS.read_text())['historical_c0']['reaction_p99']);m={'stage':'Phase 0S-SOFA Stage C V2.3-R2','scientific_base':SCIENTIFIC_BASE,'v2_3_implementation':V23_IMPLEMENTATION,'r1_evidence':R1_EVIDENCE,'r1_formal_c1_completed':0,'r2_formal_c1_authorized':1,'r2_formal_c1_completed':0,'automatic_retry':False,'cpu_only':True,'preflight':pre,'compensated_intervention':comp,'reaction_floor_c0_p99':floor}
+ try:formal_run(c);m['r2_formal_c1_completed']=1;m.update(gates(json.loads(TRACE.read_text()),c,base,floor));m.update(narrative(m['verdict']))
+ except Exception as e:m.update(verdict=V_INST,runtime_error=str(e),fact='The newly authorized first actual V2.3 C1 did not complete successfully.',inference='No Sphere/Triangle physics conclusion is permitted.',unknown='The V2.3 physical intervention remains unqualified.',next_action='Fix only the concrete runtime blocker before requesting another explicitly authorized execution.')
+ write_outputs(m);print(m['verdict']);return 0
 if __name__=='__main__':raise SystemExit(main())
