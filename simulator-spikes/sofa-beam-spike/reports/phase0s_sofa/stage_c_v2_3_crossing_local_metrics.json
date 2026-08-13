@@ -1,0 +1,4913 @@
+{
+  "verdict": "PHASE0S_SOFA_STAGE_C_V2_3L_LOCAL_CONTACT_PERSISTS_GLOBAL_RESPONSE_ACTIVE_AT_FIRST_CROSSING",
+  "reason": "Node-local formal geometric contact persists while global LCP rows and global reaction response are active at first crossing completion.",
+  "primary_event": {
+    "node_id": 6,
+    "alignment": {
+      "from_record_index": 70,
+      "to_record_index": 71,
+      "from_signed_plane_distance_m": 1.2301278259588998e-05,
+      "to_signed_plane_distance_m": -0.00020900080685008087,
+      "pass": true
+    },
+    "crossing": {
+      "node_id": 6,
+      "from_record_index": 70,
+      "to_record_index": 71,
+      "from_time_s": 0.1420000000000001,
+      "to_time_s": 0.1440000000000001,
+      "transition_duration_s": 0.0020000000000000018,
+      "from_signed_plane_distance_m": 1.2301278259588998e-05,
+      "to_signed_plane_distance_m": -0.00020900080685008087
+    },
+    "from_state": {
+      "node_id": 6,
+      "step": 70,
+      "time_s": 0.1420000000000001,
+      "signed_center_y_m": 1.2301278259588998e-05,
+      "local_native_detection": true,
+      "local_native_count": 1,
+      "local_geometric_contact": true,
+      "local_geometric_count": 1,
+      "local_min_detection_value_m": -0.0017700994581765273,
+      "local_detection_values_m": [
+        -0.0017700994581765273
+      ],
+      "local_geometric_normal_y_values": [
+        -1.0
+      ],
+      "local_geometric_normal_y_median": -1.0,
+      "contact_ids": [
+        6
+      ],
+      "fixture_triangle_ids": [
+        0
+      ],
+      "global_constraint_vector_size": 18,
+      "global_lcp_rows_present": true,
+      "global_reaction_force_proxy": 2159.2446088365314,
+      "global_reaction_active": true
+    },
+    "completion_state": {
+      "node_id": 6,
+      "step": 71,
+      "time_s": 0.1440000000000001,
+      "signed_center_y_m": -0.00020900080685008087,
+      "local_native_detection": true,
+      "local_native_count": 1,
+      "local_geometric_contact": true,
+      "local_geometric_count": 1,
+      "local_min_detection_value_m": -0.001987698721740411,
+      "local_detection_values_m": [
+        -0.001987698721740411
+      ],
+      "local_geometric_normal_y_values": [
+        -1.0
+      ],
+      "local_geometric_normal_y_median": -1.0,
+      "contact_ids": [
+        6
+      ],
+      "fixture_triangle_ids": [
+        0
+      ],
+      "global_constraint_vector_size": 18,
+      "global_lcp_rows_present": true,
+      "global_reaction_force_proxy": 2424.5313597691593,
+      "global_reaction_active": true
+    },
+    "normal_y_sign_flip_across_crossing": false,
+    "last_local_geometric_contact": {
+      "record_index": 71,
+      "node_id": 6,
+      "step": 71,
+      "time_s": 0.1440000000000001,
+      "signed_center_y_m": -0.00020900080685008087,
+      "local_native_detection": true,
+      "local_native_count": 1,
+      "local_geometric_contact": true,
+      "local_geometric_count": 1,
+      "local_min_detection_value_m": -0.001987698721740411,
+      "local_detection_values_m": [
+        -0.001987698721740411
+      ],
+      "local_geometric_normal_y_values": [
+        -1.0
+      ],
+      "local_geometric_normal_y_median": -1.0,
+      "contact_ids": [
+        6
+      ],
+      "fixture_triangle_ids": [
+        0
+      ],
+      "global_constraint_vector_size": 18,
+      "global_lcp_rows_present": true,
+      "global_reaction_force_proxy": 2424.5313597691593,
+      "global_reaction_active": true
+    },
+    "crossing_minus_last_geometric_s": 0.0,
+    "window_half_width_s": 0.02,
+    "window": [
+      {
+        "record_index": 61,
+        "node_id": 6,
+        "step": 61,
+        "time_s": 0.1240000000000001,
+        "signed_center_y_m": 0.0017801093288348122,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -5.7552575123192336e-05,
+        "local_detection_values_m": [
+          -5.7552575123192336e-05
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 220.35138100649024,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 62,
+        "node_id": 6,
+        "step": 62,
+        "time_s": 0.12600000000000008,
+        "signed_center_y_m": 0.0016095974175969884,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0002198906711651878,
+        "local_detection_values_m": [
+          -0.0002198906711651878
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 391.20058808135906,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 63,
+        "node_id": 6,
+        "step": 63,
+        "time_s": 0.12800000000000009,
+        "signed_center_y_m": 0.0014314446792231972,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.00039040258240301165,
+        "local_detection_values_m": [
+          -0.00039040258240301165
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 569.7090746120275,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 64,
+        "node_id": 6,
+        "step": 64,
+        "time_s": 0.1300000000000001,
+        "signed_center_y_m": 0.001246138762102065,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0005685553207768028,
+        "local_detection_values_m": [
+          -0.0005685553207768028
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 755.3877458514914,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 65,
+        "node_id": 6,
+        "step": 65,
+        "time_s": 0.1320000000000001,
+        "signed_center_y_m": 0.0010541302565055173,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0007538612378979351,
+        "local_detection_values_m": [
+          -0.0007538612378979351
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 956.2402075693225,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 66,
+        "node_id": 6,
+        "step": 66,
+        "time_s": 0.1340000000000001,
+        "signed_center_y_m": 0.000855974571650043,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0009458697434944828,
+        "local_detection_values_m": [
+          -0.0009458697434944828
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1175.0028000723762,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 67,
+        "node_id": 6,
+        "step": 67,
+        "time_s": 0.1360000000000001,
+        "signed_center_y_m": 0.0006522124620175054,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001144025428349957,
+        "local_detection_values_m": [
+          -0.001144025428349957
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1406.944737218224,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 68,
+        "node_id": 6,
+        "step": 68,
+        "time_s": 0.1380000000000001,
+        "signed_center_y_m": 0.0004433584570556776,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0013477875379824945,
+        "local_detection_values_m": [
+          -0.0013477875379824945
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1649.3674406345613,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 69,
+        "node_id": 6,
+        "step": 69,
+        "time_s": 0.1400000000000001,
+        "signed_center_y_m": 0.00022990054182347278,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0015566415429443224,
+        "local_detection_values_m": [
+          -0.0015566415429443224
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1900.5425941686728,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 70,
+        "node_id": 6,
+        "step": 70,
+        "time_s": 0.1420000000000001,
+        "signed_center_y_m": 1.2301278259588998e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0017700994581765273,
+        "local_detection_values_m": [
+          -0.0017700994581765273
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2159.2446088365314,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 71,
+        "node_id": 6,
+        "step": 71,
+        "time_s": 0.1440000000000001,
+        "signed_center_y_m": -0.00020900080685008087,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001987698721740411,
+        "local_detection_values_m": [
+          -0.001987698721740411
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2424.5313597691593,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 72,
+        "node_id": 6,
+        "step": 72,
+        "time_s": 0.1460000000000001,
+        "signed_center_y_m": -0.00044158968234589386,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0017909991931499192,
+        "local_detection_values_m": [
+          -0.0017909991931499192
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1941.5287494426595,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 73,
+        "node_id": 6,
+        "step": 73,
+        "time_s": 0.1480000000000001,
+        "signed_center_y_m": -0.0006817800672887749,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0015584103176541062,
+        "local_detection_values_m": [
+          -0.0015584103176541062
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1875.3243882837232,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 74,
+        "node_id": 6,
+        "step": 74,
+        "time_s": 0.1500000000000001,
+        "signed_center_y_m": -0.0009281904669993426,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0013182199327112251,
+        "local_detection_values_m": [
+          -0.0013182199327112251
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1861.0970659972604,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 75,
+        "node_id": 6,
+        "step": 75,
+        "time_s": 0.1520000000000001,
+        "signed_center_y_m": -0.0011799434456352157,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0010718095330006575,
+        "local_detection_values_m": [
+          -0.0010718095330006575
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1904.8376604231134,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 76,
+        "node_id": 6,
+        "step": 76,
+        "time_s": 0.1540000000000001,
+        "signed_center_y_m": -0.0014363275982223753,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0008200565543647843,
+        "local_detection_values_m": [
+          -0.0008200565543647843
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2006.7820347298978,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 77,
+        "node_id": 6,
+        "step": 77,
+        "time_s": 0.1560000000000001,
+        "signed_center_y_m": -0.001696710751724848,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0005636724017776247,
+        "local_detection_values_m": [
+          -0.0005636724017776247
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2162.01220709763,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 78,
+        "node_id": 6,
+        "step": 78,
+        "time_s": 0.1580000000000001,
+        "signed_center_y_m": -0.001960507152141086,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.00030328924827515195,
+        "local_detection_values_m": [
+          -0.00030328924827515195
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1959.111213370334,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 79,
+        "node_id": 6,
+        "step": 79,
+        "time_s": 0.16000000000000011,
+        "signed_center_y_m": -0.00223212147736077,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -3.9492847858914066e-05,
+        "local_detection_values_m": [
+          -3.9492847858914066e-05
+        ],
+        "local_geometric_normal_y_values": [
+          1.0
+        ],
+        "local_geometric_normal_y_median": 1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1840.1655671236335,
+        "global_reaction_active": true
+      },
+      {
+        "record_index": 80,
+        "node_id": 6,
+        "step": 80,
+        "time_s": 0.16200000000000012,
+        "signed_center_y_m": -0.0025117324173018537,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": false,
+        "local_geometric_count": 0,
+        "local_min_detection_value_m": 0.0002321214773607699,
+        "local_detection_values_m": [
+          0.0002321214773607699
+        ],
+        "local_geometric_normal_y_values": [],
+        "local_geometric_normal_y_median": null,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1746.7574579720579,
+        "global_reaction_active": true
+      }
+    ]
+  },
+  "crossing_events": [
+    {
+      "node_id": 6,
+      "alignment": {
+        "from_record_index": 70,
+        "to_record_index": 71,
+        "from_signed_plane_distance_m": 1.2301278259588998e-05,
+        "to_signed_plane_distance_m": -0.00020900080685008087,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 6,
+        "from_record_index": 70,
+        "to_record_index": 71,
+        "from_time_s": 0.1420000000000001,
+        "to_time_s": 0.1440000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 1.2301278259588998e-05,
+        "to_signed_plane_distance_m": -0.00020900080685008087
+      },
+      "from_state": {
+        "node_id": 6,
+        "step": 70,
+        "time_s": 0.1420000000000001,
+        "signed_center_y_m": 1.2301278259588998e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0017700994581765273,
+        "local_detection_values_m": [
+          -0.0017700994581765273
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2159.2446088365314,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 6,
+        "step": 71,
+        "time_s": 0.1440000000000001,
+        "signed_center_y_m": -0.00020900080685008087,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001987698721740411,
+        "local_detection_values_m": [
+          -0.001987698721740411
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2424.5313597691593,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 71,
+        "node_id": 6,
+        "step": 71,
+        "time_s": 0.1440000000000001,
+        "signed_center_y_m": -0.00020900080685008087,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001987698721740411,
+        "local_detection_values_m": [
+          -0.001987698721740411
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          6
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2424.5313597691593,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 61,
+          "node_id": 6,
+          "step": 61,
+          "time_s": 0.1240000000000001,
+          "signed_center_y_m": 0.0017801093288348122,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -5.7552575123192336e-05,
+          "local_detection_values_m": [
+            -5.7552575123192336e-05
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 220.35138100649024,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 62,
+          "node_id": 6,
+          "step": 62,
+          "time_s": 0.12600000000000008,
+          "signed_center_y_m": 0.0016095974175969884,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0002198906711651878,
+          "local_detection_values_m": [
+            -0.0002198906711651878
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 391.20058808135906,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 63,
+          "node_id": 6,
+          "step": 63,
+          "time_s": 0.12800000000000009,
+          "signed_center_y_m": 0.0014314446792231972,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.00039040258240301165,
+          "local_detection_values_m": [
+            -0.00039040258240301165
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 569.7090746120275,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 64,
+          "node_id": 6,
+          "step": 64,
+          "time_s": 0.1300000000000001,
+          "signed_center_y_m": 0.001246138762102065,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0005685553207768028,
+          "local_detection_values_m": [
+            -0.0005685553207768028
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 755.3877458514914,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 65,
+          "node_id": 6,
+          "step": 65,
+          "time_s": 0.1320000000000001,
+          "signed_center_y_m": 0.0010541302565055173,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0007538612378979351,
+          "local_detection_values_m": [
+            -0.0007538612378979351
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 956.2402075693225,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 66,
+          "node_id": 6,
+          "step": 66,
+          "time_s": 0.1340000000000001,
+          "signed_center_y_m": 0.000855974571650043,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009458697434944828,
+          "local_detection_values_m": [
+            -0.0009458697434944828
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1175.0028000723762,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 67,
+          "node_id": 6,
+          "step": 67,
+          "time_s": 0.1360000000000001,
+          "signed_center_y_m": 0.0006522124620175054,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001144025428349957,
+          "local_detection_values_m": [
+            -0.001144025428349957
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1406.944737218224,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 68,
+          "node_id": 6,
+          "step": 68,
+          "time_s": 0.1380000000000001,
+          "signed_center_y_m": 0.0004433584570556776,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013477875379824945,
+          "local_detection_values_m": [
+            -0.0013477875379824945
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1649.3674406345613,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 69,
+          "node_id": 6,
+          "step": 69,
+          "time_s": 0.1400000000000001,
+          "signed_center_y_m": 0.00022990054182347278,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015566415429443224,
+          "local_detection_values_m": [
+            -0.0015566415429443224
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1900.5425941686728,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 70,
+          "node_id": 6,
+          "step": 70,
+          "time_s": 0.1420000000000001,
+          "signed_center_y_m": 1.2301278259588998e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017700994581765273,
+          "local_detection_values_m": [
+            -0.0017700994581765273
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2159.2446088365314,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 71,
+          "node_id": 6,
+          "step": 71,
+          "time_s": 0.1440000000000001,
+          "signed_center_y_m": -0.00020900080685008087,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001987698721740411,
+          "local_detection_values_m": [
+            -0.001987698721740411
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2424.5313597691593,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 72,
+          "node_id": 6,
+          "step": 72,
+          "time_s": 0.1460000000000001,
+          "signed_center_y_m": -0.00044158968234589386,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017909991931499192,
+          "local_detection_values_m": [
+            -0.0017909991931499192
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1941.5287494426595,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 73,
+          "node_id": 6,
+          "step": 73,
+          "time_s": 0.1480000000000001,
+          "signed_center_y_m": -0.0006817800672887749,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015584103176541062,
+          "local_detection_values_m": [
+            -0.0015584103176541062
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1875.3243882837232,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 74,
+          "node_id": 6,
+          "step": 74,
+          "time_s": 0.1500000000000001,
+          "signed_center_y_m": -0.0009281904669993426,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013182199327112251,
+          "local_detection_values_m": [
+            -0.0013182199327112251
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1861.0970659972604,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 75,
+          "node_id": 6,
+          "step": 75,
+          "time_s": 0.1520000000000001,
+          "signed_center_y_m": -0.0011799434456352157,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0010718095330006575,
+          "local_detection_values_m": [
+            -0.0010718095330006575
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1904.8376604231134,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 76,
+          "node_id": 6,
+          "step": 76,
+          "time_s": 0.1540000000000001,
+          "signed_center_y_m": -0.0014363275982223753,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008200565543647843,
+          "local_detection_values_m": [
+            -0.0008200565543647843
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2006.7820347298978,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 77,
+          "node_id": 6,
+          "step": 77,
+          "time_s": 0.1560000000000001,
+          "signed_center_y_m": -0.001696710751724848,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0005636724017776247,
+          "local_detection_values_m": [
+            -0.0005636724017776247
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2162.01220709763,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 78,
+          "node_id": 6,
+          "step": 78,
+          "time_s": 0.1580000000000001,
+          "signed_center_y_m": -0.001960507152141086,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.00030328924827515195,
+          "local_detection_values_m": [
+            -0.00030328924827515195
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1959.111213370334,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 79,
+          "node_id": 6,
+          "step": 79,
+          "time_s": 0.16000000000000011,
+          "signed_center_y_m": -0.00223212147736077,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -3.9492847858914066e-05,
+          "local_detection_values_m": [
+            -3.9492847858914066e-05
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1840.1655671236335,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 80,
+          "node_id": 6,
+          "step": 80,
+          "time_s": 0.16200000000000012,
+          "signed_center_y_m": -0.0025117324173018537,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": false,
+          "local_geometric_count": 0,
+          "local_min_detection_value_m": 0.0002321214773607699,
+          "local_detection_values_m": [
+            0.0002321214773607699
+          ],
+          "local_geometric_normal_y_values": [],
+          "local_geometric_normal_y_median": null,
+          "contact_ids": [
+            6
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1746.7574579720579,
+          "global_reaction_active": true
+        }
+      ]
+    },
+    {
+      "node_id": 5,
+      "alignment": {
+        "from_record_index": 76,
+        "to_record_index": 77,
+        "from_signed_plane_distance_m": 0.00016095192374247246,
+        "to_signed_plane_distance_m": -2.4276536499422825e-05,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 5,
+        "from_record_index": 76,
+        "to_record_index": 77,
+        "from_time_s": 0.1540000000000001,
+        "to_time_s": 0.1560000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00016095192374247246,
+        "to_signed_plane_distance_m": -2.4276536499422825e-05
+      },
+      "from_state": {
+        "node_id": 5,
+        "step": 76,
+        "time_s": 0.1540000000000001,
+        "signed_center_y_m": 0.00016095192374247246,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0016582917325868448,
+        "local_detection_values_m": [
+          -0.0016582917325868448
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          5
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2006.7820347298978,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 5,
+        "step": 77,
+        "time_s": 0.1560000000000001,
+        "signed_center_y_m": -2.4276536499422825e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018390480762575277,
+        "local_detection_values_m": [
+          -0.0018390480762575277
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          5
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2162.01220709763,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 77,
+        "node_id": 5,
+        "step": 77,
+        "time_s": 0.1560000000000001,
+        "signed_center_y_m": -2.4276536499422825e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018390480762575277,
+        "local_detection_values_m": [
+          -0.0018390480762575277
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          5
+        ],
+        "fixture_triangle_ids": [
+          0
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2162.01220709763,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 68,
+          "node_id": 5,
+          "step": 68,
+          "time_s": 0.1380000000000001,
+          "signed_center_y_m": 0.0014648846425080063,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0003937021815857366,
+          "local_detection_values_m": [
+            -0.0003937021815857366
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1649.3674406345613,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 69,
+          "node_id": 5,
+          "step": 69,
+          "time_s": 0.1400000000000001,
+          "signed_center_y_m": 0.001318601042351081,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0005351153574919938,
+          "local_detection_values_m": [
+            -0.0005351153574919938
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1900.5425941686728,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 70,
+          "node_id": 5,
+          "step": 70,
+          "time_s": 0.1420000000000001,
+          "signed_center_y_m": 0.0011677277763999727,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0006813989576489191,
+          "local_detection_values_m": [
+            -0.0006813989576489191
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2159.2446088365314,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 71,
+          "node_id": 5,
+          "step": 71,
+          "time_s": 0.1440000000000001,
+          "signed_center_y_m": 0.0010125394836304332,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008322722236000274,
+          "local_detection_values_m": [
+            -0.0008322722236000274
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2424.5313597691593,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 72,
+          "node_id": 5,
+          "step": 72,
+          "time_s": 0.1460000000000001,
+          "signed_center_y_m": 0.0008533060780194226,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009874605163695668,
+          "local_detection_values_m": [
+            -0.0009874605163695668
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1941.5287494426595,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 73,
+          "node_id": 5,
+          "step": 73,
+          "time_s": 0.1480000000000001,
+          "signed_center_y_m": 0.0006882573637153031,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011466939219805774,
+          "local_detection_values_m": [
+            -0.0011466939219805774
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1875.3243882837232,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 74,
+          "node_id": 5,
+          "step": 74,
+          "time_s": 0.1500000000000001,
+          "signed_center_y_m": 0.0005176046938425367,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001311742636284697,
+          "local_detection_values_m": [
+            -0.001311742636284697
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1861.0970659972604,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 75,
+          "node_id": 5,
+          "step": 75,
+          "time_s": 0.1520000000000001,
+          "signed_center_y_m": 0.00034170826741315523,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014823953061574634,
+          "local_detection_values_m": [
+            -0.0014823953061574634
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1904.8376604231134,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 76,
+          "node_id": 5,
+          "step": 76,
+          "time_s": 0.1540000000000001,
+          "signed_center_y_m": 0.00016095192374247246,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016582917325868448,
+          "local_detection_values_m": [
+            -0.0016582917325868448
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2006.7820347298978,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 77,
+          "node_id": 5,
+          "step": 77,
+          "time_s": 0.1560000000000001,
+          "signed_center_y_m": -2.4276536499422825e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0018390480762575277,
+          "local_detection_values_m": [
+            -0.0018390480762575277
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2162.01220709763,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 78,
+          "node_id": 5,
+          "step": 78,
+          "time_s": 0.1580000000000001,
+          "signed_center_y_m": -0.00022159038571486082,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019757234635005773,
+          "local_detection_values_m": [
+            -0.0019757234635005773
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1959.111213370334,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 79,
+          "node_id": 5,
+          "step": 79,
+          "time_s": 0.16000000000000011,
+          "signed_center_y_m": -0.0004260588869397207,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017784096142851391,
+          "local_detection_values_m": [
+            -0.0017784096142851391
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1840.1655671236335,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 80,
+          "node_id": 5,
+          "step": 80,
+          "time_s": 0.16200000000000012,
+          "signed_center_y_m": -0.000637074705241453,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015739411130602794,
+          "local_detection_values_m": [
+            -0.0015739411130602794
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1746.7574579720579,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 81,
+          "node_id": 5,
+          "step": 81,
+          "time_s": 0.16400000000000012,
+          "signed_center_y_m": -0.0008542969020542679,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001362925294758547,
+          "local_detection_values_m": [
+            -0.001362925294758547
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1689.4867390651164,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 82,
+          "node_id": 5,
+          "step": 82,
+          "time_s": 0.16600000000000012,
+          "signed_center_y_m": -0.0010774025016069503,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011457030979457321,
+          "local_detection_values_m": [
+            -0.0011457030979457321
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1678.809778152329,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 83,
+          "node_id": 5,
+          "step": 83,
+          "time_s": 0.16800000000000012,
+          "signed_center_y_m": -0.0013060684605384213,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009225974983930497,
+          "local_detection_values_m": [
+            -0.0009225974983930497
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1719.938950831195,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 84,
+          "node_id": 5,
+          "step": 84,
+          "time_s": 0.17000000000000012,
+          "signed_center_y_m": -0.001539970444094098,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0006939315394615788,
+          "local_detection_values_m": [
+            -0.0006939315394615788
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1813.3120513670244,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 85,
+          "node_id": 5,
+          "step": 85,
+          "time_s": 0.17200000000000013,
+          "signed_center_y_m": -0.00177878215617151,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0004600295559059021,
+          "local_detection_values_m": [
+            -0.0004600295559059021
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1954.958584477574,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 86,
+          "node_id": 5,
+          "step": 86,
+          "time_s": 0.17400000000000013,
+          "signed_center_y_m": -0.002022219448135469,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.00022121784382849005,
+          "local_detection_values_m": [
+            -0.00022121784382849005
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            5
+          ],
+          "fixture_triangle_ids": [
+            0
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2138.171553171918,
+          "global_reaction_active": true
+        }
+      ]
+    },
+    {
+      "node_id": 4,
+      "alignment": {
+        "from_record_index": 85,
+        "to_record_index": 86,
+        "from_signed_plane_distance_m": 0.00013136378118970446,
+        "to_signed_plane_distance_m": -3.9017465274988163e-05,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 4,
+        "from_record_index": 85,
+        "to_record_index": 86,
+        "from_time_s": 0.17200000000000013,
+        "to_time_s": 0.17400000000000013,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00013136378118970446,
+        "to_signed_plane_distance_m": -3.9017465274988163e-05
+      },
+      "from_state": {
+        "node_id": 4,
+        "step": 85,
+        "time_s": 0.17200000000000013,
+        "signed_center_y_m": 0.00013136378118970446,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001702608721171213,
+        "local_detection_values_m": [
+          -0.001702608721171213
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          4
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1954.958584477574,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 4,
+        "step": 86,
+        "time_s": 0.17400000000000013,
+        "signed_center_y_m": -3.9017465274988163e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018686362188102955,
+        "local_detection_values_m": [
+          -0.0018686362188102955
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          4
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2138.171553171918,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 86,
+        "node_id": 4,
+        "step": 86,
+        "time_s": 0.17400000000000013,
+        "signed_center_y_m": -3.9017465274988163e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018686362188102955,
+        "local_detection_values_m": [
+          -0.0018686362188102955
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          4
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2138.171553171918,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 77,
+          "node_id": 4,
+          "step": 77,
+          "time_s": 0.1560000000000001,
+          "signed_center_y_m": 0.0013175761226209184,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0005577172612747925,
+          "local_detection_values_m": [
+            -0.0005577172612747925
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2162.01220709763,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 78,
+          "node_id": 4,
+          "step": 78,
+          "time_s": 0.1580000000000001,
+          "signed_center_y_m": 0.001188695784871178,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0006824238773790816,
+          "local_detection_values_m": [
+            -0.0006824238773790816
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1959.111213370334,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 79,
+          "node_id": 4,
+          "step": 79,
+          "time_s": 0.16000000000000011,
+          "signed_center_y_m": 0.001053797284180201,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.000811304215128822,
+          "local_detection_values_m": [
+            -0.000811304215128822
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1840.1655671236335,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 80,
+          "node_id": 4,
+          "step": 80,
+          "time_s": 0.16200000000000012,
+          "signed_center_y_m": 0.0009131339681546703,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.000946202715819799,
+          "local_detection_values_m": [
+            -0.000946202715819799
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1746.7574579720579,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 81,
+          "node_id": 4,
+          "step": 81,
+          "time_s": 0.16400000000000012,
+          "signed_center_y_m": 0.0007669245014289868,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.00108686603184533,
+          "local_detection_values_m": [
+            -0.00108686603184533
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1689.4867390651164,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 82,
+          "node_id": 4,
+          "step": 82,
+          "time_s": 0.16600000000000012,
+          "signed_center_y_m": 0.0006154085372485012,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0012330754985710132,
+          "local_detection_values_m": [
+            -0.0012330754985710132
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1678.809778152329,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 83,
+          "node_id": 4,
+          "step": 83,
+          "time_s": 0.16800000000000012,
+          "signed_center_y_m": 0.0004588193169095203,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013845914627514987,
+          "local_detection_values_m": [
+            -0.0013845914627514987
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1719.938950831195,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 84,
+          "node_id": 4,
+          "step": 84,
+          "time_s": 0.17000000000000012,
+          "signed_center_y_m": 0.00029739127882878703,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015411806830904796,
+          "local_detection_values_m": [
+            -0.0015411806830904796
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1813.3120513670244,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 85,
+          "node_id": 4,
+          "step": 85,
+          "time_s": 0.17200000000000013,
+          "signed_center_y_m": 0.00013136378118970446,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001702608721171213,
+          "local_detection_values_m": [
+            -0.001702608721171213
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1954.958584477574,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 86,
+          "node_id": 4,
+          "step": 86,
+          "time_s": 0.17400000000000013,
+          "signed_center_y_m": -3.9017465274988163e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0018686362188102955,
+          "local_detection_values_m": [
+            -0.0018686362188102955
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2138.171553171918,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 87,
+          "node_id": 4,
+          "step": 87,
+          "time_s": 0.17600000000000013,
+          "signed_center_y_m": -0.00022151156641264162,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019609825347250117,
+          "local_detection_values_m": [
+            -0.0019609825347250117
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1932.673015943548,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 88,
+          "node_id": 4,
+          "step": 88,
+          "time_s": 0.17800000000000013,
+          "signed_center_y_m": -0.00041083909285273584,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017784884335873585,
+          "local_detection_values_m": [
+            -0.0017784884335873585
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1815.0360059297832,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 89,
+          "node_id": 4,
+          "step": 89,
+          "time_s": 0.18000000000000013,
+          "signed_center_y_m": -0.0006061265800191364,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015891609071472643,
+          "local_detection_values_m": [
+            -0.0015891609071472643
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1717.4309134964603,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 90,
+          "node_id": 4,
+          "step": 90,
+          "time_s": 0.18200000000000013,
+          "signed_center_y_m": -0.0008069343881450449,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013938734199808638,
+          "local_detection_values_m": [
+            -0.0013938734199808638
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1647.4432572948836,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 91,
+          "node_id": 4,
+          "step": 91,
+          "time_s": 0.18400000000000014,
+          "signed_center_y_m": -0.0010129626172368377,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011930656118549553,
+          "local_detection_values_m": [
+            -0.0011930656118549553
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1615.3686385627009,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 92,
+          "node_id": 4,
+          "step": 92,
+          "time_s": 0.18600000000000014,
+          "signed_center_y_m": -0.001223961893189317,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009870373827631624,
+          "local_detection_values_m": [
+            -0.0009870373827631624
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1627.555348924046,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 93,
+          "node_id": 4,
+          "step": 93,
+          "time_s": 0.18800000000000014,
+          "signed_center_y_m": -0.0014397042961652128,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0007760381068106831,
+          "local_detection_values_m": [
+            -0.0007760381068106831
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1686.357127758607,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 94,
+          "node_id": 4,
+          "step": 94,
+          "time_s": 0.19000000000000014,
+          "signed_center_y_m": -0.0016599713451283104,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0005602957038347873,
+          "local_detection_values_m": [
+            -0.0005602957038347873
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1790.1533001042653,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 95,
+          "node_id": 4,
+          "step": 95,
+          "time_s": 0.19200000000000014,
+          "signed_center_y_m": -0.0018845484096208355,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0003400286548716897,
+          "local_detection_values_m": [
+            -0.0003400286548716897
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            4
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1934.3149007793597,
+          "global_reaction_active": true
+        }
+      ]
+    },
+    {
+      "node_id": 3,
+      "alignment": {
+        "from_record_index": 95,
+        "to_record_index": 96,
+        "from_signed_plane_distance_m": 0.0001388965471950745,
+        "to_signed_plane_distance_m": -1.8495175081744595e-05,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 3,
+        "from_record_index": 95,
+        "to_record_index": 96,
+        "from_time_s": 0.19200000000000014,
+        "to_time_s": 0.19400000000000014,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.0001388965471950745,
+        "to_signed_plane_distance_m": -1.8495175081744595e-05
+      },
+      "from_state": {
+        "node_id": 3,
+        "step": 95,
+        "time_s": 0.19200000000000014,
+        "signed_center_y_m": 0.0001388965471950745,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0017071412090662822,
+        "local_detection_values_m": [
+          -0.0017071412090662822
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          3
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1934.3149007793597,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 3,
+        "step": 96,
+        "time_s": 0.19400000000000014,
+        "signed_center_y_m": -1.8495175081744595e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018611034528049255,
+        "local_detection_values_m": [
+          -0.0018611034528049255
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          3
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2109.7385131504434,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 96,
+        "node_id": 3,
+        "step": 96,
+        "time_s": 0.19400000000000014,
+        "signed_center_y_m": -1.8495175081744595e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0018611034528049255,
+        "local_detection_values_m": [
+          -0.0018611034528049255
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          3
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 18,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2109.7385131504434,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 87,
+          "node_id": 3,
+          "step": 87,
+          "time_s": 0.17600000000000013,
+          "signed_center_y_m": 0.0012535366288716299,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.000629170941325791,
+          "local_detection_values_m": [
+            -0.000629170941325791
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1932.673015943548,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 88,
+          "node_id": 3,
+          "step": 88,
+          "time_s": 0.17800000000000013,
+          "signed_center_y_m": 0.0011307049903615412,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0007464633711283702,
+          "local_detection_values_m": [
+            -0.0007464633711283702
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1815.0360059297832,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 89,
+          "node_id": 3,
+          "step": 89,
+          "time_s": 0.18000000000000013,
+          "signed_center_y_m": 0.0010026044182326757,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008692950096384588,
+          "local_detection_values_m": [
+            -0.0008692950096384588
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1717.4309134964603,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 90,
+          "node_id": 3,
+          "step": 90,
+          "time_s": 0.18200000000000013,
+          "signed_center_y_m": 0.0008695249892217084,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009973955817673243,
+          "local_detection_values_m": [
+            -0.0009973955817673243
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1647.4432572948836,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 91,
+          "node_id": 3,
+          "step": 91,
+          "time_s": 0.18400000000000014,
+          "signed_center_y_m": 0.0007317420114861191,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011304750107782916,
+          "local_detection_values_m": [
+            -0.0011304750107782916
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1615.3686385627009,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 92,
+          "node_id": 3,
+          "step": 92,
+          "time_s": 0.18600000000000014,
+          "signed_center_y_m": 0.0005895304840644597,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001268257988513881,
+          "local_detection_values_m": [
+            -0.001268257988513881
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1627.555348924046,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 93,
+          "node_id": 3,
+          "step": 93,
+          "time_s": 0.18800000000000014,
+          "signed_center_y_m": 0.0004431519393348568,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014104695159355403,
+          "local_detection_values_m": [
+            -0.0014104695159355403
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1686.357127758607,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 94,
+          "node_id": 3,
+          "step": 94,
+          "time_s": 0.19000000000000014,
+          "signed_center_y_m": 0.00029285879093371783,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015568480606651433,
+          "local_detection_values_m": [
+            -0.0015568480606651433
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1790.1533001042653,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 95,
+          "node_id": 3,
+          "step": 95,
+          "time_s": 0.19200000000000014,
+          "signed_center_y_m": 0.0001388965471950745,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017071412090662822,
+          "local_detection_values_m": [
+            -0.0017071412090662822
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1934.3149007793597,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 96,
+          "node_id": 3,
+          "step": 96,
+          "time_s": 0.19400000000000014,
+          "signed_center_y_m": -1.8495175081744595e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0018611034528049255,
+          "local_detection_values_m": [
+            -0.0018611034528049255
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2109.7385131504434,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 97,
+          "node_id": 3,
+          "step": 97,
+          "time_s": 0.19600000000000015,
+          "signed_center_y_m": -0.00018714374635391868,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019815048249182555,
+          "local_detection_values_m": [
+            -0.0019815048249182555
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1947.5676254295572,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 98,
+          "node_id": 3,
+          "step": 98,
+          "time_s": 0.19800000000000015,
+          "signed_center_y_m": -0.00036177685039832567,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0018128562536460814,
+          "local_detection_values_m": [
+            -0.0018128562536460814
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1829.9894915218115,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 99,
+          "node_id": 3,
+          "step": 99,
+          "time_s": 0.20000000000000015,
+          "signed_center_y_m": -0.0005416861093035915,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016382231496016744,
+          "local_detection_values_m": [
+            -0.0016382231496016744
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1726.503172365474,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 100,
+          "node_id": 3,
+          "step": 100,
+          "time_s": 0.20200000000000015,
+          "signed_center_y_m": -0.0007265070179357412,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014583138906964087,
+          "local_detection_values_m": [
+            -0.0014583138906964087
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1642.502313374071,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 101,
+          "node_id": 3,
+          "step": 101,
+          "time_s": 0.20400000000000015,
+          "signed_center_y_m": -0.0009159457857329325,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0012734929820642589,
+          "local_detection_values_m": [
+            -0.0012734929820642589
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1583.7005049356408,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 102,
+          "node_id": 3,
+          "step": 102,
+          "time_s": 0.20600000000000016,
+          "signed_center_y_m": -0.0011097360648010491,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0010840542142670675,
+          "local_detection_values_m": [
+            -0.0010840542142670675
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1555.4493930922897,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 103,
+          "node_id": 3,
+          "step": 103,
+          "time_s": 0.20800000000000016,
+          "signed_center_y_m": -0.001307628783616085,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008902639351989509,
+          "local_detection_values_m": [
+            -0.0008902639351989509
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1562.746188825398,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 104,
+          "node_id": 3,
+          "step": 104,
+          "time_s": 0.21000000000000016,
+          "signed_center_y_m": -0.0015093766393419342,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0006923712163839151,
+          "local_detection_values_m": [
+            -0.0006923712163839151
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1608.7152857507601,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 105,
+          "node_id": 3,
+          "step": 105,
+          "time_s": 0.21200000000000016,
+          "signed_center_y_m": -0.0017147386251562514,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0004906233606580658,
+          "local_detection_values_m": [
+            -0.0004906233606580658
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            3
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1692.219056831242,
+          "global_reaction_active": true
+        }
+      ]
+    },
+    {
+      "node_id": 2,
+      "alignment": {
+        "from_record_index": 107,
+        "to_record_index": 108,
+        "from_signed_plane_distance_m": 7.798459234670657e-05,
+        "to_signed_plane_distance_m": -5.913359911552571e-05,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 2,
+        "from_record_index": 107,
+        "to_record_index": 108,
+        "from_time_s": 0.21600000000000016,
+        "to_time_s": 0.21800000000000017,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.798459234670657e-05,
+        "to_signed_plane_distance_m": -5.913359911552571e-05
+      },
+      "from_state": {
+        "node_id": 2,
+        "step": 107,
+        "time_s": 0.21600000000000016,
+        "signed_center_y_m": 7.798459234670657e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0017870099260631808,
+        "local_detection_values_m": [
+          -0.0017870099260631808
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          2
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 15,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1951.9721998569628,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 2,
+        "step": 108,
+        "time_s": 0.21800000000000017,
+        "signed_center_y_m": -5.913359911552571e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0019220154076532935,
+        "local_detection_values_m": [
+          -0.0019220154076532935
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          2
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 15,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2099.130745630831,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 108,
+        "node_id": 2,
+        "step": 108,
+        "time_s": 0.21800000000000017,
+        "signed_center_y_m": -5.913359911552571e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0019220154076532935,
+        "local_detection_values_m": [
+          -0.0019220154076532935
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          2
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 15,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2099.130745630831,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 99,
+          "node_id": 2,
+          "step": 99,
+          "time_s": 0.20000000000000015,
+          "signed_center_y_m": 0.001082342854016881,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008072156894003795,
+          "local_detection_values_m": [
+            -0.0008072156894003795
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1726.503172365474,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 100,
+          "node_id": 2,
+          "step": 100,
+          "time_s": 0.20200000000000015,
+          "signed_center_y_m": 0.0009679641704429054,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009176571459831191,
+          "local_detection_values_m": [
+            -0.0009176571459831191
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1642.502313374071,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 101,
+          "node_id": 2,
+          "step": 101,
+          "time_s": 0.20400000000000015,
+          "signed_center_y_m": 0.0008498981941792872,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0010320358295570946,
+          "local_detection_values_m": [
+            -0.0010320358295570946
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1583.7005049356408,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 102,
+          "node_id": 2,
+          "step": 102,
+          "time_s": 0.20600000000000016,
+          "signed_center_y_m": 0.000728395314098784,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011501018058207128,
+          "local_detection_values_m": [
+            -0.0011501018058207128
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 18,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1555.4493930922897,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 103,
+          "node_id": 2,
+          "step": 103,
+          "time_s": 0.20800000000000016,
+          "signed_center_y_m": 0.0006036988032622991,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001271604685901216,
+          "local_detection_values_m": [
+            -0.001271604685901216
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1562.746188825398,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 104,
+          "node_id": 2,
+          "step": 104,
+          "time_s": 0.21000000000000016,
+          "signed_center_y_m": 0.0004760701496481066,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001396301196737701,
+          "local_detection_values_m": [
+            -0.001396301196737701
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1608.7152857507601,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 105,
+          "node_id": 2,
+          "step": 105,
+          "time_s": 0.21200000000000016,
+          "signed_center_y_m": 0.0003457570065189693,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015239298503518933,
+          "local_detection_values_m": [
+            -0.0015239298503518933
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1692.219056831242,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 106,
+          "node_id": 2,
+          "step": 106,
+          "time_s": 0.21400000000000016,
+          "signed_center_y_m": 0.00021299007393681926,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016542429934810307,
+          "local_detection_values_m": [
+            -0.0016542429934810307
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1809.791503496038,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 107,
+          "node_id": 2,
+          "step": 107,
+          "time_s": 0.21600000000000016,
+          "signed_center_y_m": 7.798459234670657e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017870099260631808,
+          "local_detection_values_m": [
+            -0.0017870099260631808
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1951.9721998569628,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 108,
+          "node_id": 2,
+          "step": 108,
+          "time_s": 0.21800000000000017,
+          "signed_center_y_m": -5.913359911552571e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019220154076532935,
+          "local_detection_values_m": [
+            -0.0019220154076532935
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2099.130745630831,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 109,
+          "node_id": 2,
+          "step": 109,
+          "time_s": 0.22000000000000017,
+          "signed_center_y_m": -0.0002062940735273392,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019408664008844743,
+          "local_detection_values_m": [
+            -0.0019408664008844743
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1854.1444937463611,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 110,
+          "node_id": 2,
+          "step": 110,
+          "time_s": 0.22200000000000017,
+          "signed_center_y_m": -0.0003582873992871814,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017937059264726608,
+          "local_detection_values_m": [
+            -0.0017937059264726608
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1727.5857863842587,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 111,
+          "node_id": 2,
+          "step": 111,
+          "time_s": 0.22400000000000017,
+          "signed_center_y_m": -0.0005143401013631859,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016417126007128187,
+          "local_detection_values_m": [
+            -0.0016417126007128187
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 15,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1605.9177871539525,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 112,
+          "node_id": 2,
+          "step": 112,
+          "time_s": 0.22600000000000017,
+          "signed_center_y_m": -0.0006740262485618192,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014856598986368141,
+          "local_detection_values_m": [
+            -0.0014856598986368141
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1492.2181903909548,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 113,
+          "node_id": 2,
+          "step": 113,
+          "time_s": 0.22800000000000017,
+          "signed_center_y_m": -0.000837030552484074,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013259737514381808,
+          "local_detection_values_m": [
+            -0.0013259737514381808
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1390.1948070053975,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 114,
+          "node_id": 2,
+          "step": 114,
+          "time_s": 0.23000000000000018,
+          "signed_center_y_m": -0.0010030940483892609,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001162969447515926,
+          "local_detection_values_m": [
+            -0.001162969447515926
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1304.2712188090006,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 115,
+          "node_id": 2,
+          "step": 115,
+          "time_s": 0.23200000000000018,
+          "signed_center_y_m": -0.0011719917819936222,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0009969059516107392,
+          "local_detection_values_m": [
+            -0.0009969059516107392
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1239.4152703821226,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 116,
+          "node_id": 2,
+          "step": 116,
+          "time_s": 0.23400000000000018,
+          "signed_center_y_m": -0.0013435222957053079,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0008280082180063778,
+          "local_detection_values_m": [
+            -0.0008280082180063778
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1200.5759677708943,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 117,
+          "node_id": 2,
+          "step": 117,
+          "time_s": 0.23600000000000018,
+          "signed_center_y_m": -0.0015175023632642186,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0006564777042946922,
+          "local_detection_values_m": [
+            -0.0006564777042946922
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            2
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1191.7153927460377,
+          "global_reaction_active": true
+        }
+      ]
+    },
+    {
+      "node_id": 1,
+      "alignment": {
+        "from_record_index": 127,
+        "to_record_index": 128,
+        "from_signed_plane_distance_m": 7.691071045831292e-06,
+        "to_signed_plane_distance_m": -8.825787638322558e-05,
+        "pass": true
+      },
+      "crossing": {
+        "node_id": 1,
+        "from_record_index": 127,
+        "to_record_index": 128,
+        "from_time_s": 0.25600000000000017,
+        "to_time_s": 0.2580000000000002,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.691071045831292e-06,
+        "to_signed_plane_distance_m": -8.825787638322558e-05
+      },
+      "from_state": {
+        "node_id": 1,
+        "step": 127,
+        "time_s": 0.25600000000000017,
+        "signed_center_y_m": 7.691071045831292e-06,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.001897321778396795,
+        "local_detection_values_m": [
+          -0.001897321778396795
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          1
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 9,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 1996.3531388085812,
+        "global_reaction_active": true
+      },
+      "completion_state": {
+        "node_id": 1,
+        "step": 128,
+        "time_s": 0.2580000000000002,
+        "signed_center_y_m": -8.825787638322558e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0019923089289541687,
+        "local_detection_values_m": [
+          -0.0019923089289541687
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          1
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 9,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2092.496508329152,
+        "global_reaction_active": true
+      },
+      "normal_y_sign_flip_across_crossing": false,
+      "last_local_geometric_contact": {
+        "record_index": 128,
+        "node_id": 1,
+        "step": 128,
+        "time_s": 0.2580000000000002,
+        "signed_center_y_m": -8.825787638322558e-05,
+        "local_native_detection": true,
+        "local_native_count": 1,
+        "local_geometric_contact": true,
+        "local_geometric_count": 1,
+        "local_min_detection_value_m": -0.0019923089289541687,
+        "local_detection_values_m": [
+          -0.0019923089289541687
+        ],
+        "local_geometric_normal_y_values": [
+          -1.0
+        ],
+        "local_geometric_normal_y_median": -1.0,
+        "contact_ids": [
+          1
+        ],
+        "fixture_triangle_ids": [
+          1
+        ],
+        "global_constraint_vector_size": 9,
+        "global_lcp_rows_present": true,
+        "global_reaction_force_proxy": 2092.496508329152,
+        "global_reaction_active": true
+      },
+      "crossing_minus_last_geometric_s": 0.0,
+      "window_half_width_s": 0.02,
+      "window": [
+        {
+          "record_index": 118,
+          "node_id": 1,
+          "step": 118,
+          "time_s": 0.23800000000000018,
+          "signed_center_y_m": 0.00082718726262757,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001086863162444972,
+          "local_detection_values_m": [
+            -0.001086863162444972
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1214.7646270777611,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 119,
+          "node_id": 1,
+          "step": 119,
+          "time_s": 0.24000000000000019,
+          "signed_center_y_m": 0.000740115708632222,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011728127373724301,
+          "local_detection_values_m": [
+            -0.0011728127373724301
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1269.1061462884918,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 120,
+          "node_id": 1,
+          "step": 120,
+          "time_s": 0.2420000000000002,
+          "signed_center_y_m": 0.0006520120819496934,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0012598842913677782,
+          "local_detection_values_m": [
+            -0.0012598842913677782
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1350.728378416835,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 121,
+          "node_id": 1,
+          "step": 121,
+          "time_s": 0.2440000000000002,
+          "signed_center_y_m": 0.0005629305055683356,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0013479879180503065,
+          "local_detection_values_m": [
+            -0.0013479879180503065
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1439.989979032876,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 122,
+          "node_id": 1,
+          "step": 122,
+          "time_s": 0.2460000000000002,
+          "signed_center_y_m": 0.0004728583983639692,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014370694944316645,
+          "local_detection_values_m": [
+            -0.0014370694944316645
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1530.2442005909922,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 123,
+          "node_id": 1,
+          "step": 123,
+          "time_s": 0.2480000000000002,
+          "signed_center_y_m": 0.00038179265353473744,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015271416016360308,
+          "local_detection_values_m": [
+            -0.0015271416016360308
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 12,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1621.4941482161296,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 124,
+          "node_id": 1,
+          "step": 124,
+          "time_s": 0.25000000000000017,
+          "signed_center_y_m": 0.00028973645898001536,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016182073464652627,
+          "local_detection_values_m": [
+            -0.0016182073464652627
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1713.7366210808525,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 125,
+          "node_id": 1,
+          "step": 125,
+          "time_s": 0.25200000000000017,
+          "signed_center_y_m": 0.00019669589674128034,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0017102635410199847,
+          "local_detection_values_m": [
+            -0.0017102635410199847
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1806.9655215134605,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 126,
+          "node_id": 1,
+          "step": 126,
+          "time_s": 0.25400000000000017,
+          "signed_center_y_m": 0.00010267822160320514,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0018033041032587196,
+          "local_detection_values_m": [
+            -0.0018033041032587196
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1901.173578555731,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 127,
+          "node_id": 1,
+          "step": 127,
+          "time_s": 0.25600000000000017,
+          "signed_center_y_m": 7.691071045831292e-06,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001897321778396795,
+          "local_detection_values_m": [
+            -0.001897321778396795
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1996.3531388085812,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 128,
+          "node_id": 1,
+          "step": 128,
+          "time_s": 0.2580000000000002,
+          "signed_center_y_m": -8.825787638322558e-05,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019923089289541687,
+          "local_detection_values_m": [
+            -0.0019923089289541687
+          ],
+          "local_geometric_normal_y_values": [
+            -1.0
+          ],
+          "local_geometric_normal_y_median": -1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 2092.496508329152,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 129,
+          "node_id": 1,
+          "step": 129,
+          "time_s": 0.2600000000000002,
+          "signed_center_y_m": -0.00019316103373274215,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0019117421236167745,
+          "local_detection_values_m": [
+            -0.0019117421236167745
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1810.5275764954586,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 130,
+          "node_id": 1,
+          "step": 130,
+          "time_s": 0.2620000000000002,
+          "signed_center_y_m": -0.00030095333730360065,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001806838966267258,
+          "local_detection_values_m": [
+            -0.001806838966267258
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1702.5339941542638,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 131,
+          "node_id": 1,
+          "step": 131,
+          "time_s": 0.2640000000000002,
+          "signed_center_y_m": -0.0004106082767954656,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0016990466626963993,
+          "local_detection_values_m": [
+            -0.0016990466626963993
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1592.6756033924028,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 132,
+          "node_id": 1,
+          "step": 132,
+          "time_s": 0.2660000000000002,
+          "signed_center_y_m": -0.0005217358378848899,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0015893917232045343,
+          "local_detection_values_m": [
+            -0.0015893917232045343
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1481.3443997669065,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 133,
+          "node_id": 1,
+          "step": 133,
+          "time_s": 0.2680000000000002,
+          "signed_center_y_m": -0.0006341346225785401,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0014782641621151101,
+          "local_detection_values_m": [
+            -0.0014782641621151101
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1368.7431917123797,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 134,
+          "node_id": 1,
+          "step": 134,
+          "time_s": 0.2700000000000002,
+          "signed_center_y_m": -0.0007476795229923832,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.00136586537742146,
+          "local_detection_values_m": [
+            -0.00136586537742146
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1254.9985425022212,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 135,
+          "node_id": 1,
+          "step": 135,
+          "time_s": 0.2720000000000002,
+          "signed_center_y_m": -0.0008622814450498614,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.001252320477007617,
+          "local_detection_values_m": [
+            -0.001252320477007617
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1140.2013648729016,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 136,
+          "node_id": 1,
+          "step": 136,
+          "time_s": 0.2740000000000002,
+          "signed_center_y_m": -0.0009778702320089676,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0011377185549501386,
+          "local_detection_values_m": [
+            -0.0011377185549501386
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 9,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 1024.4243280109538,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 137,
+          "node_id": 1,
+          "step": 137,
+          "time_s": 0.2760000000000002,
+          "signed_center_y_m": -0.001094386850701709,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.0010221297679910324,
+          "local_detection_values_m": [
+            -0.0010221297679910324
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 6,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 907.7301917910197,
+          "global_reaction_active": true
+        },
+        {
+          "record_index": 138,
+          "node_id": 1,
+          "step": 138,
+          "time_s": 0.2780000000000002,
+          "signed_center_y_m": -0.0012117796478945829,
+          "local_native_detection": true,
+          "local_native_count": 1,
+          "local_geometric_contact": true,
+          "local_geometric_count": 1,
+          "local_min_detection_value_m": -0.000905613149298291,
+          "local_detection_values_m": [
+            -0.000905613149298291
+          ],
+          "local_geometric_normal_y_values": [
+            1.0
+          ],
+          "local_geometric_normal_y_median": 1.0,
+          "contact_ids": [
+            1
+          ],
+          "fixture_triangle_ids": [
+            1
+          ],
+          "global_constraint_vector_size": 6,
+          "global_lcp_rows_present": true,
+          "global_reaction_force_proxy": 790.1765114858276,
+          "global_reaction_active": true
+        }
+      ]
+    }
+  ],
+  "per_node_summary": [
+    {
+      "node_id": 6,
+      "crossing_time_s": 0.1440000000000001,
+      "from_signed_center_y_m": 1.2301278259588998e-05,
+      "completion_signed_center_y_m": -0.00020900080685008087,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.001987698721740411,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2424.5313597691593,
+      "last_local_geometric_time_s": 0.1440000000000001,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        6
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        0
+      ]
+    },
+    {
+      "node_id": 5,
+      "crossing_time_s": 0.1560000000000001,
+      "from_signed_center_y_m": 0.00016095192374247246,
+      "completion_signed_center_y_m": -2.4276536499422825e-05,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.0018390480762575277,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2162.01220709763,
+      "last_local_geometric_time_s": 0.1560000000000001,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        5
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        0
+      ]
+    },
+    {
+      "node_id": 4,
+      "crossing_time_s": 0.17400000000000013,
+      "from_signed_center_y_m": 0.00013136378118970446,
+      "completion_signed_center_y_m": -3.9017465274988163e-05,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.0018686362188102955,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2138.171553171918,
+      "last_local_geometric_time_s": 0.17400000000000013,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        4
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        1
+      ]
+    },
+    {
+      "node_id": 3,
+      "crossing_time_s": 0.19400000000000014,
+      "from_signed_center_y_m": 0.0001388965471950745,
+      "completion_signed_center_y_m": -1.8495175081744595e-05,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.0018611034528049255,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2109.7385131504434,
+      "last_local_geometric_time_s": 0.19400000000000014,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        3
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        1
+      ]
+    },
+    {
+      "node_id": 2,
+      "crossing_time_s": 0.21800000000000017,
+      "from_signed_center_y_m": 7.798459234670657e-05,
+      "completion_signed_center_y_m": -5.913359911552571e-05,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.0019220154076532935,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2099.130745630831,
+      "last_local_geometric_time_s": 0.21800000000000017,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        2
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        1
+      ]
+    },
+    {
+      "node_id": 1,
+      "crossing_time_s": 0.2580000000000002,
+      "from_signed_center_y_m": 7.691071045831292e-06,
+      "completion_signed_center_y_m": -8.825787638322558e-05,
+      "local_native_at_crossing": true,
+      "local_geometric_at_crossing": true,
+      "local_min_detection_value_m": -0.0019923089289541687,
+      "from_geometric_normal_y_median": -1.0,
+      "completion_geometric_normal_y_median": -1.0,
+      "normal_y_sign_flip_across_crossing": false,
+      "global_lcp_at_crossing": true,
+      "global_reaction_active_at_crossing": true,
+      "reaction_force_proxy_at_crossing": 2092.496508329152,
+      "last_local_geometric_time_s": 0.2580000000000002,
+      "crossing_minus_last_geometric_s": 0.0,
+      "contact_ids_at_crossing": [
+        1
+      ],
+      "fixture_triangle_ids_at_crossing": [
+        1
+      ]
+    }
+  ],
+  "reaction_floor": 0.0,
+  "wall_plane_y_m": 0.0,
+  "time_tolerance_s": 1e-10,
+  "distance_tolerance_m": 1e-06,
+  "primary_verdict_uses_first_crossing_only": true,
+  "constraint_response_is_global_not_node_mapped": true,
+  "normal_y_is_diagnostic_only": true,
+  "normal_y_selects_next_intervention": false,
+  "temporal_state_evidence_is_causal_proof": false,
+  "stage": "Phase 0S-SOFA Stage C V2.3-L",
+  "execution": "offline-only",
+  "source_v2_3_r2_verdict": "PHASE0S_SOFA_STAGE_C_V2_3_BARRIER_CROSSING_FAIL",
+  "source_crossing_count": 6,
+  "source_formal_geometric_onset_s": 0.1240000000000001,
+  "sofa_executed": false,
+  "docker_executed": false,
+  "gpu_executed": false,
+  "physics_changed": false,
+  "trace_regenerated": false,
+  "stage_d_e_f_executed": false,
+  "oracle_executed": false,
+  "matched_state_executed": false,
+  "training_executed": false,
+  "fact": "Node-local formal geometric contact persists while global LCP rows and global reaction response are active at first crossing completion.",
+  "inference": "Detection geometry alone is no longer the leading explanation: node-local formal contact still exists while global response remains active at the first barrier violation.",
+  "normal_diagnostic": "beam-outward normal_y does not change sign across the first crossing. Inspect the local multi-contact geometry and normal records; this diagnostic does not alter the formal verdict or choose the next physics intervention.",
+  "unknown": "Global constraint rows and reaction are not node-mapped; the trace cannot prove the individual crossing node's constraint/reaction contribution.",
+  "next_action": "Review the frozen first-crossing local-contact/global-response evidence together with the official SOFA barrier/contact-response semantics, then authorize exactly one bounded barrier-topology or response-formulation intervention while keeping Sphere radius, effective envelope, load, material and dt frozen."
+}
