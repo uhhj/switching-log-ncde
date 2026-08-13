@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""Run Stage-C V2.4 coupled constraint-correction C1."""
+from __future__ import annotations
+import argparse,json,os,subprocess,sys
+from pathlib import Path
+import numpy as np
+ROOT=Path(__file__).resolve().parents[3];SPIKE=ROOT/'simulator-spikes'/'sofa-beam-spike';sys.path.insert(0,str(SPIKE/'src'))
+from stage_c_coupled_correction_v2_4 import *
+V23=SPIKE/'configs'/'stage_c_collision_radius_v2_3.json';CONFIG=SPIKE/'configs'/'stage_c_coupled_correction_v2_4.json';SCENE=SPIKE/'src'/'stage_c_coupled_correction_v2_4_scene.py';PLUGIN=SPIKE/'native-contact-bridge'/'build'/'lib'/'libNativeContactBridge.so';V22=SPIKE/'reports'/'phase0s_sofa'/'stage_c_fixture_extent_v2_2_metrics.json';OUT=SPIKE/'reports'/'phase0s_sofa';TRACE=OUT/'data'/'stage_c_v2_4_coupled_correction_trace.json';METRICS=OUT/'stage_c_coupled_correction_v2_4_metrics.json';REPORT=OUT/'STAGE_C_COUPLED_CORRECTION_V2_4.md';SOURCE=SPIKE/'reports'/'phase0s_sofa'/'stage_c_v2_3_crossing_local_metrics.json';SOURCE_VERDICT='PHASE0S_SOFA_STAGE_C_V2_3L_LOCAL_CONTACT_PERSISTS_GLOBAL_RESPONSE_ACTIVE_AT_FIRST_CROSSING'
+def exists():return [p for p in (TRACE,METRICS,REPORT) if p.exists()]
+def timing(records,c):
+ dt=float(c['simulation']['dt_s']);tol=float(c['integrity']['time_tolerance_s']);end=int(c['beam']['nodes'])-1;zero_end=float(c['simulation']['zero_load_end_ms'])/1000;ms=float(c['simulation']['measurement_start_ms'])/1000;load=float(c['simulation']['normal_load_n']);de=ce=fe=0.;schedule=target=True
+ for i,r in enumerate(records):
+  st,en=float(r['step_start_time_s']),float(r['step_end_time_s']);de=max(de,abs(en-st-dt));ce=max(ce,0 if not i else abs(st-float(records[i-1]['step_end_time_s'])));z=st<zero_end;expect=np.asarray([0,0,0] if z else [0,-load,0.]);schedule=bool(schedule and bool(r['zero_load_phase'])==z and bool(r['measurement_active'])==(st>=ms) and np.allclose(r['scheduled_force_n'],expect,rtol=0,atol=1e-15));bi=np.asarray(r['force_field_indices_begin'],int).reshape(-1);ei=np.asarray(r['force_field_indices_end'],int).reshape(-1);target=bool(target and np.array_equal(bi,[end]) and np.array_equal(ei,[end]));bf=np.asarray(r['force_field_force_data_begin_n'],float).reshape(-1,6)[0,:3];ef=np.asarray(r['force_field_force_data_end_n'],float).reshape(-1,6)[0,:3];af=np.asarray(r['actual_applied_force_n'],float);fe=max(fe,float(max(abs(bf-expect).max(),abs(ef-expect).max(),abs(af-expect).max())))
+ out={'dt_s':dt,'endpoint_index':end,'max_step_duration_error_s':de,'max_step_continuity_error_s':ce,'schedule_pass':schedule,'target_index_pass':target,'max_force_readback_error_n':fe};out['pass']=bool(de<=tol and ce<=tol and schedule and target and fe<=1e-15);return out
+def instrumentation(payload,c):
+ rs=payload['records'];mat=payload['metadata']['material_snapshot'];expected=int(c['beam']['nodes'])-1;mp=all(np.asarray(mat[k],float).size==expected and np.allclose(np.asarray(mat[k],float),float(c['beam'][src]),rtol=0,atol=1e-12) for k,src in [('default_young_modulus_pa','young_modulus_pa'),('default_poisson_ratio','poisson_ratio'),('mass_density_kg_m3','mass_density_kg_m3')]);tim=timing(rs,c);serial=[int(r['bridge_frame_serial']) for r in rs];bridge=bool(rs and all(r['bridge_ready'] for r in rs));fresh=bool(len(serial)==len(set(serial)) and all(b>a for a,b in zip(serial,serial[1:])));tail=max((float(r['tail_translation_displacement_m']) for r in rs),default=float('inf'));out={'records':len(rs),'expected_records':int(c['simulation']['contact_steps']),'finite_timing_force':tim['pass'],'material_pass':mp,'bridge_ready_all':bridge,'serials_fresh':fresh,'timing_force':tim,'tail_translation_max_m':tail,'tail_anchor_pass':tail<=float(c['integrity']['tail_translation_max_m'])};out['pass']=bool(len(rs)==out['expected_records'] and mp and bridge and fresh and tim['pass'] and out['tail_anchor_pass']);return out
+def cmd(c):return ['docker','run','--rm','--network','none','-e','CUDA_VISIBLE_DEVICES=','-e','SOFA_STAGE_C_V24_CONFIG=/work/'+str(CONFIG.relative_to(ROOT)),'-e','SOFA_STAGE_C_V24_TRACE=/work/'+str(TRACE.relative_to(ROOT)),'-e','LD_LIBRARY_PATH=/sofa/lib','-v',f'{ROOT}:/work','-v',f"{c['runtime']['sofa_root']}:/sofa:ro",c['runtime']['image'],'/sofa/bin/runSofa','-l','SofaPython3','-l','/work/'+str(PLUGIN.relative_to(ROOT)),'-g','batch','-n','500','/work/'+str(SCENE.relative_to(ROOT))]
+def run(c):
+ p=subprocess.run(cmd(c),cwd=ROOT,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,env={**os.environ,'CUDA_VISIBLE_DEVICES':''})
+ if p.returncode or not TRACE.is_file():
+  partial=TRACE.exists();size=TRACE.stat().st_size if partial else 0
+  if partial:TRACE.unlink()
+  raise RuntimeError(json.dumps({'message':'V2.4 formal C1 did not complete.','tail':'\n'.join(p.stdout.splitlines()[-80:]),'partial_trace_present':partial,'partial_trace_size_bytes':size,'partial_trace_discarded':partial}))
+def skip(reason):return {'evaluated':False,'reason':reason}
+def scientific(payload,c,base,floor):
+ ins=instrumentation(payload,c);out={'instrumentation':ins}
+ if not ins['pass']:out.update(verdict=V_INST,semantics=skip('instrumentation failed'),zero_load=skip('instrumentation failed'),barrier=skip('instrumentation failed'),mobile_fixture_edge=skip('instrumentation failed'),contact=skip('instrumentation failed'),reaction=skip('instrumentation failed'),geometry=skip('instrumentation failed'));return out
+ classes=classify_trace(payload['records'],effective_contact_distance_m=float(c['beam']['radius_m']),reaction_floor=floor);sem=semantics_gate(payload,classes,c,base);out['semantics']=sem
+ if not sem['pass']:out.update(verdict=V_SEMANTICS,zero_load=skip('semantics failed'),barrier=skip('semantics failed'),mobile_fixture_edge=skip('semantics failed'),contact=skip('semantics failed'),reaction=skip('semantics failed'),geometry=skip('semantics failed'));return out
+ for key,fn,v,rest in [('zero_load',lambda:zero_load_gate(payload['records'],classes),V_ZERO,['barrier','mobile_fixture_edge','contact','reaction','geometry']),('barrier',lambda:barrier_crossing_gate(payload['records'],classes,c),V_CROSS,['mobile_fixture_edge','contact','reaction','geometry']),('mobile_fixture_edge',lambda:mobile_fixture_edge_gate(payload['records'],classes,c),V_EDGE,['contact','reaction','geometry']),('contact',lambda:contact_gate(payload['records'],classes,c),V_CONTACT,['reaction','geometry']),('reaction',lambda:reaction_gate(payload['records'],classes,c,reaction_floor=floor),V_REACTION,['geometry'])]:
+  x=fn();out[key]=x
+  if not x['pass']:out.update(verdict=v,**{z:skip(key+' gate failed') for z in rest});return out
+ geo=geometry_gate(payload['records'],classes,c);out.update(geometry=geo,verdict=V_PASS if geo['pass'] else V_GEOMETRY);return out
+def narrative(v):
+ if v==V_PASS:return {'fact':'The coupled correction C1 passed every Stage-C V2.4 gate.','inference':'Replacing the prescribed uncoupled compliance formulation with the linear-solver-derived correction formulation was sufficient to eliminate cross-through under the frozen Stage-C setup. The experiment does not isolate off-diagonal coupling from other differences inherent to the correction formulations.','unknown':'Later Stage-D/F capability remains untested.','next_action':'Review this result before authorizing Stage D breakaway characterization.'}
+ msgs={V_INST:('The authorized V2.4 C1 did not complete and is not scientifically qualified.','Fix only the concrete runtime blocker before another expressly authorized run.'),V_SEMANTICS:('Coupled correction or frozen response-stack semantics failed.','The C1 cannot be attributed to LinearSolverConstraintCorrection with the frozen solver/contact stack.'),V_ZERO:('The coupled correction fails the zero-load gate.','The contact-free baseline is not preserved.'),V_CROSS:('LinearSolverConstraintCorrection did not eliminate cross-through.','The current failure cannot be explained by UncoupledConstraintCorrection alone.'),V_EDGE:('Cross-through is excluded but fixture escape persists.','Fixture escape remains the first unresolved Stage-C gate.'),V_CONTACT:('Barrier and edge gates pass but sustained stable contact fails.','The current representation still does not establish stable normal contact.'),V_REACTION:('Stable contact passes but reaction coupling fails.','The reaction proxy is not qualified for later stages.'),V_GEOMETRY:('Contact and reaction pass but local-contact geometry fails.','The distribution is not qualified for later stages.')};a,b=msgs[v];return {'fact':a,'inference':b,'unknown':'All gates after the first failure remain unqualified.','next_action':'Review the first failed V2.4 gate before authorizing another bounded intervention.'}
+def write(m):OUT.mkdir(parents=True,exist_ok=True);METRICS.write_text(json.dumps(m,indent=2)+'\n');REPORT.write_text('# Phase 0S-SOFA Stage C V2.4 Coupled Constraint Correction\n\n## Verdict\n\n`'+m['verdict']+'`\n\n## Metrics\n\n```json\n'+json.dumps(m,indent=2)+'\n```\n\n## Fact\n\n'+m['fact']+'\n\n## Inference\n\n'+m['inference']+'\n\n## Unknown\n\n'+m['unknown']+'\n\n## Next action\n\n'+m['next_action']+'\n')
+def main():
+ ap=argparse.ArgumentParser();ap.add_argument('--preflight-only',action='store_true');a=ap.parse_args();ex=exists()
+ if ex:print('V2.4 evidence already exists: '+', '.join(map(str,ex)),file=sys.stderr);return 2
+ base=json.loads(V23.read_text());c=json.loads(CONFIG.read_text());inter=intervention_gate(base,c)
+ if not inter['pass']:print(json.dumps(inter,indent=2));return 2
+ if a.preflight_only:print(json.dumps(inter,indent=2));return 0
+ if json.loads(SOURCE.read_text())['verdict']!=SOURCE_VERDICT:raise RuntimeError('frozen V2.3-L source verdict changed')
+ if not PLUGIN.is_file():print('NativeContactBridge artifact missing',file=sys.stderr);return 2
+ floor=float(json.loads(V22.read_text())['historical_c0']['reaction_p99']);m={'stage':'Phase 0S-SOFA Stage C V2.4','cpu_only':True,'formal_c1_requested':1,'formal_c1_completed':0,'automatic_retry':False,'intervention':inter,'reaction_floor_c0_p99':floor,'source_v2_3l_verdict':SOURCE_VERDICT}
+ try:run(c);m['formal_c1_completed']=1;m.update(scientific(json.loads(TRACE.read_text()),c,base,floor));m.update(narrative(m['verdict']))
+ except Exception as e:m.update(verdict=V_INST,runtime_error=str(e),**narrative(V_INST))
+ write(m);print(m['verdict']);return 0
+if __name__=='__main__':raise SystemExit(main())
