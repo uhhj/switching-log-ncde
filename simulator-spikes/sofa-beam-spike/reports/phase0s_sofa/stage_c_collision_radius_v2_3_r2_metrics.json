@@ -1,0 +1,234 @@
+{
+  "stage": "Phase 0S-SOFA Stage C V2.3-R2",
+  "scientific_base": "60f542eaa1161c8491a40651c7b012ebd799c85b",
+  "v2_3_implementation": "9a81d0a750464c6ce109635b358a7135b5ad6e82",
+  "r1_evidence": "d36eee2f503df85e9657712b9c806d2280965810",
+  "r1_formal_c1_completed": 0,
+  "r2_formal_c1_authorized": 1,
+  "r2_formal_c1_completed": 1,
+  "automatic_retry": false,
+  "cpu_only": true,
+  "preflight": {
+    "branch": "phase0s-sofa-beamadapter",
+    "head": "3802ef8c790db4519ecbda043c527e62b256e977",
+    "r2_descends_from_r1_evidence": true,
+    "original_v23_scope": [
+      "simulator-spikes/sofa-beam-spike/configs/stage_c_collision_radius_v2_3.json",
+      "simulator-spikes/sofa-beam-spike/scripts/audit_stage_c_collision_radius_v2_3.py",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_collision_radius_v2_3.py",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_collision_radius_v2_3_scene.py",
+      "simulator-spikes/sofa-beam-spike/tests/test_stage_c_collision_radius_v2_3.py"
+    ],
+    "r2_scope": [
+      "simulator-spikes/sofa-beam-spike/scripts/audit_stage_c_collision_radius_v2_3.py",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_collision_radius_v2_3.py",
+      "simulator-spikes/sofa-beam-spike/src/stage_c_collision_radius_v2_3_scene.py",
+      "simulator-spikes/sofa-beam-spike/tests/test_stage_c_collision_radius_v2_3.py"
+    ],
+    "candidate_config_unchanged": true,
+    "working_tree_clean": true,
+    "original_v23_scope_pass": true,
+    "r2_scope_pass": true,
+    "pass": true
+  },
+  "compensated_intervention": {
+    "diff_paths": [
+      "simulation.alarm_distance_m",
+      "simulation.contact_distance_m"
+    ],
+    "expected_diff_paths": [
+      "simulation.alarm_distance_m",
+      "simulation.contact_distance_m"
+    ],
+    "beam_radius_m": 0.002,
+    "old_global_contact_distance_m": 0.002,
+    "new_global_contact_distance_m": 0.0,
+    "old_global_alarm_distance_m": 0.01,
+    "new_global_alarm_distance_m": 0.008,
+    "old_effective_contact_distance_m": 0.002,
+    "new_effective_contact_distance_m": 0.002,
+    "old_effective_alarm_distance_m": 0.01,
+    "new_effective_alarm_distance_m": 0.01,
+    "pass": true
+  },
+  "reaction_floor_c0_p99": 0.0,
+  "instrumentation": {
+    "records": 500,
+    "expected_records": 500,
+    "material": {
+      "checks": {
+        "default_young_modulus_pa": true,
+        "default_poisson_ratio": true,
+        "mass_density_kg_m3": true
+      },
+      "pass": true
+    },
+    "timing_force": {
+      "dt_s": 0.002,
+      "endpoint_index": 6,
+      "max_step_duration_error_s": 1.0928757898653885e-16,
+      "max_step_continuity_error_s": 0.0,
+      "schedule_pass": true,
+      "target_index_pass": true,
+      "max_force_readback_error_n": 0.0,
+      "pass": true
+    },
+    "bridge_ready_all": true,
+    "serials_fresh": true,
+    "tail_translation_max_m": 0.0,
+    "tail_anchor_pass": true,
+    "pass": true
+  },
+  "semantics": {
+    "official_sofa_source": {
+      "tag": "v26.06.00",
+      "local_min_distance_cpp_blob": "156df23d1c813888ebc98ec321e26292d8abbf07",
+      "sphere_collision_model_inl_blob": "f1c9370aba829aabd6d8024a58d15f3ea7c19cf6",
+      "triangle_sphere_contact_formula": "global_contact + sphere_radius + sphere_model_contact + triangle_model_contact",
+      "triangle_sphere_alarm_formula": "global_alarm + sphere_radius + sphere_model_contact + triangle_model_contact",
+      "detection_value_formula": "euclidean_native_point_distance - effective_contact_distance"
+    },
+    "collision_snapshot": {
+      "beam_collision_model": "SphereCollisionModel",
+      "beam_default_radius_m": 0.002,
+      "beam_list_radius_m": [
+        0.002,
+        0.002,
+        0.002,
+        0.002,
+        0.002,
+        0.002,
+        0.002
+      ],
+      "beam_model_contact_distance_m": 0.0,
+      "fixture_collision_model": "TriangleCollisionModel",
+      "fixture_model_contact_distance_m": 0.0,
+      "intersection_contact_distance_m": 0.0,
+      "intersection_alarm_distance_m": 0.008
+    },
+    "requested_beam_radius_m": 0.002,
+    "radius_count": 7,
+    "expected_radius_count": 7,
+    "all_radius_readbacks_match_requested": true,
+    "actual_effective_distances": {
+      "effective_contact_distance_m": 0.002,
+      "effective_alarm_distance_m": 0.01
+    },
+    "frozen_point_effective_contact_distance_m": 0.002,
+    "frozen_point_effective_alarm_distance_m": 0.01,
+    "reconstruction_tolerance_m": 1e-06,
+    "detection_value_reconstruction_samples": 836,
+    "detection_value_reconstruction_max_abs_error_m": 0.0,
+    "pass": true
+  },
+  "zero_load": {
+    "samples": 50,
+    "native_detection_frames": 50,
+    "proximity_only_frames": 50,
+    "geometric_contact_frames": 0,
+    "reaction_active_frames": 0,
+    "pass": true
+  },
+  "barrier": {
+    "evaluated": true,
+    "formal_geometric_onset_index": 61,
+    "formal_geometric_onset_time_s": 0.1240000000000001,
+    "scan_start_index": 0,
+    "excluded_translation_fixed_node_ids": [
+      0
+    ],
+    "mobile_node_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "crossing_events": [
+      {
+        "node_id": 6,
+        "from_record_index": 70,
+        "to_record_index": 71,
+        "from_time_s": 0.1420000000000001,
+        "to_time_s": 0.1440000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 1.2301278259588998e-05,
+        "to_signed_plane_distance_m": -0.00020900080685008087
+      },
+      {
+        "node_id": 5,
+        "from_record_index": 76,
+        "to_record_index": 77,
+        "from_time_s": 0.1540000000000001,
+        "to_time_s": 0.1560000000000001,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00016095192374247246,
+        "to_signed_plane_distance_m": -2.4276536499422825e-05
+      },
+      {
+        "node_id": 4,
+        "from_record_index": 85,
+        "to_record_index": 86,
+        "from_time_s": 0.17200000000000013,
+        "to_time_s": 0.17400000000000013,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.00013136378118970446,
+        "to_signed_plane_distance_m": -3.9017465274988163e-05
+      },
+      {
+        "node_id": 3,
+        "from_record_index": 95,
+        "to_record_index": 96,
+        "from_time_s": 0.19200000000000014,
+        "to_time_s": 0.19400000000000014,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 0.0001388965471950745,
+        "to_signed_plane_distance_m": -1.8495175081744595e-05
+      },
+      {
+        "node_id": 2,
+        "from_record_index": 107,
+        "to_record_index": 108,
+        "from_time_s": 0.21600000000000016,
+        "to_time_s": 0.21800000000000017,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.798459234670657e-05,
+        "to_signed_plane_distance_m": -5.913359911552571e-05
+      },
+      {
+        "node_id": 1,
+        "from_record_index": 127,
+        "to_record_index": 128,
+        "from_time_s": 0.25600000000000017,
+        "to_time_s": 0.2580000000000002,
+        "transition_duration_s": 0.0020000000000000018,
+        "from_signed_plane_distance_m": 7.691071045831292e-06,
+        "to_signed_plane_distance_m": -8.825787638322558e-05
+      }
+    ],
+    "crossing_event_count": 6,
+    "pass": false
+  },
+  "verdict": "PHASE0S_SOFA_STAGE_C_V2_3_BARRIER_CROSSING_FAIL",
+  "mobile_fixture_edge": {
+    "evaluated": false,
+    "reason": "barrier gate failed"
+  },
+  "contact": {
+    "evaluated": false,
+    "reason": "barrier gate failed"
+  },
+  "reaction": {
+    "evaluated": false,
+    "reason": "barrier gate failed"
+  },
+  "geometry": {
+    "evaluated": false,
+    "reason": "barrier gate failed"
+  },
+  "fact": "At least one mobile node still crosses the wall plane after contact onset.",
+  "inference": "The Sphere collision representation does not eliminate cross-through.",
+  "unknown": "All stages after the first failing gate remain scientifically unqualified.",
+  "next_action": "Review the barrier failure before another bounded collision intervention."
+}
